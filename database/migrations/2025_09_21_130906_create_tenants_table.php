@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignId('plan_id')->nullable()->constrained('plans')->nullOnDelete();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->time('max_queue_time')->nullable(); // jam maksimal ambil antrian
-            $table->json('max_purchase_rules')->nullable(); // kuota liter per jenis kendaraan
             $table->timestamps();
         });
     }

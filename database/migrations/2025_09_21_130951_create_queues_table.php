@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('queues', function (Blueprint $table) {
             $table->id();
+            $table->integer('queue_number');
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
-            $table->integer('queue_number');
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->foreignId('served_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->integer('liters_requested');
+            $table->date('queue_date');
             $table->enum('status', ['waiting', 'called', 'completed', 'cancelled', 'expired'])->default('waiting');
             $table->timestamp('checkin_time')->nullable();
             $table->timestamp('checkout_time')->nullable();
             $table->timestamps();
+
+            $table->index(['tenant_id', 'queue_date']);
         });
     }
 
