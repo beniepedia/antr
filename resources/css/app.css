@@ -7,6 +7,7 @@
 @source '../**/*.js';
 
 @plugin "flyonui" {
-    themes: all;
+    themes: light --default, dark --prefersdark, gourmet;
 }
 @import "./../../node_modules/flyonui/variants.css";
+@import "./main.css";
