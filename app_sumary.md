@@ -1,102 +1,236 @@
-jangan buat template lagi. disini saya menggunakan style dari FlyOnUI
-kamu bisa pelajari disini https://flyonui.com/docs
+1 — Pastikan auth.php (singkat)
 
-Struktur Utama Project
+Pastikan config/auth.php punya guard/provider seperti ini (sudah pernah kita bahas, tapi cek lagi):
 
-Guards:
+'guards' => [
+'web' => [
+'driver' => 'session',
+'provider' => 'users',
+],
+'admin' => [
+'driver' => 'session',
+'provider' => 'admins',
+],
+],
 
-web → untuk tenant user (admin, operator)
+'providers' => [
+'users' => [
+'driver' => 'eloquent',
+'model' => App\Models\User::class,
+],
+'admins' => [
+'driver' => 'eloquent',
+'model' => App\Models\Admin::class,
+],
+],
 
-admin → untuk superadmin (pemilik SaaS)
+2 — Buat Livewire components
 
-Tables (sudah ada, dari migrasi kita):
+Jalankan:
 
-tenants, users, admins, plans, billing, queues, vehicles, dll.
+php artisan make:livewire Auth/Login # untuk tenant user
+php artisan make:livewire Admin/Login # untuk superadmin
 
-Template Admin: sudah disediakan → tinggal dipasang sesuai guard.
+(Ini akan menghasilkan kelas dan view: app/Http/Livewire/Auth/Login.php + resources/views/livewire/auth/login.blade.php, dan app/Http/Livewire/Admin/Login.php + view admin.)
 
-📋 Task List (Revisi Final)
+3 — Kode Livewire: Tenant Login (Auth/Login.php)
 
-1. Authentication & Authorization
+Letakkan di app/Http/Livewire/Auth/Login.php:
 
-Konfigurasi auth.php → 2 guard (web untuk tenant users, admin untuk superadmin).
+<?php
 
-Buat login + register tenant (/login, /register).
+namespace App\Http\Livewire\Auth;
 
-Buat login superadmin (/admin/login).
+use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
-Setup reset password untuk dua guard (pakai tabel password_resets yang sama).
+class Login extends Component
+{
+    public $email;
+    public $password;
+    public $remember = false;
 
-Middleware:
+    protected $rules = [
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
+    ];
 
-auth:web → SPBU admin & operator.
+    public function mount()
+    {
+        if (Auth::guard('web')->check()) {
+            redirect()->route('tenant.dashboard');
+        }
+    }
 
-auth:admin → superadmin platform.
+    public function login()
+    {
+        $this->validate();
 
-2. Superadmin Panel (Global SaaS Management)
+        $key = 'login:'.Str::lower($this->email).'|'.request()->ip();
 
-Dashboard superadmin: ringkasan tenant, billing, laporan global.
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            $this->addError('email', "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.");
+            return;
+        }
 
-CRUD Plans (paket berlangganan: harga bulanan/tahunan, fitur, limit).
+        if (Auth::guard('web')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            RateLimiter::clear($key);
+            session()->regenerate();
+            return redirect()->intended(route('tenant.dashboard'));
+        }
 
-CRUD Tenants (buat SPBU baru, atur aktif/nonaktif).
+        RateLimiter::hit($key, 60);
+        $this->addError('email', 'Email atau password salah.');
+    }
 
-Billing management: lihat invoice tenant, status pembayaran.
+    public function render()
+    {
+        return view('livewire.auth.login')->layout('layouts.user');
+    }
+}
 
-Laporan global: jumlah tiket antrian, konsumsi liter BBM, omzet SaaS.
+4 — View Livewire: Tenant Login (resources/views/livewire/auth/login.blade.php)
 
-3. Tenant Panel (SPBU Admin)
+Contoh minimal pakai Tailwind (sesuaikan UI-mu / template admin):
 
-Dashboard SPBU: total antrian hari ini, total liter, breakdown per jenis kendaraan.
+<div class="max-w-md mx-auto mt-16 p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-semibold mb-4">Masuk</h2>
 
-CRUD Vehicles (atur jenis kendaraan & kuota max liter).
+    <form wire:submit.prevent="login" novalidate>
+        <div class="mb-4">
+            <label class="block text-sm">Email</label>
+            <input wire:model.defer="email" type="email" class="w-full border rounded px-3 py-2" />
+            @error('email') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+        </div>
 
-Setting jam operasional & jam maksimal ambil antrian.
+        <div class="mb-4">
+            <label class="block text-sm">Password</label>
+            <input wire:model.defer="password" type="password" class="w-full border rounded px-3 py-2" />
+            @error('password') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+        </div>
 
-CRUD Operator (user role operator).
+        <div class="mb-4 flex items-center">
+            <input wire:model="remember" id="remember" type="checkbox" class="mr-2" />
+            <label for="remember" class="text-sm">Ingat saya</label>
+        </div>
 
-Manajemen stok BBM (opsional: untuk catat sisa kuota harian).
+        <div class="flex items-center justify-between">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Masuk</button>
+            <a href="{{ route('password.request') }}" class="text-sm text-gray-600">Lupa password?</a>
+        </div>
+    </form>
+</div>
 
-Monitor antrian harian (queues → filter by tenant_id + queue_date).
+5 — Kode Livewire: Admin Login (app/Http/Livewire/Admin/Login.php)
 
-4. Operator Panel
+Hampir sama, tapi pakai guard admin dan layout admin:
 
-Login sebagai operator.
+<?php
 
-Scan QR / input queue_number → load data antrian.
+namespace App\Http\Livewire\Admin;
 
-Validasi liters_requested <= vehicles.max_liters.
+use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
-Update status antrian (waiting → called → completed).
+class Login extends Component
+{
+    public $email;
+    public $password;
+    public $remember = false;
 
-Catat served_by, checkin_time, checkout_time.
+    protected $rules = [
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
+    ];
 
-5. Pelanggan (End-User)
+    public function mount()
+    {
+        if (Auth::guard('admin')->check()) {
+            redirect()->route('admin.dashboard');
+        }
+    }
 
-Register akun pelanggan (tabel customers).
+    public function login()
+    {
+        $this->validate();
 
-Ambil nomor antrian (queues → generate queue_number + queue_date).
+        $key = 'admin-login:'.Str::lower($this->email).'|'.request()->ip();
 
-Pilih jenis kendaraan (vehicle_id) + input liter yang diminta.
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            $this->addError('email', "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.");
+            return;
+        }
 
-Dapat QR Code / kode unik.
+        if (Auth::guard('admin')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            RateLimiter::clear($key);
+            session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'));
+        }
 
-Tracking status antrian (lihat urutan & estimasi waktu).
+        RateLimiter::hit($key, 60);
+        $this->addError('email', 'Email atau password admin salah.');
+    }
 
-6. Laporan & Analytics
+    public function render()
+    {
+        return view('livewire.admin.login')->layout('layouts.admin');
+    }
+}
 
-Per tenant → total antrian, total liter, breakdown per kendaraan.
 
-Per operator → jumlah pelanggan yang dilayani.
+Buat view resources/views/livewire/admin/login.blade.php mirip view tenant, tapi layout layouts.admin.
 
-Global (superadmin) → agregat semua tenant.
+6 — Routes (web.php)
 
-7. Fitur Tambahan (Opsional)
+Tambahkan route ke routes/web.php:
 
-Notifikasi WhatsApp/SMS → kirim info nomor antrian.
+use App\Http\Livewire\Auth\Login as UserLogin;
+use App\Http\Livewire\Admin\Login as AdminLogin;
 
-Subdomain per tenant → spbu-001.saas.com.
+// guest for tenant users
+Route::middleware('guest:web')->group(function () {
+    Route::get('/login', UserLogin::class)->name('login');
+    // Route::get('/register', RegisterComponent::class)->name('register'); // jika ada
+});
 
-Integrasi Payment Gateway → tenant bisa bayar paket langsung online.
+// admin guest
+Route::prefix('admin')->middleware('guest:admin')->group(function () {
+    Route::get('/login', AdminLogin::class)->name('admin.login');
+});
 
-Export laporan Excel/PDF.
+
+Untuk dashboard routes, bungkus dengan middleware auth:
+
+Route::middleware('auth:web')->group(function () {
+    Route::get('/dashboard', \App\Http\Controllers\Tenant\DashboardController::class)->name('tenant.dashboard');
+});
+
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
+    Route::get('/dashboard', \App\Http\Controllers\Admin\DashboardController::class)->name('admin.dashboard');
+});
+
+7 — Logout (routes + snippet)
+
+Tambahkan route logout (POST):
+
+use Illuminate\Support\Facades\Auth;
+
+Route::post('/logout', function () {
+    Auth::guard('web')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+
+Route::post('/admin/logout', function () {
+    Auth::guard('admin')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('admin.login');
+})->name('admin.logout');
