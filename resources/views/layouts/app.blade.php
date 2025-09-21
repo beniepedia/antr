@@ -27,7 +27,7 @@
         @yield('topbar')
 
         <main class="p-8 flex-1">
-            {{ $slot }}
+            @yield('content')
         </main>
     </div>
 

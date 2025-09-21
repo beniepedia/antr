@@ -3,6 +3,7 @@
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
 use App\Livewire\Admin\Login as AdminLogin;
+use App\Livewire\Tenant\Dashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,16 +24,14 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 
 // For dashboard routes, bungkus with middleware auth:
 Route::middleware('auth:tenant')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('tenant.dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 });
 
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-});
+// Route::prefix('admin')->middleware('auth:admin')->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('admin.dashboard');
+//     })->name('admin.dashboard');
+// });
 
 // Logout routes
 Route::post('/logout', function () {

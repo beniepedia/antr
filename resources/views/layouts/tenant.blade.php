@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('navbar')
-    {{-- User specific navbar --}}
+    @include('layouts.partials.admin-navbar')
 @endsection
 
 @section('topbar')
-    {{-- User specific topbar --}}
+    @include('layouts.partials.admin-topbar')
 @endsection
 
 @section('content')
