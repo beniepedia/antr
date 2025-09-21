@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -23,40 +23,51 @@
         }
 
         [data-theme="dark"] body {
-            background-color: #1a202c;
-            color: #a0aec0;
+            background-color: #282a36;
+            color: #f8f8f2;
+        }
+
+        [data-theme="light"] body {
+            background-color: #f1f1f1;
+            color: #282a36;
+        }
+
+        #sidebar {
+            transition: all 0.3s ease-in-out;
         }
 
         .sidebar-closed {
             width: 0 !important;
             padding: 0 !important;
+            border: none !important;
+        }
+
+        #overlay {
+            transition: background-color 0.3s ease-in-out;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
         }
 
         [data-theme="dark"] .sidebar-link:hover {
-            background-color: #2d3748;
+            background-color: #44475a;
         }
 
         [data-theme="light"] .sidebar-link:hover {
-            background-color: #edf2f7;
+            background-color: #e0e0e0;
         }
 
         .sidebar-link.active {
-            background-color: #2d3748;
+            background: linear-gradient(90deg, #696cff, #696cff80);
             color: #fff;
-        }
-
-        [data-theme="light"] .sidebar-link.active {
-            background-color: #4299e1;
-            color: #fff;
+            box-shadow: 0 0 10px #696cff80;
         }
 
         .sidebar-link span:last-child {
@@ -66,7 +77,7 @@
 
     <script>
         // Apply theme from local storage before page load
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
@@ -74,26 +85,31 @@
 </head>
 
 <body class="min-h-screen flex">
-    <aside id="sidebar"
-        class="bg-base-100 w-72 p-4 transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap shadow-lg">
-        <h1 class="text-2xl font-bold mb-3 text-base-content">Admin</h1>
+    <aside id="sidebar" class="bg-base-100 w-80 md:w-64 p-4 overflow-hidden shadow">
+        <div class="flex items-center gap-4 px-4 mb-6">
+            <span class="icon-[tabler--brand-laravel] text-primary text-4xl"></span>
+            <h1 class="text-2xl font-bold text-base-content">Materio</h1>
+        </div>
         <ul id="sidebar-menu">
             <li><a href="/admin" class="sidebar-link text-base-content"><span
-                        class="icon-[tabler--dashboard]"></span><span>Dashboard</span></a></li>
+                        class="icon-[tabler--smart-home]"></span><span>Dashboard</span></a></li>
             <li><a href="/admin/users" class="sidebar-link text-base-content"><span
                         class="icon-[tabler--users]"></span><span>Users</span></a></li>
             <li><a href="/admin/settings" class="sidebar-link text-base-content"><span
                         class="icon-[tabler--settings]"></span><span>Settings</span></a></li>
         </ul>
     </aside>
+    <div id="overlay" class="fixed inset-0  z-40 hidden"></div>
     <div class="flex-1 flex flex-col">
-        <header class="bg-base-100 shadow-lg p-[8px] flex items-center px-6">
-            <button id="sidebar-toggle" class="btn btn-success dark:btn-primary btn-circle">
-                <span class="icon-[tabler--menu-2]"></span>
-            </button>
-            <h2 class="text-2xl font-bold ml-6 text-base-content">Dashboard</h2>
-            <div class="ml-auto">
-                <button id="theme-toggle" class="btn btn-circle">
+        <header class="bg-base-100 shadow-md p-4 flex items-center justify-between px-6">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" class="btn btn-primary btn-circle">
+                    <span class="icon-[tabler--menu-2]"></span>
+                </button>
+                <h2 class="text-2xl font-bold text-base-content">Dashboard</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle" class="btn btn-primary btn-circle">
                     <span class="icon-[tabler--sun] hidden dark:inline"></span>
                     <span class="icon-[tabler--moon] inline dark:hidden"></span>
                 </button>
@@ -109,20 +125,28 @@
     <script>
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
+        const overlay = document.getElementById('overlay');
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
         const sidebarMenu = document.getElementById('sidebar-menu');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-closed');
+            if (window.innerWidth < 768) {
+                overlay.classList.toggle('hidden', sidebar.classList.contains('sidebar-closed'));
+            }
+        }
 
         // Initially hide sidebar on mobile
         if (window.innerWidth < 768) {
             setTimeout(() => {
                 sidebar.classList.add('sidebar-closed');
+                overlay.classList.add('hidden');
             }, 100);
         }
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('sidebar-closed');
-        });
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
 
         // Theme toggle
         themeToggle.addEventListener('click', () => {
