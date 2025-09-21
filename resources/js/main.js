@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (themeToggle) {
         themeToggle.addEventListener("click", () => {
             const currentTheme = html.getAttribute("data-theme");
-            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            const newTheme = currentTheme === "black" ? "light" : "black";
             html.setAttribute("data-theme", newTheme);
             localStorage.setItem("theme", newTheme);
         });

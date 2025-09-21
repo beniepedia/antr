@@ -23,7 +23,7 @@
 <body class="min-h-screen flex">
     @yield('navbar')
 
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col flex-grow min-w-0">
         @yield('topbar')
 
         <main class="p-8 flex-1">

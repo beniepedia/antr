@@ -1,4 +1,4 @@
-<header class="shadow-md p-4 flex items-center justify-between px-6">
+<header class="bg-base-100 shadow-md p-4 flex items-center justify-between px-6">
     <div class="flex items-center gap-4">
         <button id="sidebar-toggle" class="btn btn-primary btn-circle">
             <span class="icon-[tabler--menu-2]"></span>

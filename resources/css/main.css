@@ -1,16 +1,16 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
-[data-theme="dark"] body {
+/* [data-theme="dark"] body {
     background-color: #282a36;
     color: #f8f8f2;
-}
+} */
 
-[data-theme="light"] body {
-    background-color: #f1f1f1;
-    color: #282a36;
-}
+/* [data-theme="light"] body {
+    background-color: #ededed;
+    color: #2a3ab6;
+} */
 
 #sidebar {
     transition: all 0.3s ease-in-out;
@@ -36,13 +36,13 @@ body {
     font-weight: 500;
 }
 
-[data-theme="dark"] .sidebar-link:hover {
+/* [data-theme="dark"] .sidebar-link:hover {
     background-color: #44475a;
 }
 
 [data-theme="light"] .sidebar-link:hover {
     background-color: #e0e0e0;
-}
+} */
 
 .sidebar-link.active {
     background: linear-gradient(90deg, #696cff, #696cff80);
