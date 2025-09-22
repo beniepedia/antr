@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('contact_person', 100)->nullable();
             $table->string('phone', 20)->nullable();
-            $table->foreignId('plan_id')->nullable()->constrained('plans')->nullOnDelete();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->time('max_queue_time')->nullable(); // jam maksimal ambil antrian
             $table->timestamps();

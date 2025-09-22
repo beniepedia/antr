@@ -23,8 +23,16 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 });
 
 // For dashboard routes, bungkus with middleware auth:
-Route::middleware('auth:tenant')->group(function () {
+Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
+});
+
+
+Route::middleware(['auth:tenant'])->group(function(){
+    Route::get('/app-setup', function(){
+        echo "Setuppp";
+    })->name('tenant.setup');
+    Route::get('/subscriber')->name('tenant.subscribe');
 });
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {

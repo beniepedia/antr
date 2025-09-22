@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->decimal('price', 12, 2)->default(0);
             $table->text('description')->nullable();
-            $table->decimal('price_monthly', 12, 2);
-            $table->decimal('price_yearly', 12, 2);
+            $table->string('billing_cycle')->default('trial');
+            $table->integer('duration_days')->nullable(); // untuk hitung end_date
             $table->json('features')->nullable();
             $table->timestamps();
         });

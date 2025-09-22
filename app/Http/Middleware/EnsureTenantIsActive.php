@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class EnsureTenantIsActive
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        $user = auth('tenant')->user();
+
+        // belum isi tenant
+        if (is_null($user->tenant_id)) {
+            return redirect()->route('tenant.setup');
+        }
+
+        // cek langganan aktif
+        $subscription = $user->tenant->subscriptions()
+            ->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->first();
+
+        if (!$subscription) {
+            return redirect()->route('tenant.subscribe');
+        }
+
+        return $next($request);
+    }
+}
