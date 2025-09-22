@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('navbar')
-    @include('layouts.partials.admin-navbar')
+    @include('layouts.partials.tenant-navbar')
 @endsection
 
 @section('topbar')

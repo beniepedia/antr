@@ -23,23 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleSidebar() {
         if (sidebar) {
-            sidebar.classList.toggle("sidebar-closed");
-            if (window.innerWidth < 768 && overlay) {
-                overlay.classList.toggle(
-                    "hidden",
-                    sidebar.classList.contains("sidebar-closed")
-                );
-            }
+            sidebar.classList.toggle("hidden");
         }
     }
 
-    // Initially hide sidebar on mobile
-    if (window.innerWidth < 768 && sidebar && overlay) {
-        setTimeout(() => {
-            sidebar.classList.add("sidebar-closed");
-            overlay.classList.add("hidden");
-        }, 100);
-    }
+
 
     if (sidebarToggle) {
         sidebarToggle.addEventListener("click", toggleSidebar);

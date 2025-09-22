@@ -1,5 +1,5 @@
 <aside id="sidebar"
-    class="flex-shrink-0 w-64 md:w-64 p-4 overflow-hidden shadow-xl border-r border-base-300 bg-base-100">
+    class="h-full w-64 md:w-64 p-4 overflow-y-auto shadow-xl border-r border-base-300 bg-base-100">
     <div class="flex items-center gap-4 px-4 mb-6">
         <span class="icon-[tabler--brand-laravel] text-primary text-4xl"></span>
         <h1 class="text-2xl font-bold text-base-content">Materio</h1>
