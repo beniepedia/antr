@@ -2,18 +2,22 @@
 
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Livewire\Component;
 
 class Register extends Component
 {
     public $name;
+
     public $email;
+
     public $password;
+
     public $password_confirmation;
+
     public $terms = false;
 
     protected function rules()
@@ -47,8 +51,8 @@ class Register extends Component
         session()->regenerate();
 
         // Jika tenant_id null, redirect ke setup
-        if (!$user->tenant_id) {
-            return redirect()->route('tenant.setup');
+        if (! $user->tenant_id) {
+            return redirect()->route('tenant.onboarding');
         }
 
         return redirect()->intended(route('tenant.dashboard'));

@@ -24,10 +24,10 @@ class Dashboard extends Component
             ->get()
             ->map(function ($queue) {
                 return [
-                    'id' => 'ANTRIAN' . str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT),
+                    'id' => 'ANTRIAN'.str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT),
                     'service' => $queue->vehicle->type ?? 'Unknown',
                     'date' => $queue->queue_date->format('d M Y'),
-                    'status' => match($queue->status) {
+                    'status' => match ($queue->status) {
                         'waiting' => 'Menunggu',
                         'called' => 'Dipanggil',
                         'completed' => 'Selesai',
@@ -35,7 +35,7 @@ class Dashboard extends Component
                         'expired' => 'Kadaluarsa',
                         default => 'Unknown'
                     },
-                    'time' => $queue->checkin_time ? $queue->checkin_time->format('H:i') : '-'
+                    'time' => $queue->checkin_time ? $queue->checkin_time->format('H:i') : '-',
                 ];
             });
 
@@ -63,7 +63,7 @@ class Dashboard extends Component
             'total_users' => $totalCustomers,
             'recent_queues' => $recentQueues,
             'popular_services' => $popularServices,
-            'queue_status' => $queueStatus
+            'queue_status' => $queueStatus,
         ];
 
         return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'))->layout('layouts.tenant');

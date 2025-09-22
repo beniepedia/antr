@@ -17,11 +17,13 @@ class TenantSubscription extends Model
         'start_date',
         'end_date',
         'status',
+        'price',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'price' => 'decimal:2',
     ];
 
     public function tenant()

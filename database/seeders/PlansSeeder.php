@@ -19,12 +19,12 @@ class PlansSeeder extends Seeder
                 'description' => 'Trial gratis selama 10 hari untuk mencoba fitur dasar.',
                 'billing_cycle' => 'trial',
                 'duration_days' => 10,
-                'features' => json_encode([
+                'features' => [
                     'Akses dasar sistem antrian',
                     'Maksimal 1 SPBU',
                     'Support email',
-                    '10 hari gratis'
-                ]),
+                    '10 hari gratis',
+                ],
             ],
             [
                 'name' => 'Bulanan',
@@ -32,13 +32,13 @@ class PlansSeeder extends Seeder
                 'description' => 'Langganan bulanan dengan akses penuh fitur.',
                 'billing_cycle' => 'monthly',
                 'duration_days' => 30,
-                'features' => json_encode([
+                'features' => [
                     'Akses penuh sistem antrian',
                     'Maksimal 5 SPBU',
                     'Support email dan chat',
                     'Laporan harian',
-                    'Update otomatis'
-                ]),
+                    'Update otomatis',
+                ],
             ],
             [
                 'name' => 'Tahunan',
@@ -46,14 +46,14 @@ class PlansSeeder extends Seeder
                 'description' => 'Langganan tahunan dengan diskon dan prioritas support.',
                 'billing_cycle' => 'yearly',
                 'duration_days' => 365,
-                'features' => json_encode([
+                'features' => [
                     'Akses penuh sistem antrian',
                     'SPBU unlimited',
                     'Prioritas support 24/7',
                     'Laporan advanced',
                     'API access',
-                    'Diskon 20% dari bulanan'
-                ]),
+                    'Diskon 20% dari bulanan',
+                ],
             ],
         ];
 

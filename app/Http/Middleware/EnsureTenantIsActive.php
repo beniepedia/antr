@@ -23,9 +23,9 @@ class EnsureTenantIsActive
         }
 
         // cek langganan aktif
-        $subscription = $user->tenant->activeSubscription();
+        $subscription = $user->tenant->subscriptions();
 
-        if (! $subscription) {
+        if ($subscription->get()->isEmpty()) {
             return redirect()->route('tenant.subscription');
         }
 

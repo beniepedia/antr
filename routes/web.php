@@ -5,6 +5,7 @@ use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Setup;
+use App\Livewire\Tenant\Subscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,9 +31,7 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
 
 Route::middleware(['auth:tenant'])->group(function () {
     Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
-    Route::get('/subscription', function () {
-        echo 'okeee';
-    })->name('tenant.subscription');
+    Route::get('/subscription', Subscription::class)->name('tenant.subscription');
 });
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
