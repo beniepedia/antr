@@ -1,8 +1,8 @@
 <?php
 
+use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
-use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Setup;
 use Illuminate\Support\Facades\Auth;
@@ -28,10 +28,11 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 });
 
-
-Route::middleware(['auth:tenant'])->group(function(){
-    Route::get('/app-setup', Setup::class)->name('tenant.setup');
-    Route::get('/subscriber')->name('tenant.subscribe');
+Route::middleware(['auth:tenant'])->group(function () {
+    Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
+    Route::get('/subscription', function () {
+        echo 'okeee';
+    })->name('tenant.subscription');
 });
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
@@ -45,6 +46,7 @@ Route::post('/logout', function () {
     Auth::guard('tenant')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
+
     return redirect('/');
 })->name('logout');
 
@@ -52,6 +54,7 @@ Route::post('/admin/logout', function () {
     Auth::guard('admin')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
+
     return redirect()->route('admin.login');
 })->name('admin.logout');
 

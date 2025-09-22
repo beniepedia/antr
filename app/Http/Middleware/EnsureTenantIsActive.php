@@ -19,17 +19,14 @@ class EnsureTenantIsActive
 
         // belum isi tenant
         if (is_null($user->tenant_id)) {
-            return redirect()->route('tenant.setup');
+            return redirect()->route('tenant.onboarding');
         }
 
         // cek langganan aktif
-        $subscription = $user->tenant->subscriptions()
-            ->where('status', 'active')
-            ->where('end_date', '>=', now())
-            ->first();
+        $subscription = $user->tenant->activeSubscription();
 
-        if (!$subscription) {
-            return redirect()->route('tenant.subscribe');
+        if (! $subscription) {
+            return redirect()->route('tenant.subscription');
         }
 
         return $next($request);
