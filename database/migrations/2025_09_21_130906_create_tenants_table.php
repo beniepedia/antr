@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->text('address')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->time('max_queue_time')->nullable(); // jam maksimal ambil antrian
+            $table->time('max_queue_time')->nullable(); 
+            $table->string('url'); 
             $table->timestamps();
         });
     }
