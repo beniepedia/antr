@@ -27,6 +27,7 @@ class Setup extends Component
     public function mount()
     {
         $user = Auth::guard('tenant')->user();
+
         if ($user->tenant_id) {
             return redirect()->route('tenant.dashboard');
         }
@@ -52,7 +53,7 @@ class Setup extends Component
         // Update user dengan tenant_id
         $user->update(['tenant_id' => $tenant->id]);
 
-        session()->flash('success', 'Setup berhasil! Selamat datang di dashboard.');
+        $this->js('FlyonUI.notify("Setup berhasil! Selamat datang di dashboard.", "success")');
         return redirect()->route('tenant.dashboard');
     }
 

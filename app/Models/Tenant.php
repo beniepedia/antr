@@ -32,6 +32,20 @@ class Tenant extends Model
         return $this->hasMany(Queue::class);
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(TenantSubscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->subscriptions()
+            ->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->latest('end_date')
+            ->first();
+    }
+
     public function customers()
     {
         return $this->hasMany(Customer::class);
