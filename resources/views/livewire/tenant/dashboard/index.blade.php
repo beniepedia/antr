@@ -33,36 +33,31 @@
                             <th>Perkiraan Waktu</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>#ANTRIAN001</td>
-                            <td>Pembuatan KTP</td>
-                            <td>15 Mei 2025</td>
-                            <td><span class="badge badge-success">Selesai</span></td>
-                            <td>10:30 AM</td>
-                        </tr>
-                        <tr>
-                            <td>#ANTRIAN002</td>
-                            <td>Pembuatan SIM</td>
-                            <td>16 Mei 2025</td>
-                            <td><span class="badge badge-warning">Dalam Proses</span></td>
-                            <td>14:00 PM</td>
-                        </tr>
-                        <tr>
-                            <td>#ANTRIAN003</td>
-                            <td>Paspor</td>
-                            <td>17 Mei 2025</td>
-                            <td><span class="badge badge-error">Dibatalkan</span></td>
-                            <td>09:00 AM</td>
-                        </tr>
-                        <tr>
-                            <td>#ANTRIAN004</td>
-                            <td>Surat Nikah</td>
-                            <td>18 Mei 2025</td>
-                            <td><span class="badge badge-success">Selesai</span></td>
-                            <td>11:00 AM</td>
-                        </tr>
-                    </tbody>
+                     <tbody>
+                         @forelse($dashboardData['recent_queues'] as $queue)
+                         <tr>
+                             <td>{{ $queue['id'] }}</td>
+                             <td>{{ $queue['service'] }}</td>
+                             <td>{{ $queue['date'] }}</td>
+                             <td>
+                                 @if($queue['status'] == 'Selesai')
+                                     <span class="badge badge-success">{{ $queue['status'] }}</span>
+                                 @elseif($queue['status'] == 'Dipanggil')
+                                     <span class="badge badge-warning">{{ $queue['status'] }}</span>
+                                 @elseif($queue['status'] == 'Dibatalkan')
+                                     <span class="badge badge-error">{{ $queue['status'] }}</span>
+                                 @else
+                                     <span class="badge">{{ $queue['status'] }}</span>
+                                 @endif
+                             </td>
+                             <td>{{ $queue['time'] }}</td>
+                         </tr>
+                         @empty
+                         <tr>
+                             <td colspan="5" class="text-center">Belum ada antrian</td>
+                         </tr>
+                         @endforelse
+                     </tbody>
                 </table>
             </div>
         </div>
@@ -72,26 +67,26 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-2.5">Layanan Populer</h5>
-                <div class="flex flex-wrap gap-2">
-                    <button class="btn">Pembuatan KTP</button>
-                    <button class="btn btn-primary">Pembuatan SIM</button>
-                    <button class="btn btn-secondary">Paspor</button>
-                    <button class="btn btn-accent">Surat Nikah</button>
-                </div>
+                 <div class="flex flex-wrap gap-2">
+                     @forelse($dashboardData['popular_services'] as $index => $service)
+                         <button class="btn {{ $index == 0 ? 'btn-primary' : ($index == 1 ? 'btn-secondary' : ($index == 2 ? 'btn-accent' : '')) }}">{{ $service }}</button>
+                     @empty
+                         <p class="text-gray-500">Belum ada layanan populer</p>
+                     @endforelse
+                 </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-2.5">Status Antrian</h5>
-                <div class="flex flex-wrap gap-2">
-                    <span class="badge">Total: {{ $dashboardData['total_users'] }}</span>
-                    <span class="badge badge-primary">Selesai</span>
-                    <span class="badge badge-secondary">Dalam Proses</span>
-                    <span class="badge badge-accent">Menunggu</span>
-                    <span class="badge badge-warning">Ditunda</span>
-                    <span class="badge badge-error">Dibatalkan</span>
-                </div>
+                 <div class="flex flex-wrap gap-2">
+                     <span class="badge">Total: {{ $dashboardData['queue_status']['total'] }}</span>
+                     <span class="badge badge-success">Selesai: {{ $dashboardData['queue_status']['completed'] }}</span>
+                     <span class="badge badge-warning">Dipanggil: {{ $dashboardData['queue_status']['in_progress'] }}</span>
+                     <span class="badge badge-accent">Menunggu: {{ $dashboardData['queue_status']['waiting'] }}</span>
+                     <span class="badge badge-error">Dibatalkan: {{ $dashboardData['queue_status']['cancelled'] }}</span>
+                 </div>
             </div>
         </div>
     </div>

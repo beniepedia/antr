@@ -10,57 +10,62 @@ class Dashboard extends Component
     public function render()
     {
         $user = Auth::guard('tenant')->user();
+        $tenant = $user->tenant;
 
         // Dashboard data for tenant users
-        $dashboardData = [
-            'total_queues' => 8,
-            'active_queues' => 3,
-            'total_users' => 156,
-            'recent_queues' => [
-                [
-                    'id' => 'ANTRIAN001',
-                    'service' => 'Pembuatan KTP',
-                    'date' => '15 Mei 2025',
-                    'status' => 'Selesai',
-                    'time' => '10:30 AM'
-                ],
-                [
-                    'id' => 'ANTRIAN002',
-                    'service' => 'Pembuatan SIM',
-                    'date' => '16 Mei 2025',
-                    'status' => 'Dalam Proses',
-                    'time' => '14:00 PM'
-                ],
-                [
-                    'id' => 'ANTRIAN003',
-                    'service' => 'Paspor',
-                    'date' => '17 Mei 2025',
-                    'status' => 'Dibatalkan',
-                    'time' => '09:00 AM'
-                ],
-                [
-                    'id' => 'ANTRIAN004',
-                    'service' => 'Surat Nikah',
-                    'date' => '18 Mei 2025',
-                    'status' => 'Selesai',
-                    'time' => '11:00 AM'
-                ]
-            ],
-            'popular_services' => [
-                'Pembuatan KTP',
-                'Pembuatan SIM',
-                'Paspor',
-                'Surat Nikah'
-            ],
-            'queue_status' => [
-                'total' => 156,
-                'completed' => 42,
-                'in_progress' => 28,
-                'waiting' => 56,
-                'delayed' => 12,
-                'cancelled' => 18
-            ]
+        $totalQueues = $tenant->queues()->count();
+        $activeQueues = $tenant->queues()->whereIn('status', ['waiting', 'called'])->count();
+        $totalCustomers = $tenant->customers()->count();
+
+        $recentQueues = $tenant->queues()
+            ->with(['customer', 'vehicle'])
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get()
+            ->map(function ($queue) {
+                return [
+                    'id' => 'ANTRIAN' . str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT),
+                    'service' => $queue->vehicle->type ?? 'Unknown',
+                    'date' => $queue->queue_date->format('d M Y'),
+                    'status' => match($queue->status) {
+                        'waiting' => 'Menunggu',
+                        'called' => 'Dipanggil',
+                        'completed' => 'Selesai',
+                        'cancelled' => 'Dibatalkan',
+                        'expired' => 'Kadaluarsa',
+                        default => 'Unknown'
+                    },
+                    'time' => $queue->checkin_time ? $queue->checkin_time->format('H:i') : '-'
+                ];
+            });
+
+        $popularServices = $tenant->queues()
+            ->join('vehicles', 'queues.vehicle_id', '=', 'vehicles.id')
+            ->selectRaw('vehicles.type, COUNT(*) as count')
+            ->groupBy('vehicles.type')
+            ->orderBy('count', 'desc')
+            ->limit(4)
+            ->pluck('type')
+            ->toArray();
+
+        $queueStatus = [
+            'total' => $totalQueues,
+            'completed' => $tenant->queues()->where('status', 'completed')->count(),
+            'in_progress' => $tenant->queues()->where('status', 'called')->count(),
+            'waiting' => $tenant->queues()->where('status', 'waiting')->count(),
+            'delayed' => 0, // Assuming no delayed status, or add if needed
+            'cancelled' => $tenant->queues()->where('status', 'cancelled')->count(),
         ];
+
+        $dashboardData = [
+            'total_queues' => $totalQueues,
+            'active_queues' => $activeQueues,
+            'total_users' => $totalCustomers,
+            'recent_queues' => $recentQueues,
+            'popular_services' => $popularServices,
+            'queue_status' => $queueStatus
+        ];
+
         return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'))->layout('layouts.tenant');
     }
 }
