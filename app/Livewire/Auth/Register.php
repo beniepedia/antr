@@ -14,6 +14,7 @@ class Register extends Component
     public $email;
     public $password;
     public $password_confirmation;
+    public $terms = false;
 
     protected function rules()
     {
@@ -44,6 +45,12 @@ class Register extends Component
         Auth::guard('tenant')->login($user);
 
         session()->regenerate();
+
+        // Jika tenant_id null, redirect ke setup
+        if (!$user->tenant_id) {
+            return redirect()->route('tenant.setup');
+        }
+
         return redirect()->intended(route('tenant.dashboard'));
     }
 

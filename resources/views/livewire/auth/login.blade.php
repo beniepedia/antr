@@ -1,69 +1,68 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
     <div class="w-full max-w-md">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-center">
-                <h1 class="text-3xl font-bold text-white">Antrianku</h1>
-                <p class="text-blue-100 mt-2">Sistem Antrian Modern</p>
-            </div>
+             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center">
+                 <h1 class="text-3xl font-bold text-white">Antrianku</h1>
+                 <p class="text-indigo-100 mt-2">Sistem Antrian Modern</p>
+             </div>
 
-            <div class="p-8">
-                <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Masuk ke Akun Anda</h2>
+             <div class="p-8">
+                 <div class="space-y-4 mb-6">
+                     <button type="button" class="btn btn-outline w-full">
+                         <svg class="w-5 h-5 mr-2 text-red-500" viewBox="0 0 24 24">
+                             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                             <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                             <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                             <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                         </svg>
+                         Login dengan Google
+                     </button>
+                     <button type="button" class="btn btn-outline w-full">
+                         <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                         </svg>
+                         Login dengan Facebook
+                     </button>
+                 </div>
 
-                <form wire:submit.prevent="login" novalidate>
-                    <div class="mb-5">
-                        <label for="email" class="block text-gray-700 text-sm font-medium mb-2">Email</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                                </svg>
-                            </div>
-                            <input wire:model.defer="email" type="email" id="email"
-                                class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-                                placeholder="email@contoh.com" />
-                        </div>
-                        @error('email')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                 <div class="divider mb-6">atau</div>
 
-                    <div class="mb-5">
-                        <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input wire:model.defer="password" type="password" id="password"
-                                class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-                                placeholder="••••••••" />
-                        </div>
-                        @error('password')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                 <form wire:submit.prevent="login" novalidate>
+                     <div class="mb-5">
+                         <label for="email" class="sr-only">Email</label>
+                         <div class="input input-lg">
+                             <span class="icon-[tabler--mail] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
+                             <input wire:model.defer="email" type="email" id="email" class="grow" placeholder="email@contoh.com" />
+                         </div>
+                         @error('email')
+                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                         @enderror
+                     </div>
 
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center">
-                            <input wire:model="remember" id="remember" type="checkbox"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                            <label for="remember" class="ml-2 block text-sm text-gray-700">
-                                Ingat saya
-                            </label>
-                        </div>
-                    </div>
+                     <div class="mb-5">
+                         <label for="password" class="sr-only">Password</label>
+                         <div class="input input-lg">
+                             <span class="icon-[tabler--key] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
+                             <input wire:model.defer="password" type="password" id="password" class="grow" placeholder="••••••••" />
+                         </div>
+                         @error('password')
+                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                         @enderror
+                     </div>
 
-                    <button type="submit"
-                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 shadow-md hover:shadow-lg">
-                        Masuk
-                    </button>
-                </form>
+                     <div class="flex items-center justify-between mb-6">
+                         <div class="flex items-center">
+                             <input wire:model="remember" id="remember" type="checkbox" class="checkbox checkbox-primary" />
+                             <label for="remember" class="ml-2 block text-sm text-gray-700">
+                                 Ingat saya
+                             </label>
+                         </div>
+                     </div>
+
+                     <button type="submit" class="btn btn-primary btn-lg w-full">
+                         Masuk
+                     </button>
+                 </form>
 
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
