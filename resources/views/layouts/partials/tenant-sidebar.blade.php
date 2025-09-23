@@ -14,8 +14,11 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <h3 class="text-base-content text-lg font-semibold">Mitchell Johnson</h3>
-                    <p class="text-base-content/80">flyonui@mitchell</p>
+                    <h3 class="text-base-content text-lg font-semibold">
+                        {{ Auth::guard('tenant')->check() ? Auth::guard('tenant')->user()->tenant->name : 'Tenant' }}
+                    </h3>
+                    <p class="text-base-content/80">
+                        {{ Auth::guard('tenant')->check() ? Auth::guard('tenant')->user()->email : '' }}</p>
                 </div>
 
             </div>
@@ -37,11 +40,14 @@
                             <span class="grow">Petugas</span>
                         </a>
                     </li>
-                    {{-- <li class="text-base-content/50 mt-2.5 p-2 text-xs uppercase">Pages</li> --}}
-                    <!-- Content Performance -->
 
-                    <!-- Audience Insights -->
-
+                    <li>
+                        <a href="{{ route('tenant.settings') }}" wire:navigate class="px-4"
+                            wire:current="menu-active">
+                            <span class="icon-[tabler--settings] size-4.5"></span>
+                            <span class="grow">Pengaturan</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 

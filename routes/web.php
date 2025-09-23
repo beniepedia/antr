@@ -5,6 +5,7 @@ use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Petugas;
+use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
     Route::get('/petugas', Petugas::class)->name('tenant.petugas');
+    Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 });
 
 Route::middleware(['auth:tenant'])->group(function () {

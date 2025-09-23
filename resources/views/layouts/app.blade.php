@@ -48,14 +48,28 @@
     <livewire:scripts />
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (session('message'))
-                window.notyf.success("{{ session('message') }}");
-            @endif
+        @if (session('success'))
+            window.notyf.success("{{ session('success') }}");
+        @endif
 
-            @if (session('error'))
-                window.notyf.error("{{ session('error') }}");
-            @endif
+        @if (session('error'))
+            window.notyf.error("{{ session('error') }}");
+        @endif
+
+        window.addEventListener('notify', event => {
+            const type = event.detail.type || 'success';
+            const message = event.detail.message || '';
+
+            if (type === 'success') {
+                window.notyf.success(message);
+            } else if (type === 'error') {
+                window.notyf.error(message);
+            } else {
+                window.notyf.open({
+                    type,
+                    message
+                });
+            }
         });
     </script>
 </body>
