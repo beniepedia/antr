@@ -20,23 +20,44 @@
     <livewire:styles />
 </head>
 
-<body class="min-h-screen">
-    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 z-50 overflow-y-auto hidden md:block">
-        @yield('navbar')
-    </aside>
+<body class="font-sans antialiased">
+    <div class="bg-base-200 flex min-h-screen flex-col">
 
-    <header class="fixed top-0 left-0 right-0 z-40 md:ml-64">
-        @yield('topbar')
-    </header>
+        <x-header></x-header>
 
-    <div class="md:ml-64 flex flex-col min-h-screen">
-        <main class="p-8 flex-1 mt-16">
-            @yield('content')
-        </main>
+        @include('layouts.partials.tenant-sidebar')
+
+        <div class="flex grow flex-col lg:ps-75">
+            <!-- ---------- MAIN CONTENT ---------- -->
+            <main class="mx-auto w-full max-w-7xl flex-1 p-6">
+                <div class="grid grid-cols-1 gap-6">
+
+                    @yield('content')
+                </div>
+            </main>
+            <!-- ---------- END MAIN CONTENT ---------- -->
+
+            <!-- ---------- FOOTER CONTENT ---------- -->
+            <footer class="bg-base-100">
+                <div class="mx-auto h-14 w-full max-w-7xl px-6"></div>
+            </footer>
+            <!-- ---------- END FOOTER CONTENT ---------- -->
+        </div>
     </div>
 
     <livewire:scripts />
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('message'))
+                window.notyf.success("{{ session('message') }}");
+            @endif
+
+            @if (session('error'))
+                window.notyf.error("{{ session('error') }}");
+            @endif
+        });
+    </script>
 </body>
 
 </html>
