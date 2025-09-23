@@ -2,15 +2,17 @@
 
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Livewire\Component;
 
 class Login extends Component
 {
     public $email;
+
     public $password;
+
     public $remember = false;
 
     protected $rules = [
@@ -34,12 +36,14 @@ class Login extends Component
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
             $this->addError('email', "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.");
+
             return;
         }
 
         if (Auth::guard('tenant')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::clear($key);
             session()->regenerate();
+
             return redirect()->intended(route('tenant.dashboard'));
         }
 

@@ -33,14 +33,16 @@
 
             <div class="p-8">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Buat Akun Baru</h2>
-                <p class="text-gray-600 text-center mb-6">Bergabunglah dengan ribuan pengguna yang telah mempercayai Antrianku untuk pengalaman antrian yang efisien dan modern.</p>
+                <p class="text-gray-600 text-center mb-6">Bergabunglah dengan ribuan pengguna yang telah mempercayai
+                    Antrianku untuk pengalaman antrian yang efisien dan modern.</p>
 
                 <form wire:submit.prevent="register" novalidate>
                     <div class="mb-5">
                         <label for="name" class="sr-only">Nama Lengkap</label>
-                        <div class="input input-lg">
+                        <div class="input">
                             <span class="icon-[tabler--user] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="name" type="text" id="name" class="grow" placeholder="Nama Lengkap" />
+                            <input wire:model.defer="name" type="text" id="name" class="grow"
+                                placeholder="Nama Lengkap" />
                         </div>
                         @error('name')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -49,9 +51,10 @@
 
                     <div class="mb-5">
                         <label for="email" class="sr-only">Email</label>
-                        <div class="input input-lg">
+                        <div class="input">
                             <span class="icon-[tabler--mail] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="email" type="email" id="email" class="grow" placeholder="email@contoh.com" />
+                            <input wire:model.defer="email" type="email" id="email" class="grow"
+                                placeholder="email@contoh.com" />
                         </div>
                         @error('email')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -60,9 +63,10 @@
 
                     <div class="mb-5">
                         <label for="password" class="sr-only">Password</label>
-                        <div class="input input-lg">
+                        <div class="input">
                             <span class="icon-[tabler--key] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="password" type="password" id="password" class="grow" placeholder="••••••••" />
+                            <input wire:model.defer="password" type="password" id="password" class="grow"
+                                placeholder="••••••••" />
                         </div>
                         @error('password')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -71,9 +75,10 @@
 
                     <div class="mb-6">
                         <label for="password_confirmation" class="sr-only">Konfirmasi Password</label>
-                        <div class="input input-lg">
+                        <div class="input">
                             <span class="icon-[tabler--key] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="password_confirmation" type="password" id="password_confirmation" class="grow" placeholder="••••••••" />
+                            <input wire:model.defer="password_confirmation" type="password" id="password_confirmation"
+                                class="grow" placeholder="••••••••" />
                         </div>
                         @error('password_confirmation')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -82,9 +87,11 @@
 
                     <div class="mb-6">
                         <div class="flex items-center">
-                            <input wire:model="terms" type="checkbox" class="checkbox checkbox-primary" id="terms" required />
+                            <input wire:model="terms" type="checkbox" class="checkbox checkbox-primary" id="terms"
+                                required />
                             <label for="terms" class="ml-2 block text-sm text-gray-700">
-                                Saya setuju dengan <a href="#" class="text-blue-600 hover:text-blue-500">syarat dan ketentuan</a>
+                                Saya setuju dengan <a href="#" class="text-blue-600 hover:text-blue-500">syarat
+                                    dan ketentuan</a>
                             </label>
                         </div>
                         @error('terms')
@@ -92,8 +99,8 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg w-full">
-                        <span class="icon-[tabler--user-plus] size-5 shrink-0"></span>
+                    <button type="submit" class="btn btn-primary w-full">
+                        <span wire:loading class="loading loading-spinner"></span>
                         Daftar
                     </button>
                 </form>
