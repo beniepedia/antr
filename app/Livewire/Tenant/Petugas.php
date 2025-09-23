@@ -10,7 +10,6 @@ use Livewire\Component;
 class Petugas extends Component
 {
     public $petugas = [];
-    public $showModal = false;
     public $isEditing = false;
     public $petugasId;
     public $name;
@@ -46,7 +45,7 @@ class Petugas extends Component
     {
         $this->resetForm();
         $this->isEditing = false;
-        $this->showModal = true;
+        // No need to set showModal = true as we're using FlyonUI data-overlay
     }
 
     public function openEditModal($id)
@@ -59,14 +58,14 @@ class Petugas extends Component
             $this->password = '';
             $this->password_confirmation = '';
             $this->isEditing = true;
-            $this->showModal = true;
+            // No need to set showModal = true as we're using FlyonUI data-overlay
         }
     }
 
     public function closeModal()
     {
-        $this->showModal = false;
         $this->resetForm();
+        // No need to set showModal = false as we're using FlyonUI data-overlay
     }
 
     public function resetForm()

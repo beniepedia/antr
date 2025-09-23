@@ -1,27 +1,5 @@
-{{-- <!-- ---------- MAIN SIDEBAR ---------- -->
 <aside id="layout-toggle"
-    class="overlay overlay-open:translate-x-0 drawer drawer-start inset-y-0 start-0 hidden h-full [--auto-close:lg] sm:w-75 lg:z-50 lg:block lg:translate-x-0 lg:shadow-none"
-    aria-label="Sidebar" tabindex="-1">
-    <div class="drawer-body border-base-content/20 h-full border-e p-6">
-        <button type="button" class="btn btn-text btn-square btn-xs absolute end-1 top-1 sm:hidden" aria-label="Close"
-            data-overlay="#layout-toggle">
-            <span class="icon-[tabler--x] size-4"></span>
-        </button>
-        <ul>
-            <li><a href="{{ route('tenant.dashboard') }}" wire:navigate class="sidebar-link text-base-content"><span
-                        class="icon-[tabler--smart-home]"></span><span>Dashboard</span></a></li>
-            <li><a href="{{ route('tenant.petugas') }}" wire:navigate class="sidebar-link text-base-content"><span
-                        class="icon-[tabler--user-check]"></span><span>Petugas</span></a></li>
-            <li><a href="#" class="sidebar-link text-base-content"><span
-                        class="icon-[tabler--users]"></span><span>Pelanggan</span></a></li>
-            <li><a href="#" class="sidebar-link text-base-content"><span
-                        class="icon-[tabler--settings]"></span><span>Pengaturan</span></a></li>
-        </ul>
-    </div>
-</aside> --}}
-<!-- ---------- END MAIN SIDEBAR ---------- -->
-<aside id="layout-toggle"
-    class="overlay overlay-open:translate-x-0 drawer drawer-start inset-y-0 start-0 hidden h-full [--auto-close:lg] sm:w-75 lg:block lg:translate-x-0 lg:shadow-none"
+    class="overlay overlay-open:translate-x-0 drawer drawer-start inset-y-0 start-0 hidden h-full [--auto-close:lg] lg:z-50 sm:w-75 lg:block lg:translate-x-0 lg:shadow-none"
     aria-label="Sidebar" tabindex="-1">
     <div class="drawer-body border-base-content/20 h-full border-e p-0">
         <div class="flex h-full max-h-full flex-col">
