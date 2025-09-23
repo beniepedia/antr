@@ -25,6 +25,7 @@ class PlansSeeder extends Seeder
                     'Support email',
                     '10 hari gratis',
                 ],
+                'is_trial' => 1,
             ],
             [
                 'name' => 'Bulanan',

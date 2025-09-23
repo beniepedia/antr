@@ -9,17 +9,22 @@ use Livewire\Component;
 class Setup extends Component
 {
     public $code;
+
     public $name;
+
     public $address;
+
     public $contact_person;
+
     public $phone;
+
     public $url;
 
     protected $rules = [
         'code' => 'required|string|max:50|unique:tenants,code',
         'name' => 'required|string|max:150',
         'address' => 'required|string',
-        'contact_person' => 'required|string|max:20',
+        'whatsapp' => 'required|string|max:20',
         'phone' => 'nullable|string|max:20',
         'url' => 'required|string|regex:/^[a-zA-Z0-9\-]+$/|max:50|unique:tenants,url',
     ];
@@ -46,15 +51,13 @@ class Setup extends Component
             'address' => $this->address,
             'contact_person' => $this->contact_person,
             'phone' => $this->phone,
-            'url' => $this->url ? $this->url . '.' . parse_url(config('app.url'), PHP_URL_HOST) : null,
-            'status' => 'active',
+            'url' => $this->url,
         ]);
 
         // Update user dengan tenant_id
         $user->update(['tenant_id' => $tenant->id]);
 
-        $this->js('FlyonUI.notify("Setup berhasil! Selamat datang di dashboard.", "success")');
-        return redirect()->route('tenant.dashboard');
+        return redirect()->route('tenant.dashboard')->with('success', 'Setup berhasil! Selamat datang di dashboard');
     }
 
     public function logout()
@@ -62,6 +65,7 @@ class Setup extends Component
         Auth::guard('tenant')->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
+
         return $this->redirect(route('login'), navigate: true);
     }
 

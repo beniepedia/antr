@@ -11,9 +11,17 @@ use App\Livewire\Tenant\Subscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('home');
+
+Route::domain('{tenant:url}.'.config('app.url'))
+    ->middleware('tenant.domain')
+    ->group(function () {
+        Route::get('/', function () {
+            return 'oke';
+        });
+    });
 
 // guest for tenant users
 Route::middleware('guest:tenant')->group(function () {

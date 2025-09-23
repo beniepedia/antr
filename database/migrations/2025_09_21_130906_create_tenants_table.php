@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->string('code', 20)->unique();
-            $table->foreignId('plan_id')->nullable()->constrained('plans')->nullOnDelete();
             $table->string('name', 150);
-            $table->string('contact_person', 100)->nullable();
             $table->string('phone', 20)->nullable();
+            $table->string('whatsapp', 20)->nullable();
             $table->text('address')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->time('max_queue_time')->nullable(); 
-            $table->string('url'); 
+            $table->boolean('status')->default(1);
+            $table->string('url');
             $table->timestamps();
         });
     }

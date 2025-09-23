@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureTenantIsActive;
+use App\Http\Middleware\TenantDomain;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'tenant.active' => EnsureTenantIsActive::class
+            'tenant.active' => EnsureTenantIsActive::class,
+            'tenant.domain' => TenantDomain::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

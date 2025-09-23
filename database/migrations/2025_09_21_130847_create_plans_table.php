@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('billing_cycle')->default('trial');
             $table->integer('duration_days')->nullable(); // untuk hitung end_date
             $table->json('features')->nullable();
+            $table->boolean('is_trial')->default(0);
             $table->timestamps();
         });
     }

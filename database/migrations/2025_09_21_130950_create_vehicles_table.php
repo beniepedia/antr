@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('type', 50);         // roda 2, roda 4, roda 6
-            $table->integer('max_liters');      // kuota maksimal BBM per transaksi
+            $table->string('type', 50)->nullable();         // roda 2, roda 4, roda 6
+            $table->integer('max_liters')->nullable();      // kuota maksimal BBM per transaksi
+            $table->time('max_queue_time')->nullable();
             $table->timestamps();
         });
     }
