@@ -8,6 +8,7 @@ use App\Livewire\Tenant\Petugas;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
+use App\Livewire\Tenant\Upgrade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,8 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
     Route::get('/petugas', Petugas::class)->name('tenant.petugas');
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
+
+    Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
 });
 
 Route::middleware(['auth:tenant'])->group(function () {

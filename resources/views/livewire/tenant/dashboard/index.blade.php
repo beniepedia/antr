@@ -22,7 +22,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <h5 class="card-title text-sm md:text-xl">Status Langganan</h5>
                     <div class="flex items-center gap-2">
-                        <button type="button" class="btn btn-primary btn-xs hidden md:inline-flex">
+                        <button type="button" class="btn btn-primary btn-xs hidden md:inline-flex" wire:click="redirectToUpgrade">
                             <span class="icon-[tabler--arrow-up] size-3"></span>
                             Upgrade
                         </button>
@@ -72,7 +72,7 @@
                         </div>
                     @endif
                     <div class="mt-4 md:hidden">
-                        <button type="button" class="btn btn-primary w-full">
+                        <button type="button" class="btn btn-primary w-full" wire:click="redirectToUpgrade">
                             <span class="icon-[tabler--arrow-up] size-4"></span>
                             Upgrade Paket
                         </button>
@@ -505,4 +505,6 @@
             });
         });
     </script>
+
+
 </div>

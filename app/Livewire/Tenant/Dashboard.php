@@ -7,6 +7,11 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public function redirectToUpgrade()
+    {
+        return redirect()->route('tenant.upgrade');
+    }
+
     public function render()
     {
         $user = Auth::guard('tenant')->user();
@@ -72,6 +77,8 @@ class Dashboard extends Component
             ];
         }
 
+        $plans = \App\Models\Plan::all(); // Assuming Plan model exists
+
         $dashboardData = [
             'total_queues' => $totalQueues,
             'active_queues' => $activeQueues,
@@ -80,6 +87,7 @@ class Dashboard extends Component
             'popular_services' => $popularServices,
             'queue_status' => $queueStatus,
             'subscription' => $subscriptionData,
+            'plans' => $plans,
         ];
 
         return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'))->layout('layouts.tenant');
