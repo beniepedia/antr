@@ -47,6 +47,8 @@
 
     <livewire:scripts />
 
+    @stack('scripts')
+
     <script>
         @if (session('success'))
             window.notyf.success("{{ session('success') }}");

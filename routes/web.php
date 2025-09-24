@@ -44,6 +44,7 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
 
     Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
     Route::get('/tenant/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
+
 });
 
 Route::middleware(['auth:tenant'])->group(function () {
