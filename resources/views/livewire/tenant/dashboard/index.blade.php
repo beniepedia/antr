@@ -20,9 +20,9 @@
         <div class="card border-none">
             <div class="card-body">
                 <div class="flex items-center justify-between mb-4">
-                    <h5 class="card-title">Status Langganan</h5>
+                    <h5 class="card-title text-sm md:text-xl">Status Langganan</h5>
                     <div class="flex items-center gap-2">
-                        <button type="button" class="btn btn-primary btn-xs">
+                        <button type="button" class="btn btn-primary btn-xs hidden md:inline-flex">
                             <span class="icon-[tabler--arrow-up] size-3"></span>
                             Upgrade
                         </button>
@@ -71,6 +71,12 @@
                             Langganan telah berakhir. Perpanjang untuk melanjutkan layanan.
                         </div>
                     @endif
+                    <div class="mt-4 md:hidden">
+                        <button type="button" class="btn btn-primary w-full">
+                            <span class="icon-[tabler--arrow-up] size-4"></span>
+                            Upgrade Paket
+                        </button>
+                    </div>
                 @else
                     <div class="text-center py-8">
                         <span class="icon-[tabler--crown-off] size-12 text-gray-400 mb-2 block"></span>
@@ -163,11 +169,22 @@
         </div>
     </div>
 
+    <!-- Customer Visit Chart -->
+    <div class="card mb-8">
+        <div class="card-body">
+            <div class="flex items-center justify-between mb-4">
+                <h5 class="card-title text-sm md:text-xl">Grafik Kunjungan Pelanggan</h5>
+                <span class="icon-[tabler--chart-bar] size-6 text-primary"></span>
+            </div>
+            <div id="customer-visit-chart" class="w-full h-64"></div>
+        </div>
+    </div>
+
     <!-- Information and Tips -->
     <div class="card mb-8">
         <div class="card-body">
             <div class="flex items-center justify-between mb-4">
-                <h5 class="card-title">Informasi & Tips</h5>
+                <h5 class="card-title text-sm md:text-xl">Informasi & Tips</h5>
                 <span class="icon-[tabler--info-circle] size-6 text-info"></span>
             </div>
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -200,7 +217,7 @@
     <div class="card mb-8">
         <div class="card-body">
             <div class="flex items-center justify-between mb-4">
-                <h5 class="card-title">Antrian Terbaru</h5>
+                <h5 class="card-title text-sm md:text-xl">Antrian Terbaru</h5>
                 <span class="icon-[tabler--clock-play] size-6 text-primary"></span>
             </div>
             <div class="overflow-x-auto">
@@ -271,7 +288,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="flex items-center justify-between mb-4">
-                    <h5 class="card-title">Layanan Populer</h5>
+                    <h5 class="card-title text-sm md:text-xl">Layanan Populer</h5>
                     <span class="icon-[tabler--star] size-6 text-yellow-500"></span>
                 </div>
                 @if(count($dashboardData['popular_services']) > 0)
@@ -301,7 +318,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="flex items-center justify-between mb-4">
-                    <h5 class="card-title">Status Antrian</h5>
+                    <h5 class="card-title text-sm md:text-xl">Status Antrian</h5>
                     <span class="icon-[tabler--chart-bar] size-6 text-primary"></span>
                 </div>
                 <div class="space-y-4">
@@ -351,7 +368,7 @@
     <div class="card">
         <div class="card-body">
             <div class="flex items-center justify-between mb-4">
-                <h5 class="card-title">Aksi Cepat</h5>
+                <h5 class="card-title text-sm md:text-xl">Aksi Cepat</h5>
                 <span class="icon-[tabler--zap] size-6 text-warning"></span>
             </div>
             <div class="flex flex-wrap gap-4">
@@ -399,4 +416,93 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dummy data for customer visits
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const shortMonths = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGS', 'SEP', 'OKT', 'NOV', 'DES'];
+            const visits = [120, 150, 180, 200, 250, 300, 280, 320, 350, 400, 380, 420]; // Dummy data
+
+            const options = {
+                series: [{
+                    name: 'Kunjungan',
+                    data: visits
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 250,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false, // Default vertical
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: months, // Default long names
+                    labels: {
+                        rotate: 0
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Jumlah Kunjungan'
+                    }
+                },
+                colors: ['#3B82F6'],
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + ' kunjungan';
+                        }
+                    }
+                },
+                responsive: [{
+                    breakpoint: 768,
+                    options: {
+                        plotOptions: {
+                            bar: {
+                                horizontal: true // Horizontal on mobile
+                            }
+                        },
+                        xaxis: {
+                            categories: shortMonths, // Short names on mobile
+                            labels: {
+                                rotate: -45
+                            }
+                        }
+                    }
+                }]
+            };
+
+            const chart = new ApexCharts(document.querySelector("#customer-visit-chart"), options);
+            chart.render();
+
+            // Re-render on resize
+            window.addEventListener('resize', function() {
+                chart.updateOptions({
+                    plotOptions: {
+                        bar: {
+                            horizontal: window.innerWidth >= 768 ? true : false
+                        }
+                    },
+                    xaxis: {
+                        categories: window.innerWidth >= 768 ? months : shortMonths,
+                        labels: {
+                            rotate: window.innerWidth >= 768 ? 0 : -45
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </div>
