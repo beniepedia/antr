@@ -57,6 +57,21 @@ class Dashboard extends Component
             'cancelled' => $tenant->queues()->where('status', 'cancelled')->count(),
         ];
 
+        $subscription = $tenant->activeSubscription();
+        $subscriptionData = null;
+        if ($subscription) {
+            $totalDays = $subscription->start_date->diffInDays($subscription->end_date);
+            $daysRemaining = now()->diffInDays($subscription->end_date, false);
+            $subscriptionData = [
+                'plan_name' => $subscription->plan->name ?? 'Unknown',
+                'status' => $subscription->status,
+                'start_date' => $subscription->start_date->format('d M Y'),
+                'end_date' => $subscription->end_date->format('d M Y'),
+                'days_remaining' => $daysRemaining,
+                'total_days' => $totalDays,
+            ];
+        }
+
         $dashboardData = [
             'total_queues' => $totalQueues,
             'active_queues' => $activeQueues,
@@ -64,6 +79,7 @@ class Dashboard extends Component
             'recent_queues' => $recentQueues,
             'popular_services' => $popularServices,
             'queue_status' => $queueStatus,
+            'subscription' => $subscriptionData,
         ];
 
         return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'))->layout('layouts.tenant');
