@@ -9,75 +9,69 @@ use Livewire\Component;
 
 class Subscription extends Component
 {
+    public $plans;
+
     public $selectedPlan;
+
+    public $selectedTrialPlan = null;
 
     public function mount()
     {
-        $user = Auth::guard('tenant')->user();
-        if (! $user->tenant_id) {
-            return redirect()->route('tenant.onboarding');
-        }
-
-        // Check if already has active subscription
-        $activeSub = $user->tenant->subscriptions()
-            ->where('status', 'active')
-            ->where('end_date', '>=', now())
-            ->first();
-
-        if ($activeSub) {
-            return redirect()->route('tenant.dashboard');
-        }
+        $this->plans = Plan::all();
     }
 
-    public function tryFree($planId)
+    public function selectTrialPlan($planId)
     {
-        $user = Auth::guard('tenant')->user();
-        $plan = Plan::find($planId);
+        $this->selectedTrialPlan = $planId;
+        $this->dispatch('showTrialConfirmation');
+    }
 
-        if ($plan && $plan->price == 0) {
-            // Create subscription for free plan
-            TenantSubscription::create([
-                'tenant_id' => $user->tenant_id,
-                'plan_id' => $plan->id,
-                'start_date' => now(),
-                'end_date' => now()->addDays($plan->duration_days),
-                'status' => 'active',
-            ]);
+    public function confirmTrial($planId)
+    {
+        // if (! $this->selectedTrialPlan) {
+        //     return;
+        // }
 
-            $this->js('notyf.success("Paket Trial berhasil diaktifkan!")');
+        $tenant = Auth::guard('tenant')->user()->tenant;
 
-            return redirect()->route('tenant.dashboard');
-        }
+        // Buat subscription untuk paket trial
+        TenantSubscription::create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $planId,
+            'start_date' => now(),
+            'end_date' => now()->addDays(14), // Trial selama 14 hari
+            'status' => 'active',
+        ]);
+
+        // Redirect ke dashboard
+        return redirect()->route('tenant.dashboard');
     }
 
     public function subscribe()
     {
+        // Validasi plan yang dipilih
         $this->validate([
             'selectedPlan' => 'required|exists:plans,id',
         ]);
 
-        $user = Auth::guard('tenant')->user();
-        $plan = Plan::find($this->selectedPlan);
+        // Dapatkan tenant yang sedang login
+        $tenant = Auth::guard('tenant')->user()->tenant;
 
-        // Create subscription
+        // Buat subscription
         TenantSubscription::create([
-            'tenant_id' => $user->tenant_id,
-            'plan_id' => $plan->id,
+            'tenant_id' => $tenant->id,
+            'plan_id' => $this->selectedPlan,
             'start_date' => now(),
-            'end_date' => now()->addMonth(), // Assuming monthly
+            'end_date' => now()->addMonth(), // Default 1 bulan
             'status' => 'active',
-            'price' => $plan->price,
         ]);
 
-        $this->js('notyf.success("Berhasil berlangganan paket '.$plan->name.'!");');
-
+        // Redirect ke dashboard
         return redirect()->route('tenant.dashboard');
     }
 
     public function render()
     {
-        $plans = Plan::all();
-
-        return view('livewire.tenant.subscription', compact('plans'))->layout('layouts.guest');
+        return view('livewire.tenant.subscription')->layout('layouts.guest');
     }
 }

@@ -14,7 +14,7 @@ class Setup extends Component
 
     public $address;
 
-    public $contact_person;
+    public $whatsapp;
 
     public $phone;
 
@@ -49,7 +49,7 @@ class Setup extends Component
             'code' => $this->code,
             'name' => $this->name,
             'address' => $this->address,
-            'contact_person' => $this->contact_person,
+            'whatsapp' => $this->whatsapp,
             'phone' => $this->phone,
             'url' => $this->url,
         ]);

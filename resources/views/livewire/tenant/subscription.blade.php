@@ -37,17 +37,20 @@
                                         @endforeach
                                     </ul>
                                     <div class="card-actions justify-center mt-auto">
-                                        @if($plan->price == 0)
-                                        <button type="button" wire:click="tryFree({{ $plan->id }})" class="btn btn-outline w-full cursor-pointer transition-all">
-                                            <span class="icon-[tabler--check] size-4 mr-2"></span>
-                                            Coba Gratis
-                                        </button>
+                                        @if ($plan->price == 0)
+                                            <button type="button" wire:click="confirmTrial({{ $plan->id }})"
+                                                class="btn btn-outline w-full cursor-pointer transition-all">
+                                                <span class="icon-[tabler--check] size-4 mr-2"></span>
+                                                Coba Gratis
+                                            </button>
                                         @else
-                                        <label class="btn btn-outline w-full {{ $selectedPlan == $plan->id ? 'btn-active' : '' }} cursor-pointer transition-all">
-                                            <input type="radio" wire:model="selectedPlan" value="{{ $plan->id }}" class="hidden" />
-                                            <span class="icon-[tabler--check] size-4 mr-2"></span>
-                                            Pilih Paket
-                                        </label>
+                                            <label
+                                                class="btn btn-outline w-full {{ $selectedPlan == $plan->id ? 'btn-active' : '' }} cursor-pointer transition-all">
+                                                <input type="radio" wire:model="selectedPlan"
+                                                    value="{{ $plan->id }}" class="hidden" />
+                                                <span class="icon-[tabler--check] size-4 mr-2"></span>
+                                                Pilih Paket
+                                            </label>
                                         @endif
                                     </div>
                                 </div>
@@ -58,12 +61,12 @@
                     @if ($selectedPlan)
                         @php $selectedPlanObj = $plans->find($selectedPlan); @endphp
                         @if ($selectedPlanObj && $selectedPlanObj->price > 0)
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                Pilih Paket
-                                <span class="icon-[tabler--arrow-right] size-4 ml-2"></span>
-                            </button>
-                        </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    Pilih Paket
+                                    <span class="icon-[tabler--arrow-right] size-4 ml-2"></span>
+                                </button>
+                            </div>
                         @endif
                     @endif
                 </form>

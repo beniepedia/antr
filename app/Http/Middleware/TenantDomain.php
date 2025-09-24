@@ -22,9 +22,7 @@ class TenantDomain
         $subdomain = $parts[0] ?? null;
 
         // Cari tenant di DB
-        $tenant = Tenant::where('url', 'smraja.antrian.test')->first();
-
-        dd($tenant);
+        $tenant = Tenant::where('url', strtolower($subdomain ?? ''))->first();
 
         if (! $tenant) {
             abort(404, 'Tenant tidak ditemukan'); // <- ini penting
