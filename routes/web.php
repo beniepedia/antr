@@ -4,6 +4,7 @@ use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
 use App\Livewire\Tenant\Dashboard;
+use App\Livewire\Tenant\Payment;
 use App\Livewire\Tenant\Petugas;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
@@ -42,6 +43,7 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 
     Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
+    Route::get('/tenant/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
 });
 
 Route::middleware(['auth:tenant'])->group(function () {

@@ -51,17 +51,10 @@
                         </div>
 
                         <div class="text-center">
-                            @if($selectedPlan == $plan->id)
-                                <button class="btn btn-primary w-full btn-lg gap-2 shadow-lg" wire:click="proceedToPayment">
-                                    <span class="icon-[tabler--credit-card] size-5"></span>
-                                    Lanjut ke Pembayaran
-                                </button>
-                            @else
-                                <button class="btn {{ $index == 1 ? 'btn-primary' : 'btn-outline btn-primary' }} w-full btn-lg gap-2" wire:click="selectPlan({{ $plan->id }})">
-                                    <span class="icon-[tabler--check] size-5"></span>
-                                    Pilih Paket Ini
-                                </button>
-                            @endif
+                            <button class="btn {{ $index == 1 ? 'btn-primary' : 'btn-outline btn-primary' }} w-full btn-lg gap-2" wire:click="selectPlan({{ $plan->id }})">
+                                <span class="icon-[tabler--credit-card] size-5"></span>
+                                Pilih & Bayar Sekarang
+                            </button>
                         </div>
                     </div>
                 </div>
