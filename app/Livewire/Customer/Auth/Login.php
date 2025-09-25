@@ -7,9 +7,13 @@ use Livewire\Component;
 class Login extends Component
 {
     public string $phone = '';
+
     public string $otp = '';
+
     public bool $otpSent = false;
+
     public int $resendTimer = 0;
+
     public ?string $errorMessage = null;
 
     public function sendOtp(): void
@@ -62,7 +66,7 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.customer.auth.login')->layout('components.layouts.customer-auth');
+        return view('livewire.customer.auth.login')->layout('layouts.customer-auth');
     }
 
     public function decrementTimer()
