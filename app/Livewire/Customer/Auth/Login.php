@@ -15,8 +15,6 @@ class Login extends Component
 
     public int $resendTimer = 0;
 
-    public ?string $errorMessage = null;
-
     public function sendOtp(): void
     {
         try {
@@ -29,8 +27,7 @@ class Login extends Component
 
             // Placeholder for WhatsApp OTP send logic
             $this->otpSent = true;
-            $this->resendTimer = 30;
-            $this->errorMessage = null;
+            $this->resendTimer = 60;
             session(['otp' => '1234']);
             $this->dispatch('notify', type: 'success', message: 'Kode OTP telah dikirim ke WhatsApp Anda (demo: 1234).');
         } catch (ValidationException $e) {
@@ -44,20 +41,27 @@ class Login extends Component
 
     public function verifyOtp(): void
     {
-        $this->validate([
-            'otp' => 'required|digits:4',
-        ], [
-            'otp.required' => 'Kode OTP wajib diisi.',
-            'otp.digits' => 'Kode OTP harus 4 digit.',
-        ]);
+        try {
+            $this->validate([
+                'otp' => 'required|digits:4',
+            ], [
+                'otp.required' => 'Kode OTP wajib diisi.',
+                'otp.digits' => 'Kode OTP harus 4 digit.',
+            ]);
 
-        // Placeholder for OTP verification & tenant guard login
-        // Simulate verification
-        if ($this->otp === '1234') { // Demo code
-            $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
-            $this->redirectRoute('customer.dashboard');
-        } else {
-            $this->addError('otp', 'Kode OTP tidak valid.');
+            // Placeholder for OTP verification & tenant guard login
+            // Simulate verification
+            if ($this->otp === '1234') { // Demo code
+                $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
+                $this->redirectRoute('customer.dashboard');
+            } else {
+                $this->addError('otp', 'Kode OTP tidak valid.');
+            }
+        } catch (ValidationException $e) {
+            foreach ($e->validator->errors()->all() as $error) {
+                $this->dispatch('notify', type: 'error', message: $error);
+            }
+            throw $e; // biar error tetap bisa dipakai untuk highlight field
         }
     }
 
@@ -69,11 +73,6 @@ class Login extends Component
     }
 
     protected $listeners = ['otpError' => 'setError'];
-
-    public function setError($message)
-    {
-        $this->errorMessage = $message;
-    }
 
     public function changeNumber()
     {

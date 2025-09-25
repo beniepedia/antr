@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->string('type', 50)->nullable();         // roda 2, roda 4, roda 6
             $table->integer('max_liters')->nullable();      // kuota maksimal BBM per transaksi
-            $table->time('max_queue_time')->nullable();
             $table->timestamps();
         });
     }

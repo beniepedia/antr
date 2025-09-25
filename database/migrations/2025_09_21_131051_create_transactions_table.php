@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->foreignId('queue_id')->constrained('queues')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->string('fuel_type', 50); // solar, pertalite, pertamax
             $table->decimal('volume', 10, 2);
             $table->decimal('price', 12, 2);

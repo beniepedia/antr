@@ -16,9 +16,13 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->string('name', 100)->nullable();
             $table->string('whatsapp', 20)->nullable();
-            $table->string('license_plate', 20);
-            $table->string('vehicle_type', 50)->nullable(); // truk, bus, mobil
+            $table->string('otp_code')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
+            $table->timestamp('last_otp_sent_at')->nullable();
+            $table->unsignedInteger('otp_attempts')->default(0);
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

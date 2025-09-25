@@ -39,12 +39,6 @@
             <div
                 class="card shadow-xl backdrop-blur bg-base-100/80 ring-1 ring-primary/20 rounded-2xl max-w-sm lg:max-w-md p-4">
                 <div class="card-body space-y-4 lg:space-y-5">
-                    @if ($errorMessage)
-                        <div class="alert alert-error text-sm">
-                            <span class="icon-[tabler--alert-circle] size-4"></span>
-                            <span>{{ $errorMessage }}</span>
-                        </div>
-                    @endif
 
                     <div
                         class="avatar mb-7 avatar-placeholder bg-base-100 size-16 mx-auto rounded-full flex items-center justify-center  lg:size-18">

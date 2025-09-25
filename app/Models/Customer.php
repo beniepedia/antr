@@ -13,8 +13,6 @@ class Customer extends Model
         'tenant_id',
         'name',
         'phone',
-        'license_plate',
-        'vehicle_type',
     ];
 
     public function tenant()

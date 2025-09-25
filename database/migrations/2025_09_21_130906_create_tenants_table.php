@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->string('whatsapp', 20)->nullable();
             $table->text('address')->nullable();
+            $table->time('max_queue_time')->nullable();
             $table->boolean('status')->default(1);
             $table->string('url');
             $table->timestamps();
