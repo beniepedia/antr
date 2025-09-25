@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->string('name', 100)->nullable();
-            $table->string('phone', 20)->nullable();
+            $table->string('whatsapp', 20)->nullable();
             $table->string('license_plate', 20);
             $table->string('vehicle_type', 50)->nullable(); // truk, bus, mobil
             $table->timestamps();

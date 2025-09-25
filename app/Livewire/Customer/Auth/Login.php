@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Customer\Auth;
 
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Login extends Component
@@ -18,31 +19,41 @@ class Login extends Component
 
     public function sendOtp(): void
     {
-        $this->validate([
-            'phone' => 'required|regex:/^[0-9]{10,13}$/',
-        ], [
-            'phone.required' => 'Nomor WhatsApp wajib diisi.',
-            'phone.regex' => 'Nomor WhatsApp tidak valid.',
-        ]);
+        try {
+            $this->validate([
+                'phone' => 'required|regex:/^[0-9]{10,13}$/',
+            ], [
+                'phone.required' => 'Nomor WhatsApp wajib diisi.',
+                'phone.regex' => 'Nomor WhatsApp tidak valid.',
+            ]);
 
-        // Placeholder for WhatsApp OTP send logic
-        $this->otpSent = true;
-        $this->resendTimer = 30;
-        $this->errorMessage = null;
+            // Placeholder for WhatsApp OTP send logic
+            $this->otpSent = true;
+            $this->resendTimer = 30;
+            $this->errorMessage = null;
+            session(['otp' => '1234']);
+            $this->dispatch('notify', type: 'success', message: 'Kode OTP telah dikirim ke WhatsApp Anda (demo: 1234).');
+        } catch (ValidationException $e) {
+            foreach ($e->validator->errors()->all() as $error) {
+                $this->dispatch('notify', type: 'error', message: $error);
+            }
+            throw $e; // biar error tetap bisa dipakai untuk highlight field
+        }
+
     }
 
     public function verifyOtp(): void
     {
         $this->validate([
-            'otp' => 'required|digits:6',
+            'otp' => 'required|digits:4',
         ], [
             'otp.required' => 'Kode OTP wajib diisi.',
-            'otp.digits' => 'Kode OTP harus 6 digit.',
+            'otp.digits' => 'Kode OTP harus 4 digit.',
         ]);
 
         // Placeholder for OTP verification & tenant guard login
         // Simulate verification
-        if ($this->otp === '123456') { // Stub check
+        if ($this->otp === '1234') { // Demo code
             $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
             $this->redirectRoute('customer.dashboard');
         } else {
@@ -64,8 +75,18 @@ class Login extends Component
         $this->errorMessage = $message;
     }
 
+    public function changeNumber()
+    {
+        $this->otpSent = false;
+        session()->forget('otp');
+    }
+
     public function render()
     {
+        if (session('otp')) {
+            $this->otpSent = true;
+        }
+
         return view('livewire.customer.auth.login')->layout('layouts.customer-auth');
     }
 

@@ -31,7 +31,7 @@ class TenantDomain
 
         app()->instance('tenant', $tenant);
         // Provide default domain parameter for route() generation
-        URL::defaults(['tenant' => $tenant->url]);
+        URL::defaults(['subdomain' => $tenant->url]);
 
         return $next($request);
 

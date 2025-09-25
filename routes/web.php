@@ -21,7 +21,7 @@ use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 //     return view('welcome');
 // })->name('home');
 
-Route::domain('{tenant:url}.'.config('app.url'))
+Route::domain('{subdomain:url}.'.config('app.url'))
     ->middleware('tenant.domain')
     ->group(function () {
         // Customer Portal (public and authenticated)
