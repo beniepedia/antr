@@ -17,6 +17,7 @@ class Tenant extends Model
         'phone',
         'status',
         'url',
+        'max_queue_time',
     ];
 
     protected $casts = [

@@ -18,7 +18,10 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
+            $table->decimal('price_subscription', 12, 2)->default(0);
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
