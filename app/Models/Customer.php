@@ -13,6 +13,12 @@ class Customer extends Model
         'tenant_id',
         'name',
         'phone',
+        'otp_code',
+        'otp_expires_at',
+        'last_otp_sent_at',
+        'otp_attempts',
+        'verified_at',
+        'is_active',
     ];
 
     public function tenant()

@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.active' => EnsureTenantIsActive::class,
             'tenant.domain' => TenantDomain::class,
         ]);
+
+        $middleware->web(append: [
+            TenantDomain::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

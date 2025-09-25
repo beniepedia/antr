@@ -3,6 +3,10 @@
 use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
+use App\Livewire\Customer\Auth\Login as CustomerLogin;
+use App\Livewire\Customer\Dashboard as CustomerDashboard;
+use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
+use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Payment;
 use App\Livewire\Tenant\Petugas;
@@ -12,10 +16,6 @@ use App\Livewire\Tenant\Subscription;
 use App\Livewire\Tenant\Upgrade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Customer\Auth\Login as CustomerLogin;
-use App\Livewire\Customer\Dashboard as CustomerDashboard;
-use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
-use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -27,11 +27,9 @@ Route::domain('{subdomain:url}.'.config('app.url'))
         // Customer Portal (public and authenticated)
         Route::get('/login', CustomerLogin::class)->name('customer.login');
 
-        Route::middleware('auth:tenant')->group(function () {
-            Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
-            Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
-            Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
-        });
+        Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
+        Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
+        Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
     });
 
 // guest for tenant users

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->timestamp('last_otp_sent_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->unsignedInteger('otp_attempts')->default(0);
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
 
             $table->softDeletes();
