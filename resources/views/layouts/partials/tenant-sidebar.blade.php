@@ -15,10 +15,10 @@
                 </div>
                 <div class="text-center">
                     <h3 class="text-base-content text-lg font-semibold">
-                        {{ Auth::guard('tenant')->check() ? Auth::guard('tenant')->user()->tenant->name : 'Tenant' }}
+                        {{ Auth::guard('tenant')->user()->name }}
                     </h3>
                     <p class="text-base-content/80">
-                        {{ Auth::guard('tenant')->check() ? Auth::guard('tenant')->user()->email : '' }}</p>
+                        {{ Auth::guard('tenant')->user()->email }}</p>
                 </div>
 
             </div>
@@ -28,24 +28,24 @@
                     <li>
                         <a href="{{ route('tenant.dashboard') }}" class="px-4" wire:navigate
                             wire:current="menu-active">
-                            <span class="icon-[tabler--dashboard] size-4.5"></span>
-                            <span class="grow">Dashboard</span>
+                            <span class="icon-[tabler--dashboard] size-5"></span>
+                            <span class="grow text-[1rem]">Dashboard</span>
                             {{-- <span class="badge badge-sm badge-primary rounded-full">2</span> --}}
                         </a>
                     </li>
 
                     <li>
                         <a href="{{ route('tenant.petugas') }}" wire:navigate class="px-4" wire:current="menu-active">
-                            <span class="icon-[tabler--user-check] size-4.5"></span>
-                            <span class="grow">Petugas</span>
+                            <span class="icon-[tabler--user-check] size-5"></span>
+                            <span class="grow text-[1rem]">Petugas</span>
                         </a>
                     </li>
 
                     <li>
                         <a href="{{ route('tenant.settings') }}" wire:navigate class="px-4"
                             wire:current="menu-active">
-                            <span class="icon-[tabler--settings] size-4.5"></span>
-                            <span class="grow">Pengaturan</span>
+                            <span class="icon-[tabler--settings] size-5"></span>
+                            <span class="grow text-[1rem]">Pengaturan</span>
                         </a>
                     </li>
                 </ul>
