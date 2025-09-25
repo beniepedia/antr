@@ -53,7 +53,7 @@ class Login extends Component
             // Simulate verification
             if ($this->otp === '1234') { // Demo code
                 $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
-                $this->redirectRoute('customer.dashboard');
+                $this->redirect(route('customer.dashboard'), navigate: true);
             } else {
                 $this->addError('otp', 'Kode OTP tidak valid.');
             }

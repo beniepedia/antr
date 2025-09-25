@@ -23,7 +23,12 @@ class Login extends Component
     public function mount()
     {
         if (Auth::guard('tenant')->check()) {
-            redirect()->route('tenant.dashboard');
+            $user = Auth::guard('tenant')->user();
+            if ($user->tenant_id) {
+                $this->redirect(route('tenant.dashboard'), navigate: true);
+            } else {
+                $this->redirect(route('tenant.onboarding'), navigate: true);
+            }
         }
     }
 
@@ -44,7 +49,12 @@ class Login extends Component
             RateLimiter::clear($key);
             session()->regenerate();
 
-            return redirect()->intended(route('tenant.dashboard'));
+            $user = Auth::guard('tenant')->user();
+            if ($user->tenant_id) {
+                $this->redirect(route('tenant.dashboard'), navigate: true);
+            } else {
+                $this->redirect(route('tenant.onboarding'), navigate: true);
+            }
         }
 
         RateLimiter::hit($key, 60);

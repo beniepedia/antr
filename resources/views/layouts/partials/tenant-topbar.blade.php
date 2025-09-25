@@ -393,13 +393,15 @@
                                   Add team account
                               </a>
                           </li>
-                          <li class="dropdown-footer p-2 pt-1">
-                              <a class="btn btn-text btn-error btn-block h-11 justify-start px-3 font-normal"
-                                  href="#">
-                                  <span class="icon-[tabler--logout] size-5"></span>
-                                  Logout
-                              </a>
-                          </li>
+                           <li class="dropdown-footer p-2 pt-1">
+                               <form method="POST" action="{{ route('logout') }}">
+                                   @csrf
+                                   <button type="submit" class="btn btn-text btn-error btn-block h-11 justify-start px-3 font-normal">
+                                       <span class="icon-[tabler--logout] size-5"></span>
+                                       Logout
+                                   </button>
+                               </form>
+                           </li>
                       </ul>
                   </div>
               </div>

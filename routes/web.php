@@ -73,7 +73,7 @@ Route::post('/logout', function () {
     request()->session()->invalidate();
     request()->session()->regenerateToken();
 
-    return redirect('/');
+    return redirect()->route('login')->header('X-Livewire-Navigate', 'true');
 })->name('logout');
 
 Route::post('/admin/logout', function () {
