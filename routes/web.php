@@ -12,6 +12,10 @@ use App\Livewire\Tenant\Subscription;
 use App\Livewire\Tenant\Upgrade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Customer\Auth\Login as CustomerLogin;
+use App\Livewire\Customer\Dashboard as CustomerDashboard;
+use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
+use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -20,8 +24,13 @@ use Illuminate\Support\Facades\Route;
 Route::domain('{tenant:url}.'.config('app.url'))
     ->middleware('tenant.domain')
     ->group(function () {
-        Route::get('/', function () {
-            return 'oke';
+        // Customer Portal (public and authenticated)
+        Route::get('/login', CustomerLogin::class)->name('customer.login');
+
+        Route::middleware('auth:tenant')->group(function () {
+            Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
+            Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
+            Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
         });
     });
 

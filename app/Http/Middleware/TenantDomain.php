@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class TenantDomain
@@ -29,6 +30,8 @@ class TenantDomain
         }
 
         app()->instance('tenant', $tenant);
+        // Provide default domain parameter for route() generation
+        URL::defaults(['tenant' => $tenant->url]);
 
         return $next($request);
 

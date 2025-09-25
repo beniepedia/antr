@@ -1,0 +1,113 @@
+<section
+    class="relative isolate overflow-hidden h-screen px-4 py-12 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 lg:min-h-[75vh] lg:py-16">
+    <div
+        class="mx-auto w-full max-w-6xl flex flex-col items-center gap-6 lg:flex-row lg:items-center lg:justify-center lg:gap-8">
+        <!-- Left: Hero copy -->
+        <div class="order-2 space-y-4 text-center lg:order-1 lg:text-left lg:space-y-5">
+            <div
+                class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary">
+                <span class="icon-[tabler--fuel] size-4"></span>
+                <span class="text-sm">Pengisian Solar Cepat & Aman</span>
+            </div>
+
+            <h1 class="text-2xl font-bold leading-tight lg:text-3xl">Ambil Antrian Isi Solar di
+                {{ app('tenant')->name ?? 'SPBU' }}</h1>
+            <p class="text-sm text-base-content/70 lg:text-base">Verifikasi via WhatsApp OTP. Proses antrian yang cepat
+                dan mudah untuk isi solar.</p>
+
+            <ul class="hidden mt-2 grid gap-3 sm:grid-cols-2 lg:max-w-md lg:grid">
+                <li class="flex items-center gap-2">
+                    <span class="icon-[tabler--shield-check] text-success size-5"></span>
+                    <span>Verifikasi aman via OTP</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="icon-[tabler--smartphone] text-primary size-5"></span>
+                    <span>Ramah mobile</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="icon-[tabler--clock] text-warning size-5"></span>
+                    <span>Antrian cepat</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="icon-[tabler--fuel] text-info size-5"></span>
+                    <span>Pengisian solar mudah</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Right: Login card -->
+        <div class="order-1 lg:order-2">
+            <div
+                class="card shadow-xl backdrop-blur bg-base-100/80 ring-1 ring-primary/20 rounded-2xl max-w-sm lg:max-w-md">
+                <div class="card-body space-y-4 lg:space-y-5">
+                    @if ($errorMessage)
+                        <div class="alert alert-error text-sm">
+                            <span class="icon-[tabler--alert-circle] size-4"></span>
+                            <span>{{ $errorMessage }}</span>
+                        </div>
+                    @endif
+                    <div class="text-center">
+                        <div
+                            class="avatar mb-7 avatar-placeholder bg-base-100 size-16 mx-auto rounded-full flex items-center justify-center  lg:size-18">
+                            <img src="{{ asset('assets/img/logo-pertamina.png') }}" alt="Pertamina Logo"
+                                class="size-7 lg:size-8 object-contain">
+                        </div>
+                        <h2 class="text-xl font-bold lg:text-2xl">Masuk Ambil Antrian</h2>
+                        <p class="text-sm text-base-content/70 lg:text-base">Masukkan nomor WhatsApp Anda untuk
+                            mendapatkan antrian</p>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="form-label text-base font-semibold">Nomor WhatsApp</label>
+                        <input type="number" inputmode="numeric" class="input mt-2 input-lg w-full text-base"
+                            placeholder="+62 8123 4567 890" wire:model.defer="phone">
+                    </div>
+
+                    <button class="btn btn-primary btn-block text-sm lg:text-base btn-lg" wire:click="sendOtp"
+                        wire:loading.attr="disabled">
+                        <span class="icon-[tabler--send] size-5"></span>
+                        <span class="ml-1 font-semibold">Kirim OTP</span>
+                    </button>
+
+                    @if ($otpSent)
+                        <div class="divider text-sm lg:text-base" wire:poll.1s="decrementTimer">Verifikasi Kode OTP
+                        </div>
+                        <div class="space-y-3 lg:space-y-4">
+                            <label class="form-label text-sm lg:text-base font-semibold">Masukkan Kode OTP</label>
+                            <div class="flex justify-center gap-2" data-pin-input data-pin-input-length="6">
+                                @for ($i = 0; $i < 6; $i++)
+                                    <input class="pin-input pin-input-md lg:pin-input-lg" data-pin-input-item
+                                        maxlength="1" pattern="[0-9]*" inputmode="numeric" wire:model.lazy="otp">
+                                @endfor
+                            </div>
+                            <button class="btn btn-success btn-block text-sm lg:text-base btn-lg" wire:click="verifyOtp"
+                                wire:loading.attr="disabled" wire:loading.class="loading">
+                                <span class="icon-[tabler--shield-check] size-4"></span>
+                                <span wire:loading.remove class="ml-1">Verifikasi</span>
+                                <span wire:loading class="ml-1">Memverifikasi...</span>
+                            </button>
+                            <div class="flex items-center justify-between text-xs text-base-content/70 lg:text-sm">
+                                <button type="button" class="btn btn-ghost btn-xs"
+                                    wire:click="$set('otpSent', false)">Ubah nomor</button>
+                                @if ($resendTimer > 0)
+                                    <button type="button" class="btn btn-text btn-xs lg:btn-sm" disabled>Kirim ulang
+                                        dalam {{ str_pad($resendTimer, 2, '0', STR_PAD_LEFT) }}:00</button>
+                                @else
+                                    <button type="button" class="btn btn-link btn-xs lg:btn-sm" wire:click="resendOtp"
+                                        wire:loading.class="loading" wire:loading.attr="disabled">
+                                        <span wire:loading.remove>Kirim ulang</span>
+                                        <span wire:loading>Mengirim...</span>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                    <p class="text-center text-xs text-base-content/60 lg:text-sm">Dengan masuk, Anda menyetujui <a
+                            class="link link-primary" href="#">Ketentuan Layanan</a> & <a
+                            class="link link-primary" href="#">Kebijakan Privasi</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
