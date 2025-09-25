@@ -1,8 +1,6 @@
 import './bootstrap';
 import "flyonui/flyonui"
 import './main.js';
-
-
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 

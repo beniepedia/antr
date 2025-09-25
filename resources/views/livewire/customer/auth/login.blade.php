@@ -1,4 +1,4 @@
-<section class="bg-gradient-to-br from-primary/5 via-transparent to-primary/10 min-h-screen ">
+<section class="bg-gradient-to-br from-primary/5 via-transparent to-primary/10 min-h-screen">
     <div class="mx-auto max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 px-6 py-8">
 
         <!-- Left: Hero copy -->
@@ -9,8 +9,7 @@
                 <span class="text-sm">Pengisian Solar Cepat & Aman</span>
             </div>
 
-            <h1 class="text-2xl font-bold leading-tight lg:text-3xl">Ambil Antrian Isi Solar di
-            </h1>
+            <h1 class="text-2xl font-bold leading-tight lg:text-3xl">Ambil Antrian Isi Solar di</h1>
             <p class="text-sm text-base-content/70 lg:text-base">Verifikasi via WhatsApp OTP. Proses antrian yang cepat
                 dan mudah untuk isi solar.</p>
 
@@ -74,45 +73,44 @@
                     @endif
 
                     @if ($otpSent)
-                        <div class="text-center">
-                            <h2 class="text-xl font-bold lg:text-2xl">Verifikasi OTP</h2>
-                            <p class="text-sm text-base-content/70 lg:text-base">Masukkan kode OTP yang dikirim ke nomor
-                                whatsapp</p>
-                        </div>
-                        <div class="divider text-sm lg:text-base" wire:poll.1s="decrementTimer">Verifikasi Kode OTP
-                        </div>
-                        <div class="space-y-3 lg:space-y-4">
-                            <div class="flex justify-center gap-3 mb-8">
-                                @for ($i = 0; $i < 4; $i++)
-                                    <input id="otp-{{ $i }}"
-                                        class="input input-bordered input-md lg:input-lg text-center w-12 mx-1"
-                                        maxlength="1" pattern="[0-9]*" inputmode="numeric"
-                                        wire:model.lazy="otp.{{ $i }}"
-                                        oninput="handleOtpInput(this, {{ $i }})"
-                                        onkeydown="handleOtpKeydown(this, event, {{ $i }})"
-                                        onpaste="handleOtpPaste(event)">
-                                @endfor
-
+                        <form wire:submit.prevent="verifyOtp" class="space-y-6" novalidate x-data="otpTimer({{ $resendTimer }})">
+                            <div class="text-center">
+                                <h2 class="text-xl font-bold lg:text-2xl">Verifikasi OTP</h2>
+                                <p class="text-sm text-base-content/70 lg:text-base">Masukkan kode OTP yang dikirim ke
+                                    nomor whatsapp</p>
                             </div>
-                            <button class="btn btn-success btn-block text-sm lg:text-base btn-lg" wire:click="verifyOtp"
-                                wire:loading.attr="disabled">
-                                <span class="icon-[tabler--shield-check] size-4"></span>
-                                <span class="ml-1">Verifikasi</span>
-                            </button>
-                            <div class="flex items-center justify-between text-xs text-base-content/70 lg:text-sm">
-                                <button type="button" class="btn btn-soft btn-primary btn-xs"
-                                    wire:click="changeNumber">Ganti nomor</button>
-                                @if ($resendTimer > 0)
-                                    <button type="button" class="btn btn-text btn-xs lg:btn-sm" disabled>Kirim ulang
-                                        dalam {{ str_pad($resendTimer, 2, '0', STR_PAD_LEFT) }} detik</button>
-                                @else
-                                    <button type="button" class="btn btn-soft btn-xs lg:btn-sm" wire:click="resendOtp"
-                                        wire:loading.attr="disabled">
-                                        <span>Kirim ulang</span>
-                                    </button>
-                                @endif
+                            <div class="divider text-sm lg:text-base">Verifikasi Kode OTP</div>
+                            <div class="space-y-3 lg:space-y-4">
+                                <div class="flex justify-center gap-3 mb-8">
+                                    @for ($i = 0; $i < 4; $i++)
+                                        <input id="otp-{{ $i }}"
+                                            class="input input-bordered input-md lg:input-lg text-center w-12 mx-1"
+                                            maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                                            wire:model.lazy="otp.{{ $i }}"
+                                            oninput="handleOtpInput(this, {{ $i }})"
+                                            onkeydown="handleOtpKeydown(this, event, {{ $i }})"
+                                            onpaste="handleOtpPaste(event)">
+                                    @endfor
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block text-sm lg:text-base btn-lg">
+                                    <span class="icon-[tabler--shield-check] size-4"></span>
+                                    <span class="ml-1">Verifikasi</span>
+                                </button>
+                                <div class="flex items-center justify-between text-xs text-base-content/70 lg:text-sm">
+                                    <button type="button" class="btn btn-soft btn-primary btn-xs"
+                                        wire:click="changeNumber">Ganti nomor</button>
+                                    <template x-if="timer > 0">
+                                        <span>Kirim ulang dalam <span x-text="formattedTimer"></span></span>
+                                    </template>
+                                    <template x-if="timer === 0">
+                                        <button type="button" class="btn btn-soft btn-xs lg:btn-sm"
+                                            wire:click="resendOtp" @click="restart()" wire:loading.attr="disabled">
+                                            <span>Kirim ulang</span>
+                                        </button>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     @endif
 
                     <p class="text-center text-xs text-base-content/60 lg:text-sm">Dengan masuk, Anda menyetujui <a
@@ -126,9 +124,38 @@
 
 @push('scripts')
     <script>
+        function otpTimer(initial) {
+            return {
+                timer: initial,
+                interval: null,
+                get formattedTimer() {
+                    const m = String(Math.floor(this.timer / 60)).padStart(2, '0');
+                    const s = String(this.timer % 60).padStart(2, '0');
+                    return `${m}:${s}`;
+                },
+                start() {
+                    if (this.interval) clearInterval(this.interval);
+                    this.interval = setInterval(() => {
+                        if (this.timer > 0) {
+                            this.timer--;
+                        } else {
+                            clearInterval(this.interval);
+                            Livewire.dispatch('resetTimer');
+                        }
+                    }, 1000);
+                },
+                restart() {
+                    this.timer = initial;
+                    this.start();
+                },
+                init() {
+                    this.start();
+                }
+            }
+        }
+
         function handleOtpInput(el, index) {
             const inputs = document.querySelectorAll('input[id^="otp-"]');
-
             if (el.value.length === 1 && index < inputs.length - 1) {
                 inputs[index + 1].focus();
             }
@@ -136,8 +163,6 @@
 
         function handleOtpKeydown(el, event, index) {
             const inputs = document.querySelectorAll('input[id^="otp-"]');
-
-            // kalau Backspace dan kosong → pindah balik
             if (event.key === 'Backspace' && el.value === '' && index > 0) {
                 inputs[index - 1].focus();
             }
@@ -147,19 +172,15 @@
             event.preventDefault();
             const paste = (event.clipboardData || window.clipboardData).getData('text');
             const inputs = document.querySelectorAll('input[id^="otp-"]');
-
-            if (!/^\d+$/.test(paste)) return; // hanya angka
-
+            if (!/^\d+$/.test(paste)) return;
             paste.split('').forEach((char, i) => {
                 if (i < inputs.length) {
                     inputs[i].value = char;
                     inputs[i].dispatchEvent(new Event('input', {
                         bubbles: true
-                    })); // sync ke Livewire
+                    }));
                 }
             });
-
-            // pindahkan fokus ke input terakhir terisi
             const filledIndex = Math.min(paste.length, inputs.length) - 1;
             if (filledIndex >= 0) {
                 inputs[filledIndex].focus();

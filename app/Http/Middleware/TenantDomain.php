@@ -19,6 +19,14 @@ class TenantDomain
     {
 
         $host = $request->getHost(); // contoh: test.antrian.test
+
+        $mainDomain = parse_url(config('app.url'), PHP_URL_HOST); // misal: antrian.test
+
+        if ($host === $mainDomain) {
+            // Skip tenant resolve di domain utama
+            return $next($request);
+        }
+
         $parts = explode('.', $host);
         $subdomain = $parts[0] ?? null;
 
