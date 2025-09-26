@@ -11,6 +11,7 @@
         <table class="table table-zebra w-full">
             <thead>
                 <tr>
+                    <th>Foto</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th>ID Karyawan</th>
@@ -24,6 +25,16 @@
             <tbody>
                 @forelse($karyawan as $k)
                     <tr>
+                        <td>
+                            @if ($k->profile?->avatar)
+                                <img src="{{ asset('storage/' . $k->profile->avatar) }}" alt="Avatar"
+                                    class="w-10 h-10 object-cover rounded-full">
+                            @else
+                                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <span class="text-gray-600 text-sm">{{ substr($k->name, 0, 1) }}</span>
+                                </div>
+                            @endif
+                        </td>
                         <td>{{ $k->name }}</td>
                         <td>{{ $k->email }}</td>
                         <td>{{ $k->profile?->employee_id ?? '-' }}</td>
@@ -54,7 +65,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-4">Belum ada karyawan.</td>
+                        <td colspan="9" class="text-center py-4">Belum ada karyawan.</td>
                     </tr>
                 @endforelse
             </tbody>

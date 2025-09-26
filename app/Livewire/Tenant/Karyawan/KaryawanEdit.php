@@ -8,9 +8,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class KaryawanEdit extends Component
 {
+    use WithFileUploads;
+
     public $karyawanId;
 
     public $name;
@@ -38,7 +41,9 @@ class KaryawanEdit extends Component
 
     public $experience_years;
 
-    public $avatar;
+    public $avatar; // Temporary file upload
+
+    public $currentAvatar; // Current avatar path
 
     protected function rules()
     {
@@ -54,7 +59,7 @@ class KaryawanEdit extends Component
             'station_code' => 'nullable|string',
             'license_number' => 'nullable|string',
             'experience_years' => 'nullable|integer|min:0',
-            'avatar' => 'nullable|string',
+            'avatar' => 'nullable|image|max:2048', // Max 2MB
         ];
     }
 
@@ -83,7 +88,7 @@ class KaryawanEdit extends Component
             $this->station_code = $karyawan->profile->station_code;
             $this->license_number = $karyawan->profile->license_number;
             $this->experience_years = $karyawan->profile->experience_years;
-            $this->avatar = $karyawan->profile->avatar;
+            $this->currentAvatar = $karyawan->profile->avatar;
         }
 
         $this->rules['email'] .= ',email,'.$this->karyawanId;
@@ -95,6 +100,16 @@ class KaryawanEdit extends Component
         $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         $this->validate();
+
+        // Handle avatar upload
+        $avatarPath = $this->currentAvatar; // Keep current if no new upload
+        if ($this->avatar) {
+            // Delete old avatar if exists
+            if ($this->currentAvatar && Storage::disk('public')->exists($this->currentAvatar)) {
+                Storage::disk('public')->delete($this->currentAvatar);
+            }
+            $avatarPath = $this->avatar->store('avatars', 'public');
+        }
 
         $karyawan = User::find($this->karyawanId);
         $karyawan->update([
@@ -118,7 +133,7 @@ class KaryawanEdit extends Component
                 'station_code' => $this->station_code,
                 'license_number' => $this->license_number,
                 'experience_years' => $this->experience_years,
-                'avatar' => $this->avatar,
+                'avatar' => $avatarPath,
             ]
         );
 

@@ -28,6 +28,10 @@ class KaryawanIndex extends Component
     {
         $karyawan = User::find($id);
         if ($karyawan && $karyawan->tenant_id == Auth::guard('tenant')->user()->tenant_id && $karyawan->role != 'admin') {
+            // Delete avatar file if exists
+            if ($karyawan->profile?->avatar && Storage::disk('public')->exists($karyawan->profile->avatar)) {
+                Storage::disk('public')->delete($karyawan->profile->avatar);
+            }
             $karyawan->profile?->delete(); // Delete profile first
             $karyawan->delete();
             $this->js('notyf.success("Karyawan berhasil dihapus!")');

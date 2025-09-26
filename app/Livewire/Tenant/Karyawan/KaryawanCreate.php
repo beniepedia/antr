@@ -8,9 +8,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class KaryawanCreate extends Component
 {
+    use WithFileUploads;
+
     public $name;
 
     public $email;
@@ -36,7 +39,7 @@ class KaryawanCreate extends Component
 
     public $experience_years;
 
-    public $avatar;
+    public $avatar; // Temporary file upload
 
     protected function rules()
     {
@@ -52,7 +55,7 @@ class KaryawanCreate extends Component
             'station_code' => 'nullable|string',
             'license_number' => 'nullable|string',
             'experience_years' => 'nullable|integer|min:0',
-            'avatar' => 'nullable|string',
+            'avatar' => 'nullable|image|max:2048', // Max 2MB
         ];
     }
 
@@ -66,6 +69,12 @@ class KaryawanCreate extends Component
         $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         $this->validate();
+
+        // Handle avatar upload
+        $avatarPath = null;
+        if ($this->avatar) {
+            $avatarPath = $this->avatar->store('avatars', 'public');
+        }
 
         $user = User::create([
             'tenant_id' => $tenantId,
@@ -87,7 +96,7 @@ class KaryawanCreate extends Component
             'station_code' => $this->station_code,
             'license_number' => $this->license_number,
             'experience_years' => $this->experience_years,
-            'avatar' => $this->avatar,
+            'avatar' => $avatarPath,
         ]);
 
         $this->js('notyf.success("Karyawan berhasil ditambahkan!")');

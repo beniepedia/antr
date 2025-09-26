@@ -151,13 +151,26 @@
 
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Avatar (Path)</span>
+                    <span class="label-text">Foto Profil</span>
                 </label>
-                <input type="text" wire:model="avatar" class="input input-bordered"
-                    placeholder="Path ke foto profil" />
+                <input type="file" wire:model="avatar" class="file-input file-input-bordered" accept="image/*" />
                 @error('avatar')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
+                @if ($currentAvatar)
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600">Foto saat ini:</p>
+                        <img src="{{ asset('storage/' . $currentAvatar) }}" alt="Current Avatar"
+                            class="w-20 h-20 object-cover rounded">
+                    </div>
+                @endif
+                @if ($avatar)
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600">Pratinjau:</p>
+                        <img src="{{ $avatar->temporaryUrl() }}" alt="Preview"
+                            class="w-20 h-20 object-cover rounded">
+                    </div>
+                @endif
             </div>
         </div>
 
