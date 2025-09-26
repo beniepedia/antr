@@ -35,6 +35,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('tenant.antrian') }}" wire:navigate class="px-4" wire:current="menu-active">
+                            <span class="icon-[tabler--clipboard-list] size-5"></span>
+                            <span class="grow text-[1rem]">Antrian</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('tenant.karyawan') }}" wire:navigate class="px-4"
                             wire:current="menu-active">
                             <span class="icon-[tabler--user-check] size-5"></span>
