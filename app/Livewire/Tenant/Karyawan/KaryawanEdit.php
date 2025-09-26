@@ -29,15 +29,15 @@ class KaryawanEdit extends Component
 
     public $position = 'operator';
 
-    public $shift;
-
     public $hire_date;
 
     public $status = 'active';
 
-    public $station_code;
-
     public $license_number;
+
+    public $whatsapp;
+
+    public $address;
 
     public $experience_years;
 
@@ -53,11 +53,11 @@ class KaryawanEdit extends Component
             'password' => 'nullable|min:8|confirmed',
             'employee_id' => 'nullable|string',
             'position' => 'required|in:'.implode(',', array_keys(PositionEnum::options())),
-            'shift' => 'nullable|in:morning,afternoon,night',
             'hire_date' => 'nullable|date',
             'status' => 'required|in:active,inactive',
-            'station_code' => 'nullable|string',
             'license_number' => 'nullable|string',
+            'whatsapp' => 'required|string|unique:profiles,whatsapp,'.$this->karyawanId.',user_id',
+            'address' => 'nullable|string',
             'experience_years' => 'nullable|integer|min:0',
             'avatar' => 'nullable|image|max:2048', // Max 2MB
         ];
@@ -82,11 +82,11 @@ class KaryawanEdit extends Component
         if ($karyawan->profile) {
             $this->employee_id = $karyawan->profile->employee_id;
             $this->position = $karyawan->profile->position;
-            $this->shift = $karyawan->profile->shift;
             $this->hire_date = $karyawan->profile->hire_date?->format('Y-m-d');
             $this->status = $karyawan->profile->status;
-            $this->station_code = $karyawan->profile->station_code;
             $this->license_number = $karyawan->profile->license_number;
+            $this->whatsapp = $karyawan->profile->whatsapp;
+            $this->address = $karyawan->profile->address;
             $this->experience_years = $karyawan->profile->experience_years;
             $this->currentAvatar = $karyawan->profile->avatar;
         }
@@ -127,12 +127,12 @@ class KaryawanEdit extends Component
                 'tenant_id' => $tenantId,
                 'employee_id' => $this->employee_id,
                 'position' => $this->position,
-                'shift' => $this->shift,
                 'hire_date' => $this->hire_date,
                 'status' => $this->status,
-                'station_code' => $this->station_code,
                 'license_number' => $this->license_number,
                 'experience_years' => $this->experience_years,
+                'whatsapp' => $this->whatsapp,
+                'address' => $this->address,
                 'avatar' => $avatarPath,
             ]
         );

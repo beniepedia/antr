@@ -58,4 +58,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Plan::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function servedQueues()
+    {
+        return $this->hasMany(Queue::class, 'served_by');
+    }
 }

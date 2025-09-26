@@ -16,7 +16,6 @@
                     <th>Email</th>
                     <th>ID Karyawan</th>
                     <th>Jabatan</th>
-                    <th>Shift</th>
                     <th>Status</th>
                     <th>Dibuat</th>
                     <th>Aksi</th>
@@ -42,7 +41,6 @@
                             <span
                                 class="badge badge-outline">{{ \App\Enums\PositionEnum::tryFrom($k->profile?->position ?? 'operator')?->label() ?? 'Operator' }}</span>
                         </td>
-                        <td>{{ $k->profile?->shift ? ucfirst($k->profile->shift) : '-' }}</td>
                         <td>
                             <span
                                 class="badge {{ $k->profile?->status == 'active' ? 'badge-success' : 'badge-warning' }}">
@@ -52,6 +50,10 @@
                         <td>{{ $k->created_at->format('d M Y') }}</td>
                         <td>
                             <div class="flex gap-2">
+                                <a href="{{ route('tenant.karyawan.show', $k->id) }}"
+                                    class="btn btn-sm btn-outline btn-primary">
+                                    <span class="icon-[tabler--eye] size-4"></span>
+                                </a>
                                 <a href="/karyawan/{{ $k->id }}/edit" class="btn btn-sm btn-outline btn-info">
                                     <span class="icon-[tabler--edit] size-4"></span>
                                 </a>
@@ -65,7 +67,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center py-4">Belum ada karyawan.</td>
+                        <td colspan="8" class="text-center py-4">Belum ada karyawan.</td>
                     </tr>
                 @endforelse
             </tbody>

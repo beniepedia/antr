@@ -27,15 +27,15 @@ class KaryawanCreate extends Component
 
     public $position = 'operator';
 
-    public $shift;
-
     public $hire_date;
 
     public $status = 'active';
 
-    public $station_code;
-
     public $license_number;
+
+    public $whatsapp;
+
+    public $address;
 
     public $experience_years;
 
@@ -49,11 +49,11 @@ class KaryawanCreate extends Component
             'password' => 'required|min:8|confirmed',
             'employee_id' => 'nullable|string|unique:profiles,employee_id',
             'position' => 'required|in:'.implode(',', array_keys(PositionEnum::options())),
-            'shift' => 'nullable|in:morning,afternoon,night',
             'hire_date' => 'nullable|date',
             'status' => 'required|in:active,inactive',
-            'station_code' => 'nullable|string',
             'license_number' => 'nullable|string',
+            'whatsapp' => 'required|string|unique:profiles,whatsapp',
+            'address' => 'nullable|string',
             'experience_years' => 'nullable|integer|min:0',
             'avatar' => 'nullable|image|max:2048', // Max 2MB
         ];
@@ -90,12 +90,12 @@ class KaryawanCreate extends Component
             'tenant_id' => $tenantId,
             'employee_id' => $this->employee_id,
             'position' => $this->position,
-            'shift' => $this->shift,
             'hire_date' => $this->hire_date,
             'status' => $this->status,
-            'station_code' => $this->station_code,
             'license_number' => $this->license_number,
             'experience_years' => $this->experience_years,
+            'whatsapp' => $this->whatsapp,
+            'address' => $this->address,
             'avatar' => $avatarPath,
         ]);
 

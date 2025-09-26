@@ -17,12 +17,12 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->string('employee_id')->nullable()->unique();
             $table->enum('position', ['operator', 'supervisor', 'manager'])->default('operator');
-            $table->enum('shift', ['morning', 'afternoon', 'night'])->nullable();
             $table->date('hire_date')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('station_code')->nullable(); // Kode SPBU
             $table->string('license_number')->nullable(); // Nomor lisensi jika diperlukan
             $table->integer('experience_years')->nullable();
+            $table->string('whatsapp')->unique();
+            $table->text('address')->nullable();
             $table->string('avatar')->nullable(); // Path ke foto profil
             $table->timestamps();
         });

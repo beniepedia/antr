@@ -80,21 +80,6 @@
 
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Shift</span>
-                </label>
-                <select wire:model="shift" class="select select-bordered">
-                    <option value="">Pilih Shift</option>
-                    <option value="morning">Pagi</option>
-                    <option value="afternoon">Siang</option>
-                    <option value="night">Malam</option>
-                </select>
-                @error('shift')
-                    <span class="text-error text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-control">
-                <label class="label">
                     <span class="label-text">Tanggal Mulai Kerja</span>
                 </label>
                 <input type="date" wire:model="hire_date" class="input input-bordered" />
@@ -118,17 +103,6 @@
 
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Kode SPBU</span>
-                </label>
-                <input type="text" wire:model="station_code" class="input input-bordered"
-                    placeholder="Kode Stasiun" />
-                @error('station_code')
-                    <span class="text-error text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-control">
-                <label class="label">
                     <span class="label-text">Nomor Lisensi</span>
                 </label>
                 <input type="text" wire:model="license_number" class="input input-bordered"
@@ -145,6 +119,27 @@
                 <input type="number" wire:model="experience_years" class="input input-bordered" placeholder="0"
                     min="0" />
                 @error('experience_years')
+                    <span class="text-error text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Nomor WhatsApp</span>
+                </label>
+                <input type="text" wire:model="whatsapp" class="input input-bordered" placeholder="628xxxxxxxxx"
+                    required />
+                @error('whatsapp')
+                    <span class="text-error text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Alamat</span>
+                </label>
+                <textarea wire:model="address" class="textarea textarea-bordered" rows="3" placeholder="Alamat lengkap"></textarea>
+                @error('address')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
