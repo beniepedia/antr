@@ -35,20 +35,21 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('tenant.petugas') }}" wire:navigate class="px-4" wire:current="menu-active">
+                        <a href="{{ route('tenant.karyawan') }}" wire:navigate class="px-4"
+                            wire:current="menu-active">
                             <span class="icon-[tabler--user-check] size-5"></span>
-                            <span class="grow text-[1rem]">Petugas</span>
+                            <span class="grow text-[1rem]">Karyawan</span>
                         </a>
                     </li>
 
-                     <li>
-                         <a href="{{ route('tenant.settings') }}" wire:navigate class="px-4"
-                             wire:current="menu-active">
-                             <span class="icon-[tabler--settings] size-5"></span>
-                             <span class="grow text-[1rem]">Pengaturan</span>
-                         </a>
-                     </li>
-                 </ul>
+                    <li>
+                        <a href="{{ route('tenant.settings') }}" wire:navigate class="px-4"
+                            wire:current="menu-active">
+                            <span class="icon-[tabler--settings] size-5"></span>
+                            <span class="grow text-[1rem]">Pengaturan</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
 
         </div>

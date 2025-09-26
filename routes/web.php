@@ -8,8 +8,9 @@ use App\Livewire\Customer\Dashboard as CustomerDashboard;
 use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
 use App\Livewire\Tenant\Dashboard;
+use App\Livewire\Tenant\Karyawan\KaryawanCreate;
+use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Payment;
-use App\Livewire\Tenant\Petugas;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
@@ -46,7 +47,10 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 // For dashboard routes, bungkus with middleware auth:
 Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
-    Route::get('/petugas', Petugas::class)->name('tenant.petugas');
+
+    Route::get('/karyawan', KaryawanIndex::class)->name('tenant.karyawan');
+    Route::get('/karyawan/create', KaryawanCreate::class)->name('tenant.karyawan.create');
+
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 
     Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
