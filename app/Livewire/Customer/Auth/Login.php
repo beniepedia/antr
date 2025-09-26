@@ -5,26 +5,60 @@ namespace App\Livewire\Customer\Auth;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Login extends Component
 {
+    // Property ini adalah penanda kapan timer resend berakhir (berisi Unix timestamp)
+    public $resendExpiresAt;
+
     public string $phone = '';
 
     public array|string $otp = [null, null, null, null];
 
     public bool $otpSent = false;
 
-    public int $resendTimer = 120;
+    // Konstanta untuk durasi timer
+    const RESEND_TIMER_DURATION = 60;
 
     public function mount()
     {
         if (session('otpSent') && session('whatsapp')) {
             $this->phone = session('whatsapp');
             $this->otpSent = true;
+
+            // Ambil waktu kadaluarsa dari session jika ada (misal setelah page refresh)
+            $this->resendExpiresAt = session('resendExpiresAt');
         }
     }
+
+    // --- ACCESOR UNTUK TIMER (The new source of truth) ---
+
+    // Menggantikan properti $resendTimer. Menghitung sisa detik secara real-time.
+    public function getResendTimerProperty(): int
+    {
+        // Jika belum ada waktu kadaluarsa, kembalikan 0.
+        if (! $this->resendExpiresAt) {
+            return 0;
+        }
+
+        $remaining = $this->resendExpiresAt - time();
+
+        // Pastikan sisa waktu tidak kurang dari 0
+        return max(0, $remaining);
+    }
+
+    // Properti untuk memformat tampilan waktu (MM:SS)
+    public function getFormattedTimerProperty(): string
+    {
+        $seconds = $this->resendTimer; // Menggunakan accessor yang baru
+        $m = str_pad(floor($seconds / 60), 2, '0', STR_PAD_LEFT);
+        $s = str_pad($seconds % 60, 2, '0', STR_PAD_LEFT);
+
+        return "{$m}:{$s}";
+    }
+
+    // --- METODE UTAMA ---
 
     public function sendOtp(): void
     {
@@ -55,25 +89,28 @@ class Login extends Component
             $customer->last_otp_sent_at = now();
             $customer->save();
 
-            session(['otpSent' => true, 'whatsapp' => $this->phone]);
+            // Set waktu kadaluarsa timer resend (60 detik)
+            $this->resendExpiresAt = time() + self::RESEND_TIMER_DURATION;
+
+            // Simpan juga di session untuk mount/refresh
+            session(['otpSent' => true, 'whatsapp' => $this->phone, 'resendExpiresAt' => $this->resendExpiresAt]);
+            $this->otpSent = true;
 
             // Placeholder untuk kirim OTP ke WhatsApp
-            $this->otpSent = true;
-            $this->resendTimer = 60;
-
             $this->dispatch('notify', type: 'success', message: "Kode OTP telah dikirim ke WhatsApp Anda (code: $otpCode).");
         } catch (ValidationException $e) {
-            foreach ($e->validator->errors()->all() as $error) {
-                $this->dispatch('notify', type: 'error', message: $error);
+            $firstError = $e->validator->errors()->first();
+
+            if ($firstError) {
+                $this->dispatch('notify', type: 'error', message: $firstError);
             }
+
             throw $e;
         }
     }
 
     public function verifyOtp(): void
     {
-
-        // dd($this->otp);
         try {
             $this->validate([
                 'otp.*' => 'required|digits:1',
@@ -88,29 +125,39 @@ class Login extends Component
                 ->where('whatsapp', $this->phone)
                 ->first();
 
+            // Cek kode OTP DAN waktu kadaluarsa OTP dari DB
             if ($customer && $customer->otp_code === $this->otp && Carbon::parse($customer->otp_expires_at)->isFuture()) {
                 // OTP valid
+                // Hapus data timer di session setelah sukses
+                session()->forget(['otpSent', 'whatsapp', 'resendExpiresAt']);
+
                 $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
                 $this->redirect(route('customer.dashboard'), navigate: true);
             } else {
                 $this->addError('otp', 'Kode OTP tidak valid atau sudah kadaluarsa.');
             }
         } catch (ValidationException $e) {
-            foreach ($e->validator->errors()->all() as $error) {
-                $this->dispatch('notify', type: 'error', message: $error);
+            $firstError = $e->validator->errors()->first();
+
+            if ($firstError) {
+                $this->dispatch('notify', type: 'error', message: $firstError);
             }
+
             throw $e;
         }
     }
 
     public function resendOtp(): void
     {
+        // Gunakan accessor $this->resendTimer untuk memastikan waktu sudah habis (0)
         if ($this->resendTimer === 0) {
+            // Panggil sendOtp untuk menghasilkan OTP baru dan mereset $this->resendExpiresAt
             $this->sendOtp();
+        } else {
+            // Beri notifikasi jika masih ada waktu
+            $this->dispatch('notify', type: 'warning', message: 'Mohon tunggu hingga hitungan mundur selesai.');
         }
     }
-
-    protected $listeners = ['otpError' => 'setError'];
 
     public function changeNumber(): void
     {
@@ -125,18 +172,12 @@ class Login extends Component
             }
         }
 
-        // Reset session dan variabel
-        session()->forget(['otpSent', 'whatsapp']);
+        // Reset session dan variabel, termasuk waktu kadaluarsa timer
+        session()->forget(['otpSent', 'whatsapp', 'resendExpiresAt']);
         $this->otpSent = false;
         $this->phone = '';
-        $this->otp = '';
-        $this->resendTimer = 0;
-    }
-
-    #[On('resetTimer')]
-    public function resetTimer()
-    {
-        $this->resendTimer = 0;
+        $this->otp = [null, null, null, null];
+        $this->resendExpiresAt = null;
     }
 
     public function render()

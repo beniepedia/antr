@@ -73,7 +73,8 @@
                     @endif
 
                     @if ($otpSent)
-                        <form wire:submit.prevent="verifyOtp" class="space-y-6" novalidate x-data="otpTimer({{ $resendTimer }})">
+                        <form wire:submit.prevent="verifyOtp" class="space-y-6" novalidate
+                            wire:poll.{{ $this->resendTimer > 0 ? '1000ms' : 'none' }}>
                             <div class="text-center">
                                 <h2 class="text-xl font-bold lg:text-2xl">Verifikasi OTP</h2>
                                 <p class="text-sm text-base-content/70 lg:text-base">Masukkan kode OTP yang dikirim ke
@@ -99,15 +100,17 @@
                                 <div class="flex items-center justify-between text-xs text-base-content/70 lg:text-sm">
                                     <button type="button" class="btn btn-soft btn-primary btn-xs"
                                         wire:click="changeNumber">Ganti nomor</button>
-                                    <template x-if="timer > 0">
-                                        <span>Kirim ulang dalam <span x-text="formattedTimer"></span></span>
-                                    </template>
-                                    <template x-if="timer === 0">
+
+                                    @if ($this->resendTimer > 0)
+                                        <span>Kirim ulang dalam <span
+                                                class="font-bold">{{ $this->formattedTimer }}</span></span>
+                                    @else
+                                        {{-- Tampilkan tombol Kirim Ulang --}}
                                         <button type="button" class="btn btn-soft btn-xs lg:btn-sm"
-                                            wire:click="resendOtp" @click="restart()" wire:loading.attr="disabled">
+                                            wire:click="resendOtp" wire:loading.attr="disabled">
                                             <span>Kirim ulang</span>
                                         </button>
-                                    </template>
+                                    @endif
                                 </div>
                             </div>
                         </form>
@@ -124,36 +127,6 @@
 
 @push('scripts')
     <script>
-        function otpTimer(initial) {
-            return {
-                timer: initial,
-                interval: null,
-                get formattedTimer() {
-                    const m = String(Math.floor(this.timer / 60)).padStart(2, '0');
-                    const s = String(this.timer % 60).padStart(2, '0');
-                    return `${m}:${s}`;
-                },
-                start() {
-                    if (this.interval) clearInterval(this.interval);
-                    this.interval = setInterval(() => {
-                        if (this.timer > 0) {
-                            this.timer--;
-                        } else {
-                            clearInterval(this.interval);
-                            Livewire.dispatch('resetTimer');
-                        }
-                    }, 1000);
-                },
-                restart() {
-                    this.timer = initial;
-                    this.start();
-                },
-                init() {
-                    this.start();
-                }
-            }
-        }
-
         function handleOtpInput(el, index) {
             const inputs = document.querySelectorAll('input[id^="otp-"]');
             if (el.value.length === 1 && index < inputs.length - 1) {
