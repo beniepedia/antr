@@ -25,7 +25,7 @@ Route::domain('{subdomain:url}.'.config('app.url'))
     ->middleware('tenant.domain')
     ->group(function () {
         // Customer Portal (public and authenticated)
-        Route::get('/login', CustomerLogin::class)->name('customer.login');
+        Route::get('/login', CustomerLogin::class)->middleware('guest:customer')->name('customer.login');
 
         Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
         Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');

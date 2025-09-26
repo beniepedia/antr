@@ -4,164 +4,146 @@ namespace App\Livewire\Customer\Auth;
 
 use App\Models\Customer;
 use Carbon\Carbon;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Login extends Component
 {
-    // Property ini adalah penanda kapan timer resend berakhir (berisi Unix timestamp)
-    public $resendExpiresAt;
-
     public string $phone = '';
 
     public array|string $otp = [null, null, null, null];
 
     public bool $otpSent = false;
 
-    // Konstanta untuk durasi timer
-    const RESEND_TIMER_DURATION = 60;
+    public ?int $resendExpiresAt = null; // nullable, lebih aman
 
+    const RESEND_TIMER_DURATION = 120; // detik
+
+    // ===========================
+    // MOUNT
+    // ===========================
     public function mount()
     {
-        if (session('otpSent') && session('whatsapp')) {
+        if (session()->has('otpSent') && session()->has('whatsapp')) {
             $this->phone = session('whatsapp');
             $this->otpSent = true;
-
-            // Ambil waktu kadaluarsa dari session jika ada (misal setelah page refresh)
             $this->resendExpiresAt = session('resendExpiresAt');
         }
     }
 
-    // --- ACCESOR UNTUK TIMER (The new source of truth) ---
-
-    // Menggantikan properti $resendTimer. Menghitung sisa detik secara real-time.
+    // ===========================
+    // TIMER ACCESSORS
+    // ===========================
     public function getResendTimerProperty(): int
     {
-        // Jika belum ada waktu kadaluarsa, kembalikan 0.
         if (! $this->resendExpiresAt) {
             return 0;
         }
 
-        $remaining = $this->resendExpiresAt - time();
-
-        // Pastikan sisa waktu tidak kurang dari 0
-        return max(0, $remaining);
+        return max(0, $this->resendExpiresAt - time());
     }
 
-    // Properti untuk memformat tampilan waktu (MM:SS)
     public function getFormattedTimerProperty(): string
     {
-        $seconds = $this->resendTimer; // Menggunakan accessor yang baru
-        $m = str_pad(floor($seconds / 60), 2, '0', STR_PAD_LEFT);
-        $s = str_pad($seconds % 60, 2, '0', STR_PAD_LEFT);
+        $seconds = $this->resendTimer;
 
-        return "{$m}:{$s}";
+        return sprintf('%02d:%02d', floor($seconds / 60), $seconds % 60);
     }
 
-    // --- METODE UTAMA ---
-
+    // ===========================
+    // KIRIM OTP
+    // ===========================
     public function sendOtp(): void
     {
-        try {
-            $this->validate([
-                'phone' => 'required|regex:/^[0-9]{10,13}$/',
-            ], [
-                'phone.required' => 'Nomor WhatsApp wajib diisi.',
-                'phone.regex' => 'Nomor WhatsApp tidak valid.',
-            ]);
+        $this->validate([
+            'phone' => 'required|regex:/^[0-9]{10,13}$/',
+        ], [
+            'phone.required' => 'Nomor WhatsApp wajib diisi.',
+            'phone.regex' => 'Nomor WhatsApp tidak valid.',
+        ]);
 
-            $customer = Customer::where('tenant_id', app('tenant')->id)
-                ->where('whatsapp', $this->phone)
-                ->first();
+        $customer = Customer::firstOrNew([
+            'tenant_id' => app('tenant')->id,
+            'whatsapp' => $this->phone,
+        ]);
 
-            $otpCode = rand(1000, 9999);
+        // Set OTP dan timestamp
+        $customer->otp_code = rand(1000, 9999);
+        $customer->otp_expires_at = now()->addMinutes(2);
+        $customer->last_otp_sent_at = now();
+        $customer->is_active = true; // default aktif
+        $customer->save();
 
-            if (! $customer) {
-                // Buat akun baru kalau belum ada
-                $customer = new Customer;
-                $customer->tenant_id = app('tenant')->id;
-                $customer->whatsapp = $this->phone;
-                $customer->is_active = true; // default aktif
-            }
+        // Set timer resend
+        $this->resendExpiresAt = time() + self::RESEND_TIMER_DURATION;
+        session([
+            'otpSent' => true,
+            'whatsapp' => $this->phone,
+            'resendExpiresAt' => $this->resendExpiresAt,
+        ]);
 
-            $customer->otp_code = $otpCode;
-            $customer->otp_expires_at = now()->addMinutes(2);
-            $customer->last_otp_sent_at = now();
-            $customer->save();
+        $this->otpSent = true;
 
-            // Set waktu kadaluarsa timer resend (60 detik)
-            $this->resendExpiresAt = time() + self::RESEND_TIMER_DURATION;
-
-            // Simpan juga di session untuk mount/refresh
-            session(['otpSent' => true, 'whatsapp' => $this->phone, 'resendExpiresAt' => $this->resendExpiresAt]);
-            $this->otpSent = true;
-
-            // Placeholder untuk kirim OTP ke WhatsApp
-            $this->dispatch('notify', type: 'success', message: "Kode OTP telah dikirim ke WhatsApp Anda (code: $otpCode).");
-        } catch (ValidationException $e) {
-            $firstError = $e->validator->errors()->first();
-
-            if ($firstError) {
-                $this->dispatch('notify', type: 'error', message: $firstError);
-            }
-
-            throw $e;
-        }
+        $this->dispatch('notify', type: 'success', message: "Kode OTP dikirim (code: {$customer->otp_code})");
     }
 
+    // ===========================
+    // VERIFY OTP
+    // ===========================
     public function verifyOtp(): void
     {
-        try {
-            $this->validate([
-                'otp.*' => 'required|digits:1',
-            ], [
-                'otp.*.required' => 'Masukkan kode OTP',
-                'otp.*.digits' => 'Kode OTP harus berupa angka.',
-            ]);
+        $this->validate([
+            'otp.*' => 'required|digits:1',
+        ], [
+            'otp.*.required' => 'Masukkan kode OTP',
+            'otp.*.digits' => 'Kode OTP harus berupa angka',
+        ]);
 
-            $this->otp = implode('', $this->otp);
+        $otpInput = implode('', $this->otp);
 
-            $customer = Customer::where('tenant_id', app('tenant')->id)
-                ->where('whatsapp', $this->phone)
-                ->first();
+        $customer = Customer::where('tenant_id', app('tenant')->id)
+            ->where('whatsapp', $this->phone)
+            ->first();
 
-            // Cek kode OTP DAN waktu kadaluarsa OTP dari DB
-            if ($customer && $customer->otp_code === $this->otp && Carbon::parse($customer->otp_expires_at)->isFuture()) {
-                // OTP valid
-                // Hapus data timer di session setelah sukses
-                session()->forget(['otpSent', 'whatsapp', 'resendExpiresAt']);
+        if (! $customer || $customer->otp_code !== $otpInput || Carbon::parse($customer->otp_expires_at)->isPast()) {
+            $this->addError('otp', 'Kode OTP tidak valid atau sudah kadaluarsa.');
 
-                $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
-                $this->redirect(route('customer.dashboard'), navigate: true);
-            } else {
-                $this->addError('otp', 'Kode OTP tidak valid atau sudah kadaluarsa.');
-            }
-        } catch (ValidationException $e) {
-            $firstError = $e->validator->errors()->first();
-
-            if ($firstError) {
-                $this->dispatch('notify', type: 'error', message: $firstError);
-            }
-
-            throw $e;
+            return;
         }
+
+        // Login menggunakan guard customer
+        Auth::guard('customer')->login($customer, true);
+
+        // Hapus session timer setelah sukses
+        session()->forget(['otpSent', 'whatsapp', 'resendExpiresAt']);
+
+        // Bisa set verified_at jika mau
+        $customer->verified_at = now();
+        $customer->otp_code = null; // hapus OTP sekali pakai
+        $customer->save();
+
+        $this->dispatch('notify', type: 'success', message: 'OTP berhasil diverifikasi!');
+
+        $this->redirect(route('customer.dashboard'), navigate: true);
     }
 
+    // ===========================
+    // RESEND OTP
+    // ===========================
     public function resendOtp(): void
     {
-        // Gunakan accessor $this->resendTimer untuk memastikan waktu sudah habis (0)
         if ($this->resendTimer === 0) {
-            // Panggil sendOtp untuk menghasilkan OTP baru dan mereset $this->resendExpiresAt
             $this->sendOtp();
         } else {
-            // Beri notifikasi jika masih ada waktu
-            $this->dispatch('notify', type: 'warning', message: 'Mohon tunggu hingga hitungan mundur selesai.');
+            $this->dispatch('notify', type: 'warning', message: 'Tunggu sampai timer selesai.');
         }
     }
 
+    // ===========================
+    // CHANGE NUMBER
+    // ===========================
     public function changeNumber(): void
     {
-        // Hapus nomor yang didaftarkan sebelumnya kalau belum diverifikasi/aktif
         if ($this->phone) {
             $customer = Customer::where('tenant_id', app('tenant')->id)
                 ->where('whatsapp', $this->phone)
@@ -172,16 +154,16 @@ class Login extends Component
             }
         }
 
-        // Reset session dan variabel, termasuk waktu kadaluarsa timer
         session()->forget(['otpSent', 'whatsapp', 'resendExpiresAt']);
-        $this->otpSent = false;
         $this->phone = '';
         $this->otp = [null, null, null, null];
+        $this->otpSent = false;
         $this->resendExpiresAt = null;
     }
 
     public function render()
     {
-        return view('livewire.customer.auth.login')->layout('layouts.customer-auth');
+        return view('livewire.customer.auth.login')
+            ->layout('layouts.customer-auth');
     }
 }
