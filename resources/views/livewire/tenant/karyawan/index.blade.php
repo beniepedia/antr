@@ -1,10 +1,13 @@
 <div class="bg-white rounded-lg shadow-sm p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Manajemen Karyawan</h1>
-        <a href="/karyawan/create" class="btn btn-primary">
-            <span class="icon-[tabler--plus] size-4 mr-2"></span>
-            Tambah Karyawan
-        </a>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 class="text-xl lg:text-2xl font-bold text-gray-600">Manajemen Karyawan</h1>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
+            <input type="search" wire:model.live.debounce.300ms="search" placeholder="Cari karyawan..." class="input">
+            <a href="{{ route('tenant.karyawan.create') }}" class="btn btn-primary whitespace-nowrap">
+                <span class="icon-[tabler--plus] size-4 mr-2"></span>
+                Tambah Karyawan
+            </a>
+        </div>
     </div>
 
     <div class="overflow-x-auto">
@@ -38,13 +41,14 @@
                         <td>{{ $k->email }}</td>
                         <td>{{ $k->profile?->employee_id ?? '-' }}</td>
                         <td>
-                            <span
-                                class="badge badge-outline">{{ match ($k->profile?->position ?? 'operator') {
+                            <span class="badge badge-outline">
+                                {{ match ($k->profile?->position ?? 'operator') {
                                     'operator' => 'Operator',
                                     'supervisor' => 'Supervisor',
                                     'manager' => 'Manager',
                                     default => 'Operator',
-                                } }}</span>
+                                } }}
+                            </span>
                         </td>
                         <td>
                             <span
@@ -62,9 +66,8 @@
                                 <a href="/karyawan/{{ $k->id }}/edit" class="btn btn-sm btn-outline btn-info">
                                     <span class="icon-[tabler--edit] size-4"></span>
                                 </a>
-                                <button wire:click="delete({{ $k->id }})"
-                                    class="btn btn-sm btn-outline btn-error"
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus karyawan ini?')">
+                                <button @click="$dispatch('open-confirmation', { id: {{ $k->id }} })"
+                                    class="btn btn-sm btn-outline btn-error">
                                     <span class="icon-[tabler--trash] size-4"></span>
                                 </button>
                             </div>
@@ -79,4 +82,11 @@
         </table>
     </div>
 
+    <div class="mt-4">
+        {{ $karyawan->links() }}
+    </div>
+
+    <x-confirm-dialog title="Hapus Karyawan"
+        message="Apakah Anda yakin ingin menghapus karyawan ini? Tindakan ini tidak bisa dibatalkan." method="delete"
+        confirmText="Hapus" type="success" />
 </div>

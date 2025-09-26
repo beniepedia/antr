@@ -6,23 +6,32 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class KaryawanIndex extends Component
 {
-    public $karyawan = [];
+    use WithPagination;
 
-    public function mount()
-    {
-        $this->loadKaryawan();
-    }
+    public $search = '';
 
-    public function loadKaryawan()
+    public function getKaryawanProperty()
     {
         $tenantId = Auth::guard('tenant')->user()->tenant_id;
-        $this->karyawan = User::where('tenant_id', $tenantId)
+        $query = User::where('tenant_id', $tenantId)
             ->where('role', '!=', 'admin')
-            ->with('profile')
-            ->get();
+            ->with('profile');
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('profile', function ($profileQuery) {
+                        $profileQuery->where('employee_id', 'like', '%'.$this->search.'%');
+                    });
+            });
+        }
+
+        return $query->paginate(10);
     }
 
     public function delete($id)
@@ -36,12 +45,14 @@ class KaryawanIndex extends Component
             $karyawan->profile?->delete(); // Delete profile first
             $karyawan->delete();
             $this->js('notyf.success("Karyawan berhasil dihapus!")');
-            $this->loadKaryawan();
+            $this->resetPage();
         }
     }
 
     public function render()
     {
-        return view('livewire.tenant.karyawan.index')->layout('layouts.tenant');
+        return view('livewire.tenant.karyawan.index', [
+            'karyawan' => $this->karyawan,
+        ])->layout('layouts.tenant');
     }
 }

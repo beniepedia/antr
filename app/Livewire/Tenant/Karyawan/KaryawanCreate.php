@@ -80,7 +80,7 @@ class KaryawanCreate extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'role' => 'operator',
+            'role' => 'petugas',
         ]);
 
         // Create profile
@@ -98,9 +98,9 @@ class KaryawanCreate extends Component
             'avatar' => $avatarPath,
         ]);
 
-        $this->js('notyf.success("Karyawan berhasil ditambahkan!")');
+        $this->dispatch('notify', type: 'success', message: 'Data karyawan berhasil ditambah');
 
-        return redirect('/karyawan');
+        return redirect()->route('tenant.karyawan');
     }
 
     public function render()

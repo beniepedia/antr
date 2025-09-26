@@ -20,6 +20,7 @@ class Profile extends Model
         'station_code',
         'license_number',
         'experience_years',
+        'whatsapp',
         'avatar',
     ];
 
