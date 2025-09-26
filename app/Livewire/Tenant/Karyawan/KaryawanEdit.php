@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Tenant\Karyawan;
 
-use App\Enums\PositionEnum;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -45,23 +45,20 @@ class KaryawanEdit extends Component
 
     public $currentAvatar; // Current avatar path
 
-    protected function rules()
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'password' => 'nullable|min:8|confirmed',
-            'employee_id' => 'nullable|string',
-            'position' => 'required|in:'.implode(',', array_keys(PositionEnum::options())),
-            'hire_date' => 'nullable|date',
-            'status' => 'required|in:active,inactive',
-            'license_number' => 'nullable|string',
-            'whatsapp' => 'required|string|unique:profiles,whatsapp,'.$this->karyawanId.',user_id',
-            'address' => 'nullable|string',
-            'experience_years' => 'nullable|integer|min:0',
-            'avatar' => 'nullable|image|max:2048', // Max 2MB
-        ];
-    }
+    protected $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'password' => 'nullable|min:8|confirmed',
+        'employee_id' => 'nullable|string',
+        'position' => 'required|in:operator,supervisor,manager',
+        'hire_date' => 'nullable|date',
+        'status' => 'required|in:active,inactive',
+        'license_number' => 'nullable|string',
+        'whatsapp' => 'required|string',
+        'address' => 'nullable|string',
+        'experience_years' => 'nullable|integer|min:0',
+        'avatar' => 'nullable|image|max:2048', // Max 2MB
+    ];
 
     protected $messages = [
         'email.unique' => 'Email sudah digunakan.',
@@ -91,8 +88,9 @@ class KaryawanEdit extends Component
             $this->currentAvatar = $karyawan->profile->avatar;
         }
 
-        $this->rules['email'] .= ',email,'.$this->karyawanId;
-        $this->rules['employee_id'] .= ',employee_id,'.$karyawan->profile?->id;
+        $this->rules['email'] .= '|unique:users,email,'.$this->karyawanId;
+        $this->rules['employee_id'] .= '|unique:profiles,employee_id,'.$karyawan->profile?->id;
+        $this->rules['whatsapp'] .= '|unique:profiles,whatsapp,'.$karyawan->profile?->id.',id';
     }
 
     public function save()

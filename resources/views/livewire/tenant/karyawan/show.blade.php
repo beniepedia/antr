@@ -35,7 +35,12 @@
                     <h2 class="card-title">{{ $karyawan->name }}</h2>
                     <p class="text-base-content/70">{{ $karyawan->email }}</p>
                     <div class="badge badge-outline mt-2">
-                        {{ \App\Enums\PositionEnum::tryFrom($karyawan->profile?->position ?? 'operator')?->label() ?? 'Operator' }}
+                        {{ match ($karyawan->profile?->position ?? 'operator') {
+                            'operator' => 'Operator',
+                            'supervisor' => 'Supervisor',
+                            'manager' => 'Manager',
+                            default => 'Operator',
+                        } }}
                     </div>
                 </div>
             </div>
@@ -66,7 +71,12 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-medium">Jabatan:</span>
-                                <span>{{ \App\Enums\PositionEnum::tryFrom($karyawan->profile?->position ?? 'operator')?->label() ?? 'Operator' }}</span>
+                                <span>{{ match ($karyawan->profile?->position ?? 'operator') {
+                                    'operator' => 'Operator',
+                                    'supervisor' => 'Supervisor',
+                                    'manager' => 'Manager',
+                                    default => 'Operator',
+                                } }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-medium">WhatsApp:</span>

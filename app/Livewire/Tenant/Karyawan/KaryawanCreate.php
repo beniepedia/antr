@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Tenant\Karyawan;
 
-use App\Enums\PositionEnum;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +47,7 @@ class KaryawanCreate extends Component
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
             'employee_id' => 'nullable|string|unique:profiles,employee_id',
-            'position' => 'required|in:'.implode(',', array_keys(PositionEnum::options())),
+            'position' => 'required|in:operator,supervisor,manager',
             'hire_date' => 'nullable|date',
             'status' => 'required|in:active,inactive',
             'license_number' => 'nullable|string',

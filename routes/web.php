@@ -9,6 +9,7 @@ use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Karyawan\KaryawanCreate;
+use App\Livewire\Tenant\Karyawan\KaryawanEdit;
 use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
@@ -55,6 +56,7 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/karyawan', KaryawanIndex::class)->name('tenant.karyawan');
     Route::get('/karyawan/create', KaryawanCreate::class)->name('tenant.karyawan.create');
     Route::get('/karyawan/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
+    Route::get('/karyawan/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
 
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 

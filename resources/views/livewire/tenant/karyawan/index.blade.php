@@ -39,7 +39,12 @@
                         <td>{{ $k->profile?->employee_id ?? '-' }}</td>
                         <td>
                             <span
-                                class="badge badge-outline">{{ \App\Enums\PositionEnum::tryFrom($k->profile?->position ?? 'operator')?->label() ?? 'Operator' }}</span>
+                                class="badge badge-outline">{{ match ($k->profile?->position ?? 'operator') {
+                                    'operator' => 'Operator',
+                                    'supervisor' => 'Supervisor',
+                                    'manager' => 'Manager',
+                                    default => 'Operator',
+                                } }}</span>
                         </td>
                         <td>
                             <span
