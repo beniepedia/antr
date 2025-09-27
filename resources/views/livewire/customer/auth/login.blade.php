@@ -1,42 +1,47 @@
-<section class="bg-gradient-to-br from-primary/5 via-transparent to-primary/10 min-h-screen">
-    <div class="mx-auto max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 px-6 py-8">
+<section class="bg-gradient-to-br from-primary/5 via-transparent to-primary/10 min-h-screen flex">
+    <div class="mx-auto  flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 px-6 py-9">
 
         <!-- Left: Hero copy -->
-        <div class="order-2 space-y-4 text-center lg:order-1 lg:text-left lg:space-y-5">
+        <div class="order-2 space-y-4 text-center lg:order-1 lg:text-left lg:space-y-5 lg:max-w-2xl">
             <div
                 class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary">
                 <span class="icon-[tabler--fuel] size-4"></span>
-                <span class="text-sm">Pengisian Solar Cepat & Aman</span>
+                <span class="text-sm">Sistem Antrian BBM Digital</span>
             </div>
 
-            <h1 class="text-2xl font-bold leading-tight lg:text-3xl">Ambil Antrian Isi Solar di</h1>
-            <p class="text-sm text-base-content/70 lg:text-base">Verifikasi via WhatsApp OTP. Proses antrian yang cepat
-                dan mudah untuk isi solar.</p>
+            <h1 class="text-2xl font-bold leading-tight lg:text-3xl">
+                Ambil Nomor Antrian Secara Online
+            </h1>
 
-            <ul class="hidden mt-2 grid gap-3 sm:grid-cols-2 lg:max-w-md lg:grid">
+            <p class="text-sm text-base-content/70 lg:text-base">
+                Tidak perlu antri panjang di SPBU. Ambil nomor antrian lewat aplikasi, pantau status antrian
+                secara real-time, dan isi solar sesuai giliran Anda.
+            </p>
+
+            <ul class="hidden grid gap-8 sm:grid-cols-2 lg:grid w-full">
                 <li class="flex items-center gap-2">
-                    <span class="icon-[tabler--shield-check] text-success size-5"></span>
-                    <span>Verifikasi aman via OTP</span>
+                    <span class="icon-[tabler--list-numbers] text-primary size-8"></span>
+                    <span>Nomor antrian online </span>
                 </li>
                 <li class="flex items-center gap-2">
-                    <span class="icon-[tabler--smartphone] text-primary size-5"></span>
-                    <span>Ramah mobile</span>
+                    <span class="icon-[tabler--clock-hour-4] text-warning size-8"></span>
+                    <span>Tidak buang waktu menunggu</span>
                 </li>
                 <li class="flex items-center gap-2">
-                    <span class="icon-[tabler--clock] text-warning size-5"></span>
-                    <span>Antrian cepat</span>
+                    <span class="icon-[tabler--brand-whatsapp] text-success size-10"></span>
+                    <span>Verifikasi mudah via WhatsApp OTP</span>
                 </li>
                 <li class="flex items-center gap-2">
-                    <span class="icon-[tabler--fuel] text-info size-5"></span>
-                    <span>Pengisian solar mudah</span>
+                    <span class="icon-[tabler--map-pin] text-info size-8"></span>
+                    <span>Pantau giliran dari mana saja</span>
                 </li>
             </ul>
+
         </div>
 
         <!-- Right: Login card -->
-        <div class="order-1 lg:order-2">
-            <div
-                class="card shadow-xl backdrop-blur bg-base-100/80 ring-1 ring-primary/20 rounded-2xl max-w-sm lg:max-w-md p-4">
+        <div class="order-1 lg:order-2 ">
+            <div class="shadow-xl  bg-base-100/80 ring-1 ring-primary/20 rounded-2xl max-w-lg lg:max-w-md p-4">
                 <div class="card-body space-y-4 lg:space-y-5">
 
                     <div

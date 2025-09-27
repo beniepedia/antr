@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->string('license_plate', 20);
             $table->timestamps();
+
+            $table->index(['customer_id', 'vehicle_id']);
         });
 
     }

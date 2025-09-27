@@ -13,7 +13,7 @@ class Customer extends Authenticatable
     protected $fillable = [
         'tenant_id',
         'name',
-        'phone',
+        'whatsapp',
         'otp_code',
         'otp_expires_at',
         'last_otp_sent_at',

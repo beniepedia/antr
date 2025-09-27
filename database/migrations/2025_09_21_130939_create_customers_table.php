@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->string('name', 100)->nullable();
-            $table->string('whatsapp', 20)->nullable();
+            $table->string('whatsapp', 20);
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->timestamp('last_otp_sent_at')->nullable();
@@ -23,8 +23,10 @@ return new class extends Migration
             $table->unsignedInteger('otp_attempts')->default(0);
             $table->boolean('is_active')->default(0);
             $table->timestamps();
-
+            $table->rememberToken();
             $table->softDeletes();
+
+            $table->index('tenant_id');
         });
     }
 

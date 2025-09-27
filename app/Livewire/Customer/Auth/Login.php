@@ -106,7 +106,7 @@ class Login extends Component
             ->first();
 
         if (! $customer || $customer->otp_code !== $otpInput || Carbon::parse($customer->otp_expires_at)->isPast()) {
-            $this->addError('otp', 'Kode OTP tidak valid atau sudah kadaluarsa.');
+            $this->dispatch('notify', type: 'error', message: 'Kode OTP tidak valid atau sudah kadaluarsa.');
 
             return;
         }

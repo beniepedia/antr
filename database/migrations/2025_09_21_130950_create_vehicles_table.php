@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('type', 50)->nullable();         // roda 2, roda 4, roda 6
             $table->integer('max_liters')->nullable();      // kuota maksimal BBM per transaksi
             $table->timestamps();
+
+            $table->index('tenant_id');
         });
     }
 

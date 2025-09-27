@@ -25,6 +25,8 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('avatar')->nullable(); // Path ke foto profil
             $table->timestamps();
+
+            $table->index(['user_id', 'tenant_id']);
         });
     }
 
