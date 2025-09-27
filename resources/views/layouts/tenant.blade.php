@@ -8,7 +8,7 @@
 
         <div class="flex grow flex-col lg:ps-75">
             <!-- ---------- MAIN CONTENT ---------- -->
-            <main class="mx-auto w-full max-w-7xl flex-1 p-6">
+            <main class="mx-auto w-full max-w-7xl flex-1 px-6 py-4">
                 <div class="grid grid-cols-1 gap-6">
                     {{ $slot }}
                 </div>
