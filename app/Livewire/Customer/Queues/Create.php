@@ -15,6 +15,6 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.customer.queues.create')->layout('components.layouts.customer');
+        return view('livewire.customer.queues.create')->layout('layouts.customer.main');
     }
 }
