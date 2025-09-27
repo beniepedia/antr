@@ -12,21 +12,14 @@
     </div>
     <div class="relative z-10">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h2 class="text-lg font-semibold text-gray-800">Selamat datang, John Doe</h2>
-                <p class="text-xs text-gray-600">Kelola antrian Anda hari ini</p>
-            </div>
+        <div class="flex items-center justify-end mb-6">
             <!-- Notification Dropdown -->
             <div class="relative group">
                 <button
                     class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg transition">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11.5 4.5a1 1 0 011 1v3.586l2.707 2.707a1 1 0 01-1.414 1.414l-3-3A1 1 0 0110.5 8V5.5a1 1 0 011-1zm0 6a3.5 3.5 0 100 7 3.5 3.5 0 000-7z">
-                        </path>
-                    </svg>
+                    <span class="icon-[tabler--bell] size-5 text-gray-600"></span>
                 </button>
+
                 <!-- Dropdown -->
                 <div
                     class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -70,21 +63,44 @@
             </div>
         </div>
 
+        <!-- Welcome Card -->
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div>
+                        <h2 class="text-lg text-gray-800 flex items-center">
+                            Selamat Datang! 👋
+                        </h2>
+                        <p class="text-xl font-semibold text-gray-700 mt-1">John Doe</p>
+                    </div>
+                </div>
+                <div class="md:block">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Active Queue Card -->
-        <div class="bg-white rounded-2xl shadow border-0 p-8 mb-8 relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow border-0 p-8 mb-6 relative overflow-hidden">
             <div
                 class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full -mr-16 -mt-16 opacity-20">
             </div>
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Nomor Antrian Aktif</p>
+                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Antrian Anda </p>
                         <p
                             class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mt-2">
-                            —</p>
+                            #20</p>
                     </div>
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                        class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -92,12 +108,33 @@
                         </svg>
                     </div>
                 </div>
-                <div class="flex items-center text-sm text-gray-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Status: Tidak ada antrean aktif
+                <div class="mt-4">
+                    <span class="badge badge-soft badge-warning badge-lg">Menunggu</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Queue Card -->
+        <div class="bg-white rounded-2xl shadow border-0 p-6 mb-6 relative overflow-hidden">
+            <div
+                class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400 to-blue-500 rounded-full -mr-12 -mt-12 opacity-20">
+            </div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Antrian Saat Ini</p>
+                        <p
+                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mt-2">
+                            #1</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                            </path>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,7 +171,8 @@
         <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
                         </path>
@@ -196,7 +234,7 @@
             <form method="POST" action="{{ route('customer.logout') }}">
                 @csrf
                 <button type="submit" class="btn btn-text btn-error btn-block h-11 justify-start px-3 font-normal">
-                    <span class="icon-[tabler--logout] size-5"></span>
+                    <span class="icon-[tabler--logout] size-5 mr-3"></span>
                     Logout
                 </button>
             </form>
