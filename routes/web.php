@@ -31,9 +31,19 @@ Route::domain('{subdomain:url}.'.config('app.url'))
         // Customer Portal (public and authenticated)
         Route::get('/login', CustomerLogin::class)->middleware('guest:customer')->name('customer.login');
 
-        Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
-        Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
-        Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
+        Route::middleware('auth:customer')->group(function () {
+            Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
+            Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
+            Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
+
+            Route::post('/logout', function () {
+                Auth::guard('customer')->logout();
+                request()->session()->invalidate();
+                request()->session()->regenerateToken();
+
+                return redirect()->route('customer.login')->header('X-Livewire-Navigate', 'true');
+            })->name('customer.logout');
+        });
     });
 
 // guest for tenant users
@@ -63,6 +73,14 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
     Route::get('/tenant/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
 
+    Route::post('/logout', function () {
+        Auth::guard('tenant')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('login')->header('X-Livewire-Navigate', 'true');
+    })->name('tenant.logout');
+
 });
 
 Route::middleware(['auth:tenant'])->group(function () {
@@ -77,13 +95,6 @@ Route::middleware(['auth:tenant'])->group(function () {
 // });
 
 // Logout routes
-Route::post('/logout', function () {
-    Auth::guard('tenant')->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-
-    return redirect()->route('login')->header('X-Livewire-Navigate', 'true');
-})->name('logout');
 
 Route::post('/admin/logout', function () {
     Auth::guard('admin')->logout();

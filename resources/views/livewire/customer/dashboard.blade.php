@@ -153,6 +153,15 @@
                 <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">Menunggu</span>
             </div>
         </div>
+
+
+        <form method="POST" action="{{ route('customer.logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-text btn-error btn-block h-11 justify-start px-3 font-normal">
+                <span class="icon-[tabler--logout] size-5"></span>
+                Logout
+            </button>
+        </form>
     </div>
 
     <!-- Bottom Navigation -->
@@ -190,4 +199,5 @@
             </a>
         </div>
     </div>
+
 </div>
