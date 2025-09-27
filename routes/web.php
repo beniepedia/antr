@@ -7,6 +7,8 @@ use App\Livewire\Customer\Auth\Login as CustomerLogin;
 use App\Livewire\Customer\Dashboard as CustomerDashboard;
 use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
+use App\Livewire\Customer\Vehicles\Create as CustomerVehiclesCreate;
+use App\Livewire\Customer\Vehicles\Index as CustomerVehiclesIndex;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Karyawan\KaryawanCreate;
 use App\Livewire\Tenant\Karyawan\KaryawanEdit;
@@ -35,6 +37,8 @@ Route::domain('{subdomain:url}.'.config('app.url'))
             Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
             Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
             Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
+            Route::get('/vehicles', CustomerVehiclesIndex::class)->name('customer.vehicles.index');
+            Route::get('/vehicles/create', CustomerVehiclesCreate::class)->name('customer.vehicles.create');
 
             Route::post('/logout', function () {
                 Auth::guard('customer')->logout();

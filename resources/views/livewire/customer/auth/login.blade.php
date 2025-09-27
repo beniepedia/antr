@@ -1,8 +1,8 @@
 <section class="bg-gradient-to-br from-primary/5 via-transparent to-primary/10 min-h-screen flex">
-    <div class="mx-auto  flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 px-6 py-9">
+    <div class="mx-auto  flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 px-4 py-9">
 
         <!-- Left: Hero copy -->
-        <div class="order-2 space-y-4 text-center lg:order-1 lg:text-left lg:space-y-5 lg:max-w-2xl">
+        <div class="order-1 space-y-4 text-center lg:order-1 lg:text-left lg:space-y-5 lg:max-w-2xl">
             <div
                 class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary">
                 <span class="icon-[tabler--fuel] size-4"></span>
@@ -40,8 +40,8 @@
         </div>
 
         <!-- Right: Login card -->
-        <div class="order-1 lg:order-2 ">
-            <div class="shadow-xl  bg-base-100/80 ring-1 ring-primary/20 rounded-2xl max-w-lg lg:max-w-md p-4">
+        <div class="order-1 lg:order-1 ">
+            <div class="shadow-lg bg-base-100 ring-2 ring-primary/20 rounded-2xl  lg:max-w-md">
                 <div class="card-body space-y-4 lg:space-y-5">
 
                     <div
