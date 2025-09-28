@@ -25,12 +25,9 @@
               </svg>
               <span class="text-xs font-medium">Riwayat</span>
           </a>
-          <a href="#" class="flex flex-col items-center text-gray-500 hover:text-blue-600">
-              <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-              </svg>
-              <span class="text-xs font-medium">Profil</span>
-          </a>
+           <a href="{{ route('customer.profile') }}" class="flex flex-col items-center text-gray-500 hover:text-blue-600" wire:navigate>
+               <span class="icon-[tabler--user] size-7 mb-1"></span>
+               <span class="text-xs font-medium">Profil</span>
+           </a>
       </div>
   </div>
