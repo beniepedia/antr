@@ -45,42 +45,57 @@
         <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
     </div>
     <div class="relative  px-3">
-        <!-- Combined Queue Card -->
-        <div class="bg-base-100 rounded-2xl shadow-md p-8 mb-6 relative overflow-hidden">
-            <div
-                class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full -mr-16 -mt-16 opacity-20 animate-pulse">
-            </div>
-            <div class="relative z-10">
-                <div class="flex items-start justify-between ">
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Antrian Anda</p>
-                        <p class="text-6xl font-extrabold text-purple-500 mt-2">
-                            0010</p>
-                        <div class="mt-4 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="">
-                                    <div class="text-sm text-gray-600">
-                                        <span class="font-medium">ANTRIAN SAAT INI:</span>
+        @if ($hasActiveQueue)
+            <!-- Combined Queue Card -->
+            <div class="bg-base-100 rounded-2xl shadow-md p-8 mb-6 relative overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full -mr-16 -mt-16 opacity-20 animate-pulse">
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-start justify-between ">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Antrian Anda</p>
+                            <p class="text-6xl font-extrabold text-purple-500 mt-2">
+                                {{ $activeQueue->queue_number }}</p>
+                            <div class="mt-4 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="">
+                                        <div class="text-sm text-gray-600">
+                                            <span class="font-medium">ANTRIAN SAAT INI:</span>
+                                        </div>
+                                        <span
+                                            class="text-2xl font-bold text-green-700">{{ $currentQueueNumber == '0' ? '-' : $currentQueueNumber }}</span>
                                     </div>
-                                    <span class="text-2xl font-bold text-green-700">0001</span>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="flex-shrink-0 mt-6">
+                            <div
+                                class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex-shrink-0 mt-6">
-                        <div
-                            class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                        </div>
+
+
+                </div>
+                <div class="flex flex-col space-y-2 mt-3">
+                    <button wire:click="checkIn" class="btn btn-success w-full btn-sm">Saya sudah di
+                        lokasi</button>
+                    <div class="flex space-x-2">
+                        <button wire:click="cancelQueue" class="btn btn-error btn-sm flex-1">Batal
+                            Antrian</button>
+                        <button class="btn btn-outline  btn-sm"><span
+                                class="icon-[tabler--qrcode] size-5"></span></button>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         <!-- Quick Actions -->
         <div class="grid grid-cols-2 gap-4 mb-8">
