@@ -48,7 +48,7 @@
                     </div>
                     @if ($discountAmount > 0)
                         <div class="text-green-600 text-sm mt-2 flex items-center gap-1">
-                            <span class="icon-[tabler--check-circle] size-4"></span>
+                            <span class="icon-[tabler--circle-check] size-4"></span>
                             Diskon diterapkan: Rp {{ number_format($discountAmount) }}
                         </div>
                     @endif

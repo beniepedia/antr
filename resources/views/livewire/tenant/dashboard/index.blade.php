@@ -10,7 +10,8 @@
                         <p class="text-blue-100">Kelola antrian Anda dengan mudah di dashboard Antrianku.</p>
                     </div>
                     <div class="hidden md:block">
-                        <span class="icon-[tabler--cube] size-16 opacity-20" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: perspective(500px) rotateY(-10deg);"></span>
+                        <span class="icon-[tabler--cube] size-16 opacity-20"
+                            style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: perspective(500px) rotateY(-10deg);"></span>
                     </div>
                 </div>
             </div>
@@ -22,14 +23,16 @@
                 <div class="flex items-center justify-between mb-4">
                     <h5 class="card-title text-sm md:text-xl">Status Langganan</h5>
                     <div class="flex items-center gap-2">
-                        <button type="button" class="btn btn-primary btn-xs hidden md:inline-flex" wire:click="redirectToUpgrade">
+                        <button type="button" class="btn btn-primary btn-xs hidden md:inline-flex"
+                            wire:click="redirectToUpgrade">
                             <span class="icon-[tabler--arrow-up] size-3"></span>
                             Upgrade
                         </button>
-                        <span class="icon-[tabler--crown] size-6 {{ $dashboardData['subscription'] ? ($dashboardData['subscription']['status'] == 'active' ? 'text-success' : 'text-warning') : 'text-gray-400' }}"></span>
+                        <span
+                            class="icon-[tabler--crown] size-6 {{ $dashboardData['subscription'] ? ($dashboardData['subscription']['status'] == 'active' ? 'text-success' : 'text-warning') : 'text-gray-400' }}"></span>
                     </div>
                 </div>
-                @if($dashboardData['subscription'])
+                @if ($dashboardData['subscription'])
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
                             <p class="text-sm text-gray-600">Paket</p>
@@ -37,7 +40,9 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Status</p>
-                            <span class="badge {{ $dashboardData['subscription']['status'] == 'active' ? '' : 'badge-warning' }}" style="{{ $dashboardData['subscription']['status'] == 'active' ? 'background-color: #1e7e34; color: white; border: none;' : '' }}">
+                            <span
+                                class="badge {{ $dashboardData['subscription']['status'] == 'active' ? '' : 'badge-warning' }}"
+                                style="{{ $dashboardData['subscription']['status'] == 'active' ? 'background-color: #1e7e34; color: white; border: none;' : '' }}">
                                 {{ $dashboardData['subscription']['status'] == 'active' ? 'Aktif' : ucfirst($dashboardData['subscription']['status']) }}
                             </span>
                         </div>
@@ -50,19 +55,42 @@
                             <p class="font-semibold">{{ $dashboardData['subscription']['end_date'] }}</p>
                         </div>
                     </div>
-                    @if($dashboardData['subscription']['days_remaining'] >= 0)
+                    @if ($dashboardData['subscription']['days_remaining'] >= 0)
                         <div class="mt-4">
                             <div class="flex justify-between text-sm mb-2">
                                 <span>Hari Tersisa</span>
-                                <span>{{ round($dashboardData['subscription']['days_remaining']) }} / {{ $dashboardData['subscription']['total_days'] }} hari</span>
+                                <span>{{ round($dashboardData['subscription']['days_remaining']) }} /
+                                    {{ $dashboardData['subscription']['total_days'] }} hari</span>
                             </div>
                             @php
-                                $progressPercent = round(min(100, max(0, ($dashboardData['subscription']['days_remaining'] / $dashboardData['subscription']['total_days']) * 100)));
-                                $progressClass = $dashboardData['subscription']['days_remaining'] > ($dashboardData['subscription']['total_days'] * 0.7) ? 'bg-success' : ($dashboardData['subscription']['days_remaining'] > ($dashboardData['subscription']['total_days'] * 0.3) ? 'bg-warning' : 'bg-error');
-                                $progressStyle = $progressClass === 'bg-success' ? 'background-color: #1e7e34 !important;' : '';
+                                $progressPercent = round(
+                                    min(
+                                        100,
+                                        max(
+                                            0,
+                                            ($dashboardData['subscription']['days_remaining'] /
+                                                $dashboardData['subscription']['total_days']) *
+                                                100,
+                                        ),
+                                    ),
+                                );
+                                $progressClass =
+                                    $dashboardData['subscription']['days_remaining'] >
+                                    $dashboardData['subscription']['total_days'] * 0.7
+                                        ? 'bg-success'
+                                        : ($dashboardData['subscription']['days_remaining'] >
+                                        $dashboardData['subscription']['total_days'] * 0.3
+                                            ? 'bg-warning'
+                                            : 'bg-error');
+                                $progressStyle =
+                                    $progressClass === 'bg-success' ? 'background-color: #1e7e34 !important;' : '';
                             @endphp
-                            <div class="progress h-4" role="progressbar" aria-label="{{ $progressPercent }}% Progressbar" aria-valuenow="{{ $progressPercent }}" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar {{ $progressClass }} font-normal" style="width: {{ $progressPercent }}%; {{ $progressStyle }}">{{ $progressPercent }}%</div>
+                            <div class="progress h-4" role="progressbar"
+                                aria-label="{{ $progressPercent }}% Progressbar"
+                                aria-valuenow="{{ $progressPercent }}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar {{ $progressClass }} font-normal"
+                                    style="width: {{ $progressPercent }}%; {{ $progressStyle }}">
+                                    {{ $progressPercent }}%</div>
                             </div>
                         </div>
                     @else
@@ -92,10 +120,11 @@
     <div class="card bg-gradient-to-r from-yellow-100 to-orange-100 border-yellow-300 mb-8">
         <div class="card-body">
             <div class="flex items-center gap-3">
-                <span class="icon-[tabler--megaphone] size-8 text-yellow-600"></span>
+                <span class="icon-[tabler--speakerphone] size-8 text-yellow-600"></span>
                 <div>
                     <h6 class="font-bold text-yellow-800">Pengumuman Penting</h6>
-                    <p class="text-yellow-700 text-sm">Sistem antrian akan mengalami maintenance pada tanggal 25 September 2025 pukul 22:00 - 24:00 WIB. Mohon maaf atas ketidaknyamanannya.</p>
+                    <p class="text-yellow-700 text-sm">Sistem antrian akan mengalami maintenance pada tanggal 25
+                        September 2025 pukul 22:00 - 24:00 WIB. Mohon maaf atas ketidaknyamanannya.</p>
                 </div>
             </div>
         </div>
@@ -103,12 +132,14 @@
 
     <!-- Key Statistics -->
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-        <div class="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow duration-300">
+        <div
+            class="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow duration-300">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="stat-title text-blue-600 font-medium">Total Antrian</div>
-                        <div class="stat-value text-3xl font-bold text-blue-800">{{ $dashboardData['total_queues'] }}</div>
+                        <div class="stat-value text-3xl font-bold text-blue-800">{{ $dashboardData['total_queues'] }}
+                        </div>
                         <div class="stat-desc text-blue-500 text-sm">Semua antrian yang dibuat</div>
                     </div>
                     <div class="stat-figure">
@@ -119,12 +150,14 @@
                 </div>
             </div>
         </div>
-        <div class="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow duration-300">
+        <div
+            class="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow duration-300">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="stat-title text-orange-600 font-medium">Antrian Aktif</div>
-                        <div class="stat-value text-3xl font-bold text-orange-800">{{ $dashboardData['active_queues'] }}</div>
+                        <div class="stat-value text-3xl font-bold text-orange-800">
+                            {{ $dashboardData['active_queues'] }}</div>
                         <div class="stat-desc text-orange-500 text-sm">Sedang menunggu atau dipanggil</div>
                     </div>
                     <div class="stat-figure">
@@ -135,12 +168,14 @@
                 </div>
             </div>
         </div>
-        <div class="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow duration-300">
+        <div
+            class="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow duration-300">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="stat-title text-purple-600 font-medium">Total Pelanggan</div>
-                        <div class="stat-value text-3xl font-bold text-purple-800">{{ $dashboardData['total_users'] }}</div>
+                        <div class="stat-value text-3xl font-bold text-purple-800">{{ $dashboardData['total_users'] }}
+                        </div>
                         <div class="stat-desc text-purple-500 text-sm">Pelanggan terdaftar</div>
                     </div>
                     <div class="stat-figure">
@@ -151,12 +186,14 @@
                 </div>
             </div>
         </div>
-        <div class="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow duration-300">
+        <div
+            class="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow duration-300">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="stat-title text-green-600 font-medium">Antrian Selesai</div>
-                        <div class="stat-value text-3xl font-bold text-green-800">{{ $dashboardData['queue_status']['completed'] }}</div>
+                        <div class="stat-value text-3xl font-bold text-green-800">
+                            {{ $dashboardData['queue_status']['completed'] }}</div>
                         <div class="stat-desc text-green-500 text-sm">Berhasil dilayani</div>
                     </div>
                     <div class="stat-figure">
@@ -231,53 +268,53 @@
                             <th>Waktu Check-in</th>
                         </tr>
                     </thead>
-                     <tbody>
-                         @forelse($dashboardData['recent_queues'] as $queue)
-                         <tr>
-                             <td class="font-mono">{{ $queue['id'] }}</td>
-                             <td>{{ $queue['service'] }}</td>
-                             <td>{{ $queue['date'] }}</td>
-                             <td>
-                                 @if($queue['status'] == 'Selesai')
-                                     <span class="badge badge-success gap-1">
-                                         <span class="icon-[tabler--check] size-3"></span>
-                                         {{ $queue['status'] }}
-                                     </span>
-                                 @elseif($queue['status'] == 'Dipanggil')
-                                     <span class="badge badge-warning gap-1">
-                                         <span class="icon-[tabler--bell] size-3"></span>
-                                         {{ $queue['status'] }}
-                                     </span>
-                                 @elseif($queue['status'] == 'Dibatalkan')
-                                     <span class="badge badge-error gap-1">
-                                         <span class="icon-[tabler--x] size-3"></span>
-                                         {{ $queue['status'] }}
-                                     </span>
-                                 @elseif($queue['status'] == 'Menunggu')
-                                     <span class="badge badge-info gap-1">
-                                         <span class="icon-[tabler--clock] size-3"></span>
-                                         {{ $queue['status'] }}
-                                     </span>
-                                 @else
-                                     <span class="badge gap-1">
-                                         <span class="icon-[tabler--question-mark] size-3"></span>
-                                         {{ $queue['status'] }}
-                                     </span>
-                                 @endif
-                             </td>
-                             <td>{{ $queue['time'] }}</td>
-                         </tr>
-                         @empty
-                         <tr>
-                             <td colspan="5" class="text-center py-8">
-                                 <div class="flex flex-col items-center gap-2">
-                                     <span class="icon-[tabler--inbox] size-12 text-gray-400"></span>
-                                     <p class="text-gray-500">Belum ada antrian</p>
-                                 </div>
-                             </td>
-                         </tr>
-                         @endforelse
-                     </tbody>
+                    <tbody>
+                        @forelse($dashboardData['recent_queues'] as $queue)
+                            <tr>
+                                <td class="font-mono">{{ $queue['id'] }}</td>
+                                <td>{{ $queue['service'] }}</td>
+                                <td>{{ $queue['date'] }}</td>
+                                <td>
+                                    @if ($queue['status'] == 'Selesai')
+                                        <span class="badge badge-success gap-1">
+                                            <span class="icon-[tabler--check] size-3"></span>
+                                            {{ $queue['status'] }}
+                                        </span>
+                                    @elseif($queue['status'] == 'Dipanggil')
+                                        <span class="badge badge-warning gap-1">
+                                            <span class="icon-[tabler--bell] size-3"></span>
+                                            {{ $queue['status'] }}
+                                        </span>
+                                    @elseif($queue['status'] == 'Dibatalkan')
+                                        <span class="badge badge-error gap-1">
+                                            <span class="icon-[tabler--x] size-3"></span>
+                                            {{ $queue['status'] }}
+                                        </span>
+                                    @elseif($queue['status'] == 'Menunggu')
+                                        <span class="badge badge-info gap-1">
+                                            <span class="icon-[tabler--clock] size-3"></span>
+                                            {{ $queue['status'] }}
+                                        </span>
+                                    @else
+                                        <span class="badge gap-1">
+                                            <span class="icon-[tabler--question-mark] size-3"></span>
+                                            {{ $queue['status'] }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>{{ $queue['time'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-8">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <span class="icon-[tabler--inbox] size-12 text-gray-400"></span>
+                                        <p class="text-gray-500">Belum ada antrian</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -291,11 +328,12 @@
                     <h5 class="card-title text-sm md:text-xl">Layanan Populer</h5>
                     <span class="icon-[tabler--star] size-6 text-yellow-500"></span>
                 </div>
-                @if(count($dashboardData['popular_services']) > 0)
+                @if (count($dashboardData['popular_services']) > 0)
                     <div class="space-y-3">
-                        @foreach($dashboardData['popular_services'] as $index => $service)
+                        @foreach ($dashboardData['popular_services'] as $index => $service)
                             <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
-                                <div class="flex-shrink-0 w-8 h-8 bg-primary text-primary-content rounded-full flex items-center justify-center font-bold text-center">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 bg-primary text-primary-content rounded-full flex items-center justify-center font-bold text-center">
                                     {{ $index + 1 }}
                                 </div>
                                 <div class="flex-1">
@@ -324,38 +362,47 @@
                 <div class="space-y-4">
                     @php
                         $total = $dashboardData['queue_status']['total'];
-                        $completedPercent = $total > 0 ? round(($dashboardData['queue_status']['completed'] / $total) * 100) : 0;
-                        $inProgressPercent = $total > 0 ? round(($dashboardData['queue_status']['in_progress'] / $total) * 100) : 0;
-                        $waitingPercent = $total > 0 ? round(($dashboardData['queue_status']['waiting'] / $total) * 100) : 0;
-                        $cancelledPercent = $total > 0 ? round(($dashboardData['queue_status']['cancelled'] / $total) * 100) : 0;
+                        $completedPercent =
+                            $total > 0 ? round(($dashboardData['queue_status']['completed'] / $total) * 100) : 0;
+                        $inProgressPercent =
+                            $total > 0 ? round(($dashboardData['queue_status']['in_progress'] / $total) * 100) : 0;
+                        $waitingPercent =
+                            $total > 0 ? round(($dashboardData['queue_status']['waiting'] / $total) * 100) : 0;
+                        $cancelledPercent =
+                            $total > 0 ? round(($dashboardData['queue_status']['cancelled'] / $total) * 100) : 0;
                     @endphp
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span>Selesai</span>
                             <span>{{ $dashboardData['queue_status']['completed'] }} ({{ $completedPercent }}%)</span>
                         </div>
-                        <progress class="progress progress-success" value="{{ $completedPercent }}" max="100"></progress>
+                        <progress class="progress progress-success" value="{{ $completedPercent }}"
+                            max="100"></progress>
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span>Dipanggil</span>
-                            <span>{{ $dashboardData['queue_status']['in_progress'] }} ({{ $inProgressPercent }}%)</span>
+                            <span>{{ $dashboardData['queue_status']['in_progress'] }}
+                                ({{ $inProgressPercent }}%)</span>
                         </div>
-                        <progress class="progress progress-warning" value="{{ $inProgressPercent }}" max="100"></progress>
+                        <progress class="progress progress-warning" value="{{ $inProgressPercent }}"
+                            max="100"></progress>
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span>Menunggu</span>
                             <span>{{ $dashboardData['queue_status']['waiting'] }} ({{ $waitingPercent }}%)</span>
                         </div>
-                        <progress class="progress progress-info" value="{{ $waitingPercent }}" max="100"></progress>
+                        <progress class="progress progress-info" value="{{ $waitingPercent }}"
+                            max="100"></progress>
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span>Dibatalkan</span>
                             <span>{{ $dashboardData['queue_status']['cancelled'] }} ({{ $cancelledPercent }}%)</span>
                         </div>
-                        <progress class="progress progress-error" value="{{ $cancelledPercent }}" max="100"></progress>
+                        <progress class="progress progress-error" value="{{ $cancelledPercent }}"
+                            max="100"></progress>
                     </div>
                 </div>
             </div>
@@ -365,7 +412,7 @@
 
 
     <!-- Quick Actions -->
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-body">
             <div class="flex items-center justify-between mb-4">
                 <h5 class="card-title text-sm md:text-xl">Aksi Cepat</h5>
@@ -415,14 +462,18 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Dummy data for customer visits
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            const shortMonths = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGS', 'SEP', 'OKT', 'NOV', 'DES'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
+                'Oktober', 'November', 'Desember'
+            ];
+            const shortMonths = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGS', 'SEP', 'OKT', 'NOV',
+                'DES'
+            ];
             const visits = [120, 150, 180, 200, 250, 300, 280, 320, 350, 400, 380, 420]; // Dummy data
 
             const options = {

@@ -31,7 +31,7 @@
                                         @foreach ($plan->features as $feature)
                                             <li class="flex items-center justify-center text-gray-700">
                                                 <span
-                                                    class="icon-[tabler--check-circle] text-success size-5 mr-2"></span>
+                                                    class="icon-[tabler--circle-check] text-success size-5 mr-2"></span>
                                                 <span class="font-medium">{{ $feature }}</span>
                                             </li>
                                         @endforeach

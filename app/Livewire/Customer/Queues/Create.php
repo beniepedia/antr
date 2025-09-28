@@ -23,6 +23,7 @@ class Create extends Component
     {
         // Set default liters if only one vehicle
         $vehicles = $this->getVehicles();
+
         if ($vehicles->count() === 1) {
             $this->selected_vehicle_id = $vehicles->first()->id;
             $this->liters_requested = $vehicles->first()->max_liters;
@@ -41,7 +42,18 @@ class Create extends Component
     {
         $this->validate();
 
+        // Check if customer already has an active queue
+        $existingQueue = Queue::where('customer_id', auth('customer')->id())
+            ->whereIn('status', ['waiting', 'called'])
+            ->exists();
+
+        if ($existingQueue) {
+            $this->dispatch('notify', type: 'error', message: 'Anda sudah memiliki antrian aktif. Tidak dapat membuat antrian baru.');
+            return;
+        }
+
         $vehicle = Vehicle::find($this->selected_vehicle_id);
+
         if ($this->liters_requested > $vehicle->max_liters) {
             $this->addError('liters_requested', 'Liters requested cannot exceed vehicle max capacity.');
             return;
@@ -65,12 +77,12 @@ class Create extends Component
         ]);
 
         $this->dispatch('notify', type: 'success', message: 'Tiket antrean berhasil dibuat! Nomor antrean: ' . $queueNumber);
-        $this->redirectRoute('customer.dashboard');
+        $this->redirectRoute('customer.dashboard', navigate:true);
     }
 
     public function getVehicles()
     {
-        return Vehicle::where('tenant_id', auth()->user()->tenant_id ?? 1)->get();
+        return Vehicle::where('tenant_id', auth('customer')->user()->tenant->id)->get();
     }
 
     public function render()

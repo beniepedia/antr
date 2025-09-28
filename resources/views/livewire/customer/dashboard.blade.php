@@ -71,13 +71,8 @@
                         </div>
                         <div class="flex-shrink-0 mt-6">
                             <div
-                                class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                    </path>
-                                </svg>
+                                class="w-16 h-16 bg-gradient-to-br from-blue-300 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                                <span class="icon-[tabler--ticket] size-8 text-base-100"></span>
                             </div>
                         </div>
                     </div>

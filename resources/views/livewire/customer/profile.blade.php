@@ -35,7 +35,7 @@
                 @if (session()->has('message'))
                     <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
                         <div class="flex items-center">
-                            <span class="icon-[tabler--check-circle] text-green-600 size-5 mr-2"></span>
+                            <span class="icon-[tabler--circle-check] text-green-600 size-5 mr-2"></span>
                             <span class="text-green-800 text-sm">{{ session('message') }}</span>
                         </div>
                     </div>
