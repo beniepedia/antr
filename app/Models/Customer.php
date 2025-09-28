@@ -34,6 +34,6 @@ class Customer extends Authenticatable
 
     public function vehicles()
     {
-        return $this->belongsToMany(Vehicle::class, 'customer_vehicles')->withPivot('license_plate')->withTimestamps();
+        return $this->belongsToMany(Vehicle::class, 'customer_vehicles')->withPivot(['id','license_plate'])->withTimestamps();
     }
 }

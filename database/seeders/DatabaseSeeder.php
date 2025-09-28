@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PlansSeeder::class,
             TenantSeeder::class,
             UserSeeder::class,
+            VehicleSeeder::class,
         ]);
     }
 }

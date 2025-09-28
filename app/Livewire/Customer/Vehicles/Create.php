@@ -22,7 +22,7 @@ class Create extends Component
     {
         $this->validate();
 
-        auth()->user()->vehicles()->attach($this->vehicle_id, [
+        auth('customer')->user()->vehicles()->attach($this->vehicle_id, [
             'license_plate' => $this->license_plate,
         ]);
 
@@ -33,8 +33,8 @@ class Create extends Component
 
     public function render()
     {
-        $vehicles = Vehicle::where('tenant_id', auth()->user()->tenant_id)->get();
+        $vehicles = Vehicle::where('tenant_id', auth('customer')->user()->tenant_id)->get();
 
-        return view('livewire.customer.vehicles.create', compact('vehicles'));
+        return view('livewire.customer.vehicles.create', compact('vehicles'))->layout('layouts.customer.main');
     }
 }

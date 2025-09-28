@@ -30,6 +30,7 @@
 
     <script>
         @if (session('success'))
+            dd(session('success'))
             window.notyf.success("{{ session('success') }}");
         @endif
 
@@ -37,20 +38,13 @@
             window.notyf.error("{{ session('error') }}");
         @endif
 
-        window.addEventListener('notify', event => {
-            const type = event.detail.type || 'success';
-            const message = event.detail.message || '';
-
-            if (type === 'success') {
-                window.notyf.success(message);
-            } else if (type === 'error') {
-                window.notyf.error(message);
-            } else {
-                window.notyf.open({
-                    type,
-                    message
-                });
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            Livewire.on('notify', ({
+                type,
+                message
+            }) => {
+                notyf[type](message);
+            });
         });
     </script>
 </body>

@@ -22,26 +22,32 @@
             <form wire:submit="save" class="space-y-6">
                 <!-- Vehicle Type -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Kendaraan</label>
-                    <select wire:model="vehicle_id" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">Pilih tipe kendaraan</option>
-                        @foreach($vehicles as $vehicle)
-                            <option value="{{ $vehicle->id }}">{{ $vehicle->type }} (Max {{ $vehicle->max_liters }}L)</option>
-                        @endforeach
-                    </select>
-                    @error('vehicle_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    <label for="vehicle_id" class="block text-sm font-medium text-gray-700 mb-2">Tipe Kendaraan</label>
+                    <div class="select">
+                        <span class="icon-[tabler--car] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
+                        <select wire:model="vehicle_id" id="vehicle_id" class="grow">
+                            <option value="">Pilih tipe kendaraan</option>
+                            @foreach($vehicles as $vehicle)
+                                <option value="{{ $vehicle->id }}">{{ ucwords($vehicle->type) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('vehicle_id') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- License Plate -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Plat</label>
-                    <input type="text" wire:model="license_plate" placeholder="Contoh: B 1234 ABC"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase">
-                    @error('license_plate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    <label for="license_plate" class="block text-sm font-medium text-gray-700 mb-2">Nomor Plat</label>
+                    <div class="input">
+                        <span class="icon-[tabler--license] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
+                        <input wire:model="license_plate" type="text" id="license_plate" class="grow uppercase" placeholder="Contoh: B 1234 ABC" />
+                    </div>
+                    @error('license_plate') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5">
+                <button type="submit" class="btn btn-primary w-full">
+                    <span wire:loading class="loading loading-spinner"></span>
                     Tambah Kendaraan
                 </button>
             </form>
