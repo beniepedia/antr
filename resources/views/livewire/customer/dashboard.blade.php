@@ -1,81 +1,50 @@
-<div class="relative max-w-2xl mx-auto"> <!-- Background Decorative Elements -->
+<div class="relative max-w-2xl mx-auto">
 
-    <div class="relative z-10">
-        <!-- Header -->
-        <div class="flex items-center justify-end mb-6">
-            <!-- Notification Dropdown -->
-            <div class="relative group">
-                <button
-                    class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg transition">
-                    <span class="icon-[tabler--bell] size-5 text-gray-600"></span>
-                </button>
-
-                <!-- Dropdown -->
-                <div
-                    class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                    <div class="p-4 border-b border-gray-200">
-                        <h3 class="text-sm font-semibold text-gray-800">Notifikasi</h3>
-                    </div>
-                    <div class="max-h-64 overflow-y-auto">
-                        <div class="p-4 border-b border-gray-100 hover:bg-gray-50 transition">
-                            <div class="flex items-start">
-                                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-800">Antrian #001 telah dipanggil</p>
-                                    <p class="text-xs text-gray-500 mt-1">2 menit yang lalu</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 border-b border-gray-100 hover:bg-gray-50 transition">
-                            <div class="flex items-start">
-                                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-800">Antrian Anda telah selesai</p>
-                                    <p class="text-xs text-gray-500 mt-1">1 jam yang lalu</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 hover:bg-gray-50 transition">
-                            <div class="flex items-start">
-                                <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3"></div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-800">Pengingat: Antrian dalam 30 menit</p>
-                                    <p class="text-xs text-gray-500 mt-1">2 jam yang lalu</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-3 border-t border-gray-200 text-center">
-                        <a href="#" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Lihat Semua
-                            Notifikasi</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Welcome Card -->
-        <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-4 mb-6">
+    <!-- Welcome Header -->
+    <div
+        class="bg-gradient-to-r from-green-300 via-teal-300 to-cyan-300 rounded-b-3xl shadow px-6 py-9 mb-6 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative z-10">
             <div class="flex items-center justify-between">
-                <div>
-                    <div>
-                        <h2 class="text-lg text-gray-800 flex items-center">
-                            Selamat Datang! 👋
-                        </h2>
-                        <p class="text-xl font-semibold text-gray-700 mt-1">John Doe</p>
-                    </div>
+                <div class="flex-1">
+                    <h2 class="text-3xl font-bold mb-2">
+                        @php
+                            $hour = now()->hour;
+                            $greeting =
+                                $hour < 12
+                                    ? 'Selamat Pagi'
+                                    : ($hour < 15
+                                        ? 'Selamat Siang'
+                                        : ($hour < 18
+                                            ? 'Selamat Sore'
+                                            : 'Selamat Malam'));
+                        @endphp
+                        {{ $greeting }}
+                    </h2>
+                    <p class="text-2xl opacity-90 mb-1 font-bold">John Doe</p>
+                    <p class="text-sm opacity-75">
+                        {{ now()->locale('id')->dayName }}, {{ now()->format('d M Y') }}
+                    </p>
                 </div>
-                <div class="md:block">
-                    <div
-                        class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
+                <div class="flex-shrink-0">
+                    <!-- Notification Button -->
+                    <div class="relative group">
+                        <button
+                            class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition border border-white/30">
+                            <span class="icon-[tabler--bell] size-6 text-white"></span>
+                            <span
+                                class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
-
+        <!-- Decorative elements -->
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
+    </div>
+    <div class="relative z-10 px-3">
         <!-- Active Queue Card -->
         <div class="bg-white rounded-2xl shadow border-0 p-8 mb-6 relative overflow-hidden">
             <div
