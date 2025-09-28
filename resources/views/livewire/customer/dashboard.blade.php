@@ -2,7 +2,7 @@
 
     <!-- Welcome Header -->
     <div
-        class="bg-gradient-to-r from-green-300 via-teal-300 to-cyan-300 rounded-b-3xl shadow px-6 py-9 mb-6 text-white relative overflow-hidden">
+        class="bg-gradient-to-r from-green-300 via-teal-300 to-cyan-300 rounded-b-3xl shadow-md px-6 py-9 mb-6 text-white relative overflow-hidden">
         <div class="absolute inset-0 bg-black/20"></div>
         <div class="relative z-10">
             <div class="flex items-center justify-between">
@@ -45,54 +45,38 @@
         <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
     </div>
     <div class="relative  px-3">
-        <!-- Active Queue Card -->
-        <div class="bg-white rounded-2xl shadow border-0 p-8 mb-6 relative overflow-hidden">
+        <!-- Combined Queue Card -->
+        <div class="bg-base-100 rounded-2xl shadow-md p-8 mb-6 relative overflow-hidden">
             <div
-                class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full -mr-16 -mt-16 opacity-20">
+                class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full -mr-16 -mt-16 opacity-20 animate-pulse">
             </div>
             <div class="relative z-10">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Antrian Anda </p>
-                        <p
-                            class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mt-2">
-                            0001</p>
-                    </div>
-                    <div
-                        class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <span class="badge badge-soft badge-warning badge-lg">Menunggu</span>
-                </div>
-            </div>
-        </div>
+                <div class="flex items-start justify-between ">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Antrian Anda</p>
+                        <p class="text-6xl font-extrabold text-purple-500 mt-2">
+                            0010</p>
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="">
+                                    <div class="text-sm text-gray-600">
+                                        <span class="font-medium">ANTRIAN SAAT INI:</span>
+                                    </div>
+                                    <span class="text-2xl font-bold text-green-700">0001</span>
+                                </div>
+                            </div>
 
-        <!-- Current Queue Card -->
-        <div class="bg-white rounded-2xl shadow border-0 p-6 mb-6 relative overflow-hidden">
-            <div
-                class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400 to-blue-500 rounded-full -mr-12 -mt-12 opacity-20">
-            </div>
-            <div class="relative z-10">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Antrian Saat Ini</p>
-                        <p
-                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mt-2">
-                            #1</p>
+                        </div>
                     </div>
-                    <div
-                        class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
-                            </path>
-                        </svg>
+                    <div class="flex-shrink-0 mt-6">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
