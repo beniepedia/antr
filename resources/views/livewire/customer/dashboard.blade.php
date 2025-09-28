@@ -44,7 +44,7 @@
         <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
         <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
     </div>
-    <div class="relative z-10 px-3">
+    <div class="relative  px-3">
         <!-- Active Queue Card -->
         <div class="bg-white rounded-2xl shadow border-0 p-8 mb-6 relative overflow-hidden">
             <div
@@ -56,7 +56,7 @@
                         <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Antrian Anda </p>
                         <p
                             class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mt-2">
-                            #20</p>
+                            0001</p>
                     </div>
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow">

@@ -1,6 +1,6 @@
   <!-- Bottom Navigation -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-      <div class="flex justify-around items-center py-3 px-4 relative">
+  <div class="fixed bottom-4 left-3 right-3 bg-white/80 backdrop-blur-md shadow z-50 rounded-xl">
+      <div class="flex justify-around items-center py-4 relative">
           <a href="{{ route('customer.dashboard') }}" class="flex flex-col items-center" wire:current="text-primary"
               wire:navigate>
               <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,9 +25,10 @@
               </svg>
               <span class="text-xs font-medium">Riwayat</span>
           </a>
-           <a href="{{ route('customer.profile') }}" class="flex flex-col items-center text-gray-500 hover:text-blue-600" wire:navigate>
-               <span class="icon-[tabler--user] size-7 mb-1"></span>
-               <span class="text-xs font-medium">Profil</span>
-           </a>
+          <a href="{{ route('customer.profile') }}" class="flex flex-col items-center text-gray-500 hover:text-blue-600"
+              wire:navigate>
+              <span class="icon-[tabler--user] size-7 mb-1"></span>
+              <span class="text-xs font-medium">Profil</span>
+          </a>
       </div>
   </div>
