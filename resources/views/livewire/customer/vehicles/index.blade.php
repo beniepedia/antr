@@ -39,7 +39,7 @@
 
           <div class="grid grid-cols-2 gap-5">
               <div class="h-50 bg-base-100">
-                  asd
+                  asd sa ss ss
               </div>
               <div class="h-50 bg-base-100">
                   asd
