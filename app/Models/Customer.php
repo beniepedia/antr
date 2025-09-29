@@ -32,7 +32,7 @@ class Customer extends Authenticatable
         return $this->hasMany(Queue::class);
     }
 
-    public function vehicle()
+    public function customerVehicles()
     {
         return $this->hasMany(CustomerVehicle::class);
     }

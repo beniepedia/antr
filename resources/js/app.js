@@ -4,14 +4,24 @@ import './main.js';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
-const notyf = new Notyf({
-    duration: 5000,
-    // ripple: true,
-    dismissible: true,
-    position: { x: 'right', y: 'bottom' },
-});
+// const notyf = new Notyf({
+//     duration: 5000,
+//     // ripple: true,
+//     dismissible: true,
+//     position: { x: 'right', y: 'bottom' },
+// });
 
-window.notyf = notyf;
+// window.notyf = notyf;
+
+if (!window.notyf) {
+    window.notyf = new Notyf({
+        duration: 5000,
+        // ripple: true,
+        dismissible: true,
+        position: { x: 'right', y: 'bottom' }
+    })
+}
+
 
 
 // Re-initialize FlyonUI components after Livewire navigation or updates

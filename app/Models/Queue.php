@@ -20,7 +20,7 @@ class Queue extends Model
         'queue_number',
         'tenant_id',
         'customer_id',
-        'vehicle_id',
+        'customer_vehicle_id',
         'served_by',
         'liters_requested',
         'queue_date',
@@ -63,7 +63,6 @@ class Queue extends Model
 
     public function getLicensePlateAttribute()
     {
-        $customerVehicle = $this->customer->vehicles()->where('vehicle_id', $this->vehicle_id)->first();
-        return $customerVehicle ? $customerVehicle->pivot->license_plate : null;
+        return $this->customerVehicle ? $this->customerVehicle->license_plate : null;
     }
 }

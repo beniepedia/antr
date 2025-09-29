@@ -14,7 +14,7 @@
                             <span class="text-white font-bold text-xl">{{ $queue->queue_number }}</span>
                         </div>
                         <p class="text-lg font-semibold text-gray-800">{{ strtoupper($queue->license_plate ?? 'Nomor Plat') }}</p>
-                        <p class="text-sm text-gray-600">{{ $queue->vehicle->type ?? 'Kendaraan' }} - {{ strtoupper($queue->license_plate ?? '') }}</p>
+                        <p class="text-sm text-gray-600">{{ $queue->customerVehicle->vehicle->type ?? 'Kendaraan' }} - {{ strtoupper($queue->license_plate ?? '') }}</p>
                         <p class="text-sm text-gray-500">{{ $queue->queue_date->format('d M Y') }}</p>
                     </div>
                     <div class="text-center">

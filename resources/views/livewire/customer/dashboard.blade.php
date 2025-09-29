@@ -80,11 +80,16 @@
 
                 </div>
                 <div class="flex flex-col space-y-2 mt-3">
-                    <button wire:click="checkIn" class="btn btn-success w-full btn-sm">Saya sudah di
-                        lokasi</button>
+                    <button wire:click="checkIn" class="btn btn-success w-full btn-sm">
+                        <span class="icon-[tabler--map-pin] size-4 mr-2"></span>
+                        Saya sudah di lokasi
+                    </button>
                     <div class="flex space-x-2">
-                        <button wire:click="cancelQueue" class="btn btn-error btn-sm flex-1">Batal
-                            Antrian</button>
+                        <button @click="$dispatch('open-confirmation', { id: null })"
+                            class="btn btn-error btn-sm flex-1">
+                            <span class="icon-[tabler--x] size-4 mr-2"></span>
+                            Batal Antrian
+                        </button>
                         <button class="btn btn-outline  btn-sm"><span
                                 class="icon-[tabler--qrcode] size-5"></span></button>
                     </div>
@@ -194,4 +199,7 @@
         </div>
 
     </div>
+
+    <x-confirm-dialog method="cancelQueue" title="Batal Antrian"
+        message="Apakah Anda yakin ingin membatalkan antrian ini?" confirm-text="Ya, Batal" type="danger" />
 </div>

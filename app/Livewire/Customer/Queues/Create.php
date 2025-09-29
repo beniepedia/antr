@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Customer\Queues;
 
+use App\Models\CustomerVehicle;
 use App\Models\Queue;
 use App\Models\Vehicle;
 use App\trait\WithQueueNumber;
@@ -12,31 +13,31 @@ class Create extends Component
 {
     use WithQueueNumber;
 
-    public $selected_vehicle_id;
+    public $selected_customer_vehicle_id;
 
     public $liters_requested;
 
     protected $rules = [
-        'selected_vehicle_id' => 'required|exists:vehicles,id',
+        'selected_customer_vehicle_id' => 'required|exists:customer_vehicles,id',
         'liters_requested' => 'required|integer|min:1',
     ];
 
     public function mount()
     {
-        // Set default liters if only one vehicle
-        $vehicles = $this->getVehicles();
+        // Set default liters if only one customer vehicle
+        $customerVehicles = $this->getCustomerVehicles();
 
-        if ($vehicles->count() === 1) {
-            $this->selected_vehicle_id = $vehicles->first()->id;
-            $this->liters_requested = $vehicles->first()->max_liters;
+        if ($customerVehicles->count() === 1) {
+            $this->selected_customer_vehicle_id = $customerVehicles->first()->id;
+            $this->liters_requested = $customerVehicles->first()->vehicle->max_liters;
         }
     }
 
-    public function updatedSelectedVehicleId()
+    public function updatedSelectedCustomerVehicleId()
     {
-        $vehicle = Vehicle::find($this->selected_vehicle_id);
-        if ($vehicle) {
-            $this->liters_requested = $vehicle->max_liters;
+        $customerVehicle = CustomerVehicle::find($this->selected_customer_vehicle_id);
+        if ($customerVehicle && $customerVehicle->vehicle) {
+            $this->liters_requested = $customerVehicle->vehicle->max_liters;
         }
     }
 
@@ -55,9 +56,14 @@ class Create extends Component
             return;
         }
 
-        $vehicle = Vehicle::find($this->selected_vehicle_id);
+        $customerVehicle = CustomerVehicle::find($this->selected_customer_vehicle_id);
 
-        if ($this->liters_requested > $vehicle->max_liters) {
+        if (!$customerVehicle || !$customerVehicle->vehicle) {
+            $this->addError('selected_customer_vehicle_id', 'Invalid vehicle selected.');
+            return;
+        }
+
+        if ($this->liters_requested > $customerVehicle->vehicle->max_liters) {
             $this->addError('liters_requested', 'Liters requested cannot exceed vehicle max capacity.');
 
             return;
@@ -73,7 +79,7 @@ class Create extends Component
             'queue_number' => $queueNumber,
             'tenant_id' => $tenantId,
             'customer_id' => auth('customer')->id(),
-            'vehicle_id' => $this->selected_vehicle_id,
+            'customer_vehicle_id' => $this->selected_customer_vehicle_id,
             'liters_requested' => $this->liters_requested,
             'queue_date' => today(),
             'status' => 'waiting',
@@ -84,15 +90,15 @@ class Create extends Component
         $this->redirectRoute('customer.dashboard', navigate: true);
     }
 
-    public function getVehicles()
+    public function getCustomerVehicles()
     {
-        return Auth::guard('customer')->user()->vehicles;
+        return Auth::guard('customer')->user()->customerVehicles()->with('vehicle');
     }
 
     public function render()
     {
         return view('livewire.customer.queues.create', [
-            'vehicles' => $this->getVehicles(),
+            'customerVehicles' => $this->getCustomerVehicles()->get(),
         ])->layout('layouts.customer.main');
     }
 }

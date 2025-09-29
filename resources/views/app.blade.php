@@ -37,15 +37,22 @@
             window.notyf.error("{{ session('error') }}");
         @endif
 
-        document.addEventListener('DOMContentLoaded', () => {
+
+        document.addEventListener('livewire:init', () => {
             Livewire.on('notify', ({
                 type,
                 message
             }) => {
-                notyf[type](message);
+                console.log(notyf);
+                notyf.success("asdasdad")
+                // kalau type gak valid, fallback ke error
+                if (typeof window.notyf[type] === "function") {
+                    window.notyf[type](message);
+                } else {
+                    window.notyf.error(message);
+                }
             });
         });
-
 
         document.addEventListener("DOMContentLoaded", () => {
             if (window.Livewire && window.Livewire.hotReload) {
