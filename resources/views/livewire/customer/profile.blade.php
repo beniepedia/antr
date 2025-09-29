@@ -1,80 +1,62 @@
-<div class="min-h-screen ">
-    <!-- Custom Header -->
-    <div class="top-0 bg-base-100 rounded shadow">
-        <div class="container mx-auto px-4 py-2 max-w-2xl">
-            <div class="flex items-center justify-between">
-                <a href="{{ route('customer.dashboard') }}">
-                    <span class="icon-[tabler--arrow-left] size-5"></span>
-                </a>
-                <h1 class="text-xl font-semibold text-gray-900 absolute left-1/2 transform -translate-x-1/2">Profil Saya
-                </h1>
+<div class="max-w-xl mx-auto pt-19">
+    <!-- Header -->
+    <x-mobile-header title="Profil Saya" />
 
-            </div>
-        </div>
-    </div>
-
-    <div class="container mx-auto py-8 max-w-2xl">
-
+    <div class="px-3">
         <!-- Profile Card -->
-        <div class="border border-gray-200 rounded-lg shadow-sm">
-            <!-- Profile Info -->
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex items-center">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mr-4">
-                        <span class="icon-[tabler--user] text-gray-600 size-8"></span>
+        <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+                <!-- Profile Header -->
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="avatar">
+                        <div class="w-16 rounded-full bg-primary text-primary-content">
+                            <span class="icon-[tabler--user] size-8"></span>
+                        </div>
                     </div>
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-900">{{ auth('customer')->user()->name }}</h2>
-                        <p class="text-gray-600">{{ auth('customer')->user()->whatsapp }}</p>
+                        <h2 class="card-title">{{ auth('customer')->user()->name }}</h2>
+                        <p class="text-base-content/70">{{ auth('customer')->user()->whatsapp }}</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Form -->
-            <div class="p-6">
-                @if (session()->has('message'))
-                    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                        <div class="flex items-center">
-                            <span class="icon-[tabler--circle-check] text-green-600 size-5 mr-2"></span>
-                            <span class="text-green-800 text-sm">{{ session('message') }}</span>
-                        </div>
-                    </div>
-                @endif
 
-                <form wire:submit="save" class="space-y-6">
+                <!-- Form -->
+                <form wire:submit="save" class="space-y-4">
                     <!-- Name -->
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                            Nama Lengkap
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Nama Lengkap</span>
                         </label>
-                        <div class="input">
-                            <span class="icon-[tabler--user] text-gray-400 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model="name" type="text" class="grow" id="name"
+                        <label class="input input-bordered flex items-center gap-2">
+                            <span class="icon-[tabler--user] size-5 text-base-content/60"></span>
+                            <input wire:model="name" type="text" class="grow"
                                 placeholder="Masukkan nama lengkap" />
-                        </div>
+                        </label>
                         @error('name')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
                         @enderror
                     </div>
 
                     <!-- WhatsApp -->
-                    <div>
-                        <label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-2">
-                            Nomor WhatsApp
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Nomor WhatsApp</span>
                         </label>
-                        <div class="input">
-                            <span
-                                class="icon-[tabler--brand-whatsapp] text-gray-400 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model="whatsapp" type="text" class="grow" id="whatsapp"
-                                placeholder="6281234567890" />
-                        </div>
+                        <label class="input input-bordered flex items-center gap-2">
+                            <span class="icon-[tabler--brand-whatsapp] size-5 text-base-content/60"></span>
+                            <input wire:model="whatsapp" type="text" class="grow" placeholder="6281234567890" />
+                        </label>
                         @error('whatsapp')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
                         @enderror
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="pt-4">
+                    <div class="form-control mt-6">
                         <button type="submit" class="btn btn-primary w-full">
                             <span wire:loading class="loading loading-spinner"></span>
                             <span wire:loading.remove>Simpan Perubahan</span>
@@ -84,20 +66,27 @@
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="mt-8 grid grid-cols-3 gap-4">
-            <div class="border border-gray-200 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ auth('customer')->user()->vehicles()->count() }}</div>
-                <div class="text-sm text-gray-600">Kendaraan</div>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-3 gap-4 mt-6">
+            <div class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                <div class="card-body p-4 text-center">
+                    <div class="text-2xl font-bold">{{ auth('customer')->user()->vehicles()->count() }}</div>
+                    <div class="text-sm opacity-90">Kendaraan</div>
+                </div>
             </div>
-            <div class="border border-gray-200 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-green-600">{{ auth('customer')->user()->queues()->count() }}</div>
-                <div class="text-sm text-gray-600">Antrian</div>
+            <div class="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
+                <div class="card-body p-4 text-center">
+                    <div class="text-2xl font-bold">{{ auth('customer')->user()->queues()->count() }}</div>
+                    <div class="text-sm opacity-90">Antrian</div>
+                </div>
             </div>
-            <div class="border border-gray-200 rounded-lg p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600">
-                    {{ auth('customer')->user()->queues()->where('status', 'completed')->count() }}</div>
-                <div class="text-sm text-gray-600">Selesai</div>
+            <div class="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
+                <div class="card-body p-4 text-center">
+                    <div class="text-2xl font-bold">
+                        {{ auth('customer')->user()->queues()->where('status', 'completed')->count() }}
+                    </div>
+                    <div class="text-sm opacity-90">Selesai</div>
+                </div>
             </div>
         </div>
     </div>

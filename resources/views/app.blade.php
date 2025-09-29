@@ -18,6 +18,8 @@
     @endif --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+
 </head>
 
 <body class="font-sans antialiased">
@@ -27,51 +29,10 @@
     @livewireScripts
 
     @stack('scripts')
-
-    <script>
-        @if (session('success'))
-            window.notyf.success("{{ session('success') }}");
-        @endif
-
-        @if (session('error'))
-            window.notyf.error("{{ session('error') }}");
-        @endif
-
-
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('notify', ({
-                type,
-                message
-            }) => {
-                console.log(notyf);
-                notyf.success("asdasdad")
-                // kalau type gak valid, fallback ke error
-                if (typeof window.notyf[type] === "function") {
-                    window.notyf[type](message);
-                } else {
-                    window.notyf.error(message);
-                }
-            });
-        });
-
-        document.addEventListener("DOMContentLoaded", () => {
-            if (window.Livewire && window.Livewire.hotReload) {
-                console.log("%c✅ Livewire Hot Reload aktif!", "color: green; font-weight: bold;");
-            } else {
-                console.warn("⚠️ Livewire Hot Reload TIDAK aktif. Fallback reload halaman.");
-            }
-
-            // Optional: pantau koneksi websocket
-            const wsCheck = setInterval(() => {
-                const ws = window.Livewire?.hotReload?.connection;
-                if (ws) {
-                    console.log("🔌 Hot Reload WebSocket status:", ws.readyState === 1 ? "Connected" :
-                        "Disconnected");
-                    clearInterval(wsCheck);
-                }
-            }, 1000);
-        });
-    </script>
+    {{-- 
+    <script type="text/javascript">
+       
+    </script> --}}
 </body>
 
 </html>

@@ -4,44 +4,49 @@ import './main.js';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
-// const notyf = new Notyf({
-//     duration: 5000,
-//     // ripple: true,
-//     dismissible: true,
-//     position: { x: 'right', y: 'bottom' },
-// });
 
-// window.notyf = notyf;
-
-if (!window.notyf) {
+// bikin fungsi init ulang
+function initNotyf() {
+    // document.querySelectorAll(".notyf").forEach(el => el.remove());
     window.notyf = new Notyf({
-        duration: 5000,
-        // ripple: true,
+        duration: 2500,
+        position: { x: "right", y: "top" },
         dismissible: true,
-        position: { x: 'right', y: 'bottom' }
-    })
+    });
 }
 
+// inisialisasi awal
+initNotyf();
 
+document.addEventListener("livewire:init", () => {
+    Livewire.on("notify", ({ type, message }) => {
+        if (!window.notyf) initNotyf();
+        if (type === "success") {
+            window.notyf.success(message);
+        } else {
+            window.notyf.error(message);
+        }
+    });
+});
 
-// Re-initialize FlyonUI components after Livewire navigation or updates
-// so dynamic content (modals, dropdowns, tabs, etc.) works without full reloads.
 const reinitFlyonUI = () => {
     try {
         if (window.HSStaticMethods && typeof window.HSStaticMethods.autoInit === 'function') {
             window.HSStaticMethods.autoInit('all');
-            window.HSSelect.getInstance('#select');
+            if (window.HSSelect) {
+                window.HSSelect.getInstance('#select');
+            }
         }
     } catch (e) {
-        // Silently ignore to avoid breaking UX if HSStaticMethods is unavailable
+        console.warn("FlyonUI reinit gagal:", e);
     }
 };
 
-// On initial Livewire load
+
+// --- hook untuk FlyonUI setelah navigasi/DOM update ---
 document.addEventListener('livewire:load', () => {
     reinitFlyonUI();
 
-    // When any Livewire component finishes a DOM update
     if (window.Livewire && typeof window.Livewire.hook === 'function') {
         window.Livewire.hook('message.processed', () => {
             reinitFlyonUI();
@@ -49,7 +54,7 @@ document.addEventListener('livewire:load', () => {
     }
 });
 
-// When navigating with wire:navigate (no full page reload)
 document.addEventListener('livewire:navigated', () => {
     reinitFlyonUI();
+    initNotyf();
 });

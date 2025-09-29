@@ -1,4 +1,4 @@
-<div class="relative max-w-2xl mx-auto">
+<div class="relative max-w-xl mx-auto">
 
     <!-- Welcome Header -->
     <div

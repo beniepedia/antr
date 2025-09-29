@@ -4,6 +4,8 @@ namespace App\Livewire\Customer;
 
 use Livewire\Component;
 
+use function PHPSTORM_META\type;
+
 class Profile extends Component
 {
     public $name = '';
@@ -32,8 +34,8 @@ class Profile extends Component
             'name' => $this->name,
             'whatsapp' => $this->whatsapp,
         ]);
-
-        session()->flash('message', 'Profil berhasil diperbarui.');
+        $this->dispatch("notify", type:"success", message: "asdasd");
+        // session()->flash('message', 'Profil berhasil diperbarui.');
     }
 
     public function render()

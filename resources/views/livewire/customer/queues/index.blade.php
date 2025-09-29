@@ -1,6 +1,7 @@
-<div class="relative max-w-4xl mx-auto">
+<div class="max-w-xl mx-auto pt-19">
     <!-- Header -->
     <x-mobile-header title="Antrean Saya" url="{{ route('customer.dashboard') }}" />
+
 
     <!-- Queues List -->
     @if ($queues->count() > 0)
@@ -13,8 +14,10 @@
                             class="w-16 h-16 bg-gradient-to-br from-green-300 to-blue-400 rounded-full flex items-center justify-center mx-auto mb-2">
                             <span class="text-white font-bold text-xl">{{ $queue->queue_number }}</span>
                         </div>
-                        <p class="text-lg font-semibold text-gray-800">{{ strtoupper($queue->license_plate ?? 'Nomor Plat') }}</p>
-                        <p class="text-sm text-gray-600">{{ $queue->customerVehicle->vehicle->type ?? 'Kendaraan' }} - {{ strtoupper($queue->license_plate ?? '') }}</p>
+                        <p class="text-lg font-semibold text-gray-800">
+                            {{ strtoupper($queue->license_plate ?? 'Nomor Plat') }}</p>
+                        <p class="text-sm text-gray-600">{{ $queue->customerVehicle->vehicle->type ?? 'Kendaraan' }}
+                            - {{ strtoupper($queue->license_plate ?? '') }}</p>
                         <p class="text-sm text-gray-500">{{ $queue->queue_date->format('d M Y') }}</p>
                     </div>
                     <div class="text-center">
@@ -38,11 +41,13 @@
                             <p class="text-xs text-gray-600">Litur yang diminta:
                                 {{ $queue->liters_requested ?? 'N/A' }} L</p>
                             @if ($queue->checkout_time)
-                                <p class="text-xs text-gray-600">Check-out: {{ $queue->checkout_time->format('H:i') }}
+                                <p class="text-xs text-gray-600">Check-out:
+                                    {{ $queue->checkout_time->format('H:i') }}
                                 </p>
                             @endif
                             @if ($queue->servedBy)
-                                <p class="text-xs text-gray-600">Dilayani oleh: {{ $queue->servedBy->name ?? 'N/A' }}
+                                <p class="text-xs text-gray-600">Dilayani oleh:
+                                    {{ $queue->servedBy->name ?? 'N/A' }}
                                 </p>
                             @endif
                         </div>

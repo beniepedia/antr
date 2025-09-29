@@ -1,14 +1,6 @@
-  <div class="relative z-10 max-w-md mx-auto">
+  <div class="relative max-w-xl mx-auto pt-19">
       <!-- Header -->
-      <div class="flex items-center justify-between mb-6">
-          <a href="{{ route('customer.vehicles.index') }}" class="text-blue-600 hover:text-blue-800">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-          </a>
-          <h1 class="text-xl font-bold text-gray-800">Edit Kendaraan</h1>
-          <div></div>
-      </div>
+      <x-mobile-header title="Edit Kendaraan" url="{{ route('customer.vehicles.index') }}" />
 
       <!-- Form Card -->
       <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">

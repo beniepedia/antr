@@ -1,4 +1,4 @@
-<div class="max-w-md mx-auto">
+<div class="max-w-xl mx-auto pt-19">
     <!-- Header -->
     <x-mobile-header title="Ambil Antrian" url="{{ route('customer.dashboard') }}" />
 
