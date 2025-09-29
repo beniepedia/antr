@@ -35,6 +35,16 @@
                   </div>
               @endforeach
           </div>
+
+
+          <div class="grid grid-cols-2 gap-5">
+              <div class="h-50 bg-base-100">
+                  asd
+              </div>
+              <div class="h-50 bg-base-100">
+                  asd
+              </div>
+          </div>
       @else
           <!-- Empty State -->
           <div class="text-center flex flex-col items-center  min-vh-100 py-19 px-2">
