@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('queue_number', 6);
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
-            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->foreignId('customer_vehicle_id')->constrained('customer_vehicles')->cascadeOnDelete();
             $table->foreignId('served_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('liters_requested')->nullable()->default(0);
             $table->date('queue_date');

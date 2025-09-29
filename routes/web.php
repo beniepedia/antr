@@ -38,7 +38,7 @@ Route::domain('{subdomain:url}.'.config('app.url'))
         Route::middleware('auth:customer')->group(function () {
             Route::get('/dashboard', CustomerDashboard::class)->name('customer.dashboard');
             Route::get('/profile', CustomerProfile::class)->name('customer.profile');
-            Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues');
+            Route::get('/queues', CustomerQueueIndex::class)->name('customer.queues.index');
             Route::get('/queues/create', CustomerQueueCreate::class)->name('customer.queues.create');
             Route::get('/vehicles', CustomerVehiclesIndex::class)->name('customer.vehicles.index');
             Route::get('/vehicles/create', CustomerVehiclesCreate::class)->name('customer.vehicles.create');

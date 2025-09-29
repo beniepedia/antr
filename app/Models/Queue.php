@@ -9,6 +9,13 @@ class Queue extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::addGlobalScope('tenant', function ($query) {
+            $query->where('tenant_id', auth('customer')->user()->tenant_id);
+        });
+    }
+
     protected $fillable = [
         'queue_number',
         'tenant_id',
@@ -38,13 +45,25 @@ class Queue extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function customerVehicle()
+    {
+        return $this->belongsTo(CustomerVehicle::class);
+    }
+
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        // lewat customerVehicle -> vehicles
+        return $this->hasOneThrough(Vehicle::class, CustomerVehicle::class, 'id', 'id', 'customer_vehicle_id', 'vehicle_id');
     }
 
     public function servedBy()
     {
         return $this->belongsTo(User::class, 'served_by');
+    }
+
+    public function getLicensePlateAttribute()
+    {
+        $customerVehicle = $this->customer->vehicles()->where('vehicle_id', $this->vehicle_id)->first();
+        return $customerVehicle ? $customerVehicle->pivot->license_plate : null;
     }
 }

@@ -1,5 +1,5 @@
   <!-- Bottom Navigation -->
-  <div class="fixed bottom-4 left-3 right-3 bg-white/80 backdrop-blur-md shadow z-50 rounded-xl">
+  <div class="fixed bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md shadow z-50 rounded-xl">
       <div class="flex justify-around items-center py-4 relative">
           <a href="{{ route('customer.dashboard') }}" class="flex flex-col items-center" wire:current="text-primary"
               wire:navigate>
@@ -10,7 +10,8 @@
               </svg>
               <span class="text-xs font-medium">Beranda</span>
           </a>
-          <a href="#" class="flex flex-col items-center text-gray-500 hover:text-blue-600">
+          <a href="{{ route('customer.queues.index') }}"
+              class="flex flex-col items-center text-gray-500 hover:text-blue-600" wire:navigate>
               <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">

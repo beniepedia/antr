@@ -4,10 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Vehicle extends Model
 {
     use HasFactory;
+
+    protected static function booted()
+    {
+        static::addGlobalScope('tenant', function (Builder $builder) {
+            if (auth('customer')->check()) {
+                $builder->where('tenant_id', auth('customer')->user()->tenant_id);
+            }
+        });
+    }
 
     protected $fillable = [
         'tenant_id',
