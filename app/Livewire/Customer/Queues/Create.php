@@ -5,13 +5,15 @@ namespace App\Livewire\Customer\Queues;
 use App\Models\Queue;
 use App\Models\Vehicle;
 use App\trait\WithQueueNumber;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Create extends Component
 {
     use WithQueueNumber;
-    
+
     public $selected_vehicle_id;
+
     public $liters_requested;
 
     protected $rules = [
@@ -49,6 +51,7 @@ class Create extends Component
 
         if ($existingQueue) {
             $this->dispatch('notify', type: 'error', message: 'Anda sudah memiliki antrian aktif. Tidak dapat membuat antrian baru.');
+
             return;
         }
 
@@ -56,6 +59,7 @@ class Create extends Component
 
         if ($this->liters_requested > $vehicle->max_liters) {
             $this->addError('liters_requested', 'Liters requested cannot exceed vehicle max capacity.');
+
             return;
         }
 
@@ -76,13 +80,13 @@ class Create extends Component
             'checkin_time' => now(),
         ]);
 
-        $this->dispatch('notify', type: 'success', message: 'Tiket antrean berhasil dibuat! Nomor antrean: ' . $queueNumber);
-        $this->redirectRoute('customer.dashboard', navigate:true);
+        $this->dispatch('notify', type: 'success', message: 'Tiket antrean berhasil dibuat! Nomor antrean: '.$queueNumber);
+        $this->redirectRoute('customer.dashboard', navigate: true);
     }
 
     public function getVehicles()
     {
-        return Vehicle::where('tenant_id', auth('customer')->user()->tenant->id)->get();
+        return Auth::guard('customer')->user()->vehicles;
     }
 
     public function render()

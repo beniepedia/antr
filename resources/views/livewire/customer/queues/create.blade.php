@@ -19,8 +19,8 @@
                     <select wire:model.live="selected_vehicle_id" id="vehicle" class="select select-lg">
                         <option value="">-- Pilih Kendaraan --</option>
                         @foreach ($vehicles as $vehicle)
-                            <option value="{{ $vehicle->id }}">{{ ucfirst($vehicle->type) }} (Max:
-                                {{ $vehicle->max_liters }}L)
+                            <option value="{{ $vehicle->id }}">{{ ucfirst($vehicle->type) }}
+                                ({{ $vehicle->pivot->license_plate }})
                             </option>
                         @endforeach
                     </select>

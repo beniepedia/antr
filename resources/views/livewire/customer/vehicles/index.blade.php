@@ -7,7 +7,7 @@
       @if ($vehicles->count() > 0)
           <div class="space-y-4 px-3">
               @foreach ($vehicles as $vehicle)
-                  <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-md border border-white/20 px-3 py-4">
+                  <div class="bg-white/90 backdrop-blur-sm rounded-lg shadow-md border border-white/20 px-3 py-4">
                       <div class="flex items-center justify-between">
                           <div class="flex items-center">
                               <div
