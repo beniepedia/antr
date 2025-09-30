@@ -18,6 +18,7 @@ use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
 use App\Livewire\Tenant\queue\QueueIndex;
+use App\Livewire\Tenant\QueueControl;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
@@ -70,6 +71,7 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 
     Route::get('/antrian', QueueIndex::class)->name('tenant.antrian');
+    Route::get('/kontrol-antrian', QueueControl::class)->name('tenant.queue.control');
 
     Route::get('/karyawan', KaryawanIndex::class)->name('tenant.karyawan');
     Route::get('/karyawan/create', KaryawanCreate::class)->name('tenant.karyawan.create');

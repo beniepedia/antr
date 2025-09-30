@@ -42,6 +42,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('tenant.queue.control') }}" wire:navigate class="px-4" wire:current="menu-active">
+                            <span class="icon-[tabler--player-play] size-5"></span>
+                            <span class="grow text-[1rem]">Kontrol Antrian</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('tenant.karyawan') }}" wire:navigate class="px-4"
                             wire:current="menu-active">
                             <span class="icon-[tabler--user-check] size-5"></span>

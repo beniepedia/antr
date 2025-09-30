@@ -3,30 +3,22 @@
 namespace App\Livewire\Tenant\queue;
 
 use App\Models\Queue as QueueModel;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class QueueIndex extends Component
 {
-    public $queues = [];
+    use WithPagination;
 
     public $filterStatus = '';
 
     public $filterDate = '';
 
-    public $staff = [];
-
-    public function mount()
-    {
-        $this->loadQueues();
-        $this->loadStaff();
-    }
-
-    public function loadQueues()
+    public function getQueuesProperty()
     {
         $query = QueueModel::where('tenant_id', Auth::guard('tenant')->user()->tenant_id)
-            ->with(['customer', 'vehicle', 'servedBy']);
+            ->with(['customer', 'customerVehicle.vehicle', 'servedBy']);
 
         if ($this->filterStatus) {
             $query->where('status', $this->filterStatus);
@@ -36,17 +28,12 @@ class QueueIndex extends Component
             $query->where('queue_date', $this->filterDate);
         }
 
-        $this->queues = $query->orderBy('queue_date', 'desc')
+        return $query->orderBy('queue_date', 'desc')
             ->orderBy('queue_number', 'asc')
-            ->get();
+            ->paginate(10);
     }
 
-    public function loadStaff()
-    {
-        $this->staff = User::where('tenant_id', Auth::guard('tenant')->user()->tenant_id)
-            ->where('role', '!=', 'admin')
-            ->get();
-    }
+
 
     public function callQueue($queueId)
     {
@@ -84,24 +71,16 @@ class QueueIndex extends Component
         }
     }
 
-    public function assignStaff($queueId, $staffId)
-    {
-        $queue = QueueModel::find($queueId);
-        if ($queue && $queue->tenant_id == Auth::guard('tenant')->user()->tenant_id) {
-            $queue->update(['served_by' => $staffId]);
-            $this->loadQueues();
-            $this->js('notyf.success("Staff berhasil ditugaskan!")');
-        }
-    }
+
 
     public function updatedFilterStatus()
     {
-        $this->loadQueues();
+        $this->resetPage();
     }
 
     public function updatedFilterDate()
     {
-        $this->loadQueues();
+        $this->resetPage();
     }
 
     public function render()

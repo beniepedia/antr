@@ -5,7 +5,7 @@
         @foreach ($links as $link)
             @if (!@$loop->last)
                 <li>
-                    <a href="{{ $link['url'] }}">
+                    <a href="{{ $link['url'] }}" wire:navigate>
                         {{ $link['label'] }}
                     </a>
                 </li>

@@ -2,12 +2,12 @@
     <!-- Welcome and Subscription Row -->
     <div class="grid gap-4 lg:grid-cols-2 mb-8">
         <!-- Welcome Section -->
-        <div class="card bg-gradient-to-r from-blue-400 to-purple-500 text-white">
+        <div class="card bg-gradient-to-r from-green-400 to-green-600 text-white">
             <div class="card-body">
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-2xl font-bold mb-2">Selamat Datang, {{ $user->name }}!</h1>
-                        <p class="text-blue-100">Kelola antrian Anda dengan mudah di dashboard Antrianku.</p>
+                        <p class="text-green-100">Kelola antrian Anda dengan mudah di dashboard Antrianku.</p>
                     </div>
                     <div class="hidden md:block">
                         <span class="icon-[tabler--cube] size-16 opacity-20"
