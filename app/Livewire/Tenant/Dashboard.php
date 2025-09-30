@@ -45,7 +45,8 @@ class Dashboard extends Component
             });
 
         $popularServices = $tenant->queues()
-            ->join('vehicles', 'queues.vehicle_id', '=', 'vehicles.id')
+            ->join('customer_vehicles', 'queues.customer_vehicle_id', '=', 'customer_vehicles.id')
+            ->join('vehicles', 'customer_vehicles.vehicle_id', '=', 'vehicles.id')
             ->selectRaw('vehicles.type, COUNT(*) as count')
             ->groupBy('vehicles.type')
             ->orderBy('count', 'desc')
