@@ -10,12 +10,18 @@ class Profile extends Component
 {
     public $name = '';
     public $whatsapp = '';
+    public $editing = false;
 
     public function mount()
     {
         $user = auth('customer')->user();
         $this->name = $user->name;
         $this->whatsapp = $user->whatsapp;
+    }
+
+    public function toggleEdit()
+    {
+        $this->editing = !$this->editing;
     }
 
     public function rules()
