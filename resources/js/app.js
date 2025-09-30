@@ -1,6 +1,7 @@
 import './bootstrap';
 import "flyonui/flyonui"
 import './main.js';
+import './echo';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
@@ -58,3 +59,15 @@ document.addEventListener('livewire:navigated', () => {
     reinitFlyonUI();
     initNotyf();
 });
+
+
+window.Echo.channel('test-channel')
+    .listen('.test.event', (e) => {
+        console.log("Broadcast diterima:", e.message);
+        alert("Pesan broadcast: " + e.message);
+    });
+
+window.Echo.channel('debug-channel')
+    .listen('.debug.event', (e) => {
+        console.log("📡 Event diterima:", e);
+    });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96b9ff062866fbe309de14d67952a570",
+    "content-hash": "af11426ccf945e4b1f3372e3ff6e2dbf",
     "packages": [
         {
             "name": "adityadarma/laravel-duitku",

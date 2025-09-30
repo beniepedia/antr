@@ -1,4 +1,15 @@
-<div class="space-y-6">
+<div class="space-y-6"
+     x-data="{
+         init() {
+             // Listen for real-time queue updates
+             Echo.channel('tenant.{{ auth('tenant')->user()->tenant_id }}.queue')
+                 .listen('.queue.updated', (e) => {
+                     console.log('Queue updated:', e);
+                     // Refresh the component data
+                     $wire.call('loadQueues');
+                 });
+         }
+     }">
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>

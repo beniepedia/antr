@@ -20,13 +20,23 @@ class UserSeeder extends Seeder
             ['email' => 'admin@jakarta.test'],
             [
                 'tenant_id' => 1,
-                'name' => 'Admin Jakarta',
+                'name' => 'Petugas A',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ]
         );
 
         // User untuk tenant Bandung
+        User::updateOrCreate(
+            ['email' => 'admin1@jakarta.test'],
+            [
+                'tenant_id' => 1,
+                'name' => 'Petugas B',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
+
         User::updateOrCreate(
             ['email' => 'admin@bandung.test'],
             [

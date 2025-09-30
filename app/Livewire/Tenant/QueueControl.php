@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tenant;
 
+use App\Events\TenantQueueUpdated;
 use App\Models\Queue;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -37,10 +38,22 @@ class QueueControl extends Component
     public function callNext()
     {
         if ($this->nextQueue) {
-            $this->nextQueue->update([
-                'status' => 'called',
-                'checkin_time' => now(),
-            ]);
+            // $this->nextQueue->update([
+            //     'status' => 'called',
+            //     'checkin_time' => now(),
+            // ]);
+
+            // Broadcast event
+            // broadcast(new TenantQueueUpdated(
+            //     Auth::guard('tenant')->user()->tenant_id,
+            //     'called',
+            //     [
+            //         'queue_number' => $this->nextQueue->queue_number,
+            //         'status' => 'called'
+            //     ]
+            // ));
+            event(new \App\Events\TestBroadcast("Coba broadcast sukses!"));
+
             $this->loadQueues();
             $this->js('notyf.success("Antrian berikutnya dipanggil!")');
         }
@@ -50,6 +63,17 @@ class QueueControl extends Component
     {
         if ($this->currentQueue) {
             $this->currentQueue->update(['status' => 'waiting']);
+
+            // Broadcast event
+            broadcast(new TenantQueueUpdated(
+                Auth::guard('tenant')->user()->tenant_id,
+                'skipped',
+                [
+                    'queue_number' => $this->currentQueue->queue_number,
+                    'status' => 'waiting'
+                ]
+            ));
+
             $this->callNext();
         }
     }
@@ -61,6 +85,17 @@ class QueueControl extends Component
                 'status' => 'completed',
                 'checkout_time' => now(),
             ]);
+
+            // Broadcast event
+            broadcast(new TenantQueueUpdated(
+                Auth::guard('tenant')->user()->tenant_id,
+                'completed',
+                [
+                    'queue_number' => $this->currentQueue->queue_number,
+                    'status' => 'completed'
+                ]
+            ));
+
             $this->loadQueues();
             $this->js('notyf.success("Antrian diselesaikan!")');
         }
