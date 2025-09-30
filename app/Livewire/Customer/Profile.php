@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Customer;
 
+use App\trait\WithNotyf;
 use Livewire\Component;
-
-use function PHPSTORM_META\type;
 
 class Profile extends Component
 {
+    use WithNotyf;
+
     public $name = '';
     public $whatsapp = '';
     public $editing = false;
@@ -40,8 +41,9 @@ class Profile extends Component
             'name' => $this->name,
             'whatsapp' => $this->whatsapp,
         ]);
-        $this->dispatch("notify", type:"success", message: "asdasd");
-        // session()->flash('message', 'Profil berhasil diperbarui.');
+
+       $this->notyf("Profil berhasil diperbarui");
+       $this->toggleEdit();
     }
 
     public function render()

@@ -12,7 +12,9 @@ class Queue extends Model
     protected static function booted()
     {
         static::addGlobalScope('tenant', function ($query) {
-            $query->where('tenant_id', auth('customer')->user()->tenant_id);
+            if (auth('customer')->check()) {
+                $query->where('tenant_id', auth('customer')->user()->tenant_id);
+            }
         });
     }
 

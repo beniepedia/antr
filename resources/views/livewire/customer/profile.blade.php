@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        @if (!$editing)
+        @if ($editing)
             <h3 class="card-title text-lg flex items-center gap-2 mb-2">
                 <span class="icon-[tabler--edit] size-5 text-primary"></span>
                 Edit Profil

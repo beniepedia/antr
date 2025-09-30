@@ -1,5 +1,5 @@
   <!-- Bottom Navigation -->
-  <div class="fixed bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md shadow z-50 rounded-xl">
+  <div class="fixed bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md shadow z-30 rounded-xl">
       <div class="flex justify-around items-center py-4 relative">
           <a href="{{ route('customer.dashboard') }}" class="flex flex-col items-center" wire:current="text-primary"
               wire:navigate>
