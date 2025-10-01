@@ -13,9 +13,3 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-
-window.Echo.channel('debug-channel')
-    .listen('.debug.event', (e) => {
-        console.log("📡 Event diterima:", e);
-    });
-

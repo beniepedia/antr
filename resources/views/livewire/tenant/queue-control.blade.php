@@ -1,23 +1,13 @@
-<div class="space-y-6"
-     x-data="{
-         init() {
-             // Listen for real-time queue updates
-             Echo.channel('tenant.{{ auth('tenant')->user()->tenant_id }}.queue')
-                 .listen('.queue.updated', (e) => {
-                     console.log('Queue updated:', e);
-                     // Refresh the component data
-                     $wire.call('loadQueues');
-                 });
-         }
-     }">
+<div class="space-y-6">
     <!-- Header -->
-    <div class="flex justify-between items-center">
+    <div class="flex justify-center items-center">
         <div>
             <h1 class="text-3xl font-bold">Kontrol Antrian</h1>
             <p class="text-base-content/70">Kelola antrian pelanggan secara real-time</p>
         </div>
     </div>
 
+    <h1>{{ $textEvent }}</h1>
     <!-- Main Control Cards -->
     <div class="grid gap-6 lg:grid-cols-2">
         <!-- Current Queue Card -->
@@ -28,12 +18,13 @@
                     <span class="icon-[tabler--clock] size-6 text-primary"></span>
                 </div>
 
-                @if($currentQueue)
+                @if ($currentQueue)
                     <div class="card bg-gradient-to-r from-green-400 to-green-600 text-white mb-4 border-none">
                         <div class="card-body p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <div class="text-2xl font-bold">{{ str_pad($currentQueue->queue_number, 3, '0', STR_PAD_LEFT) }}</div>
+                                    <div class="text-2xl font-bold">
+                                        {{ str_pad($currentQueue->queue_number, 3, '0', STR_PAD_LEFT) }}</div>
                                     <div class="text-cyan-100 text-sm">Dipanggil</div>
                                 </div>
                                 <span class="icon-[tabler--volume-2] size-8 opacity-80"></span>
@@ -60,7 +51,8 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm font-medium">Waktu Check-in:</span>
-                            <span class="text-sm">{{ $currentQueue->checkin_time ? $currentQueue->checkin_time->format('H:i') : '-' }}</span>
+                            <span
+                                class="text-sm">{{ $currentQueue->checkin_time ? $currentQueue->checkin_time->format('H:i') : '-' }}</span>
                         </div>
                     </div>
 
@@ -98,12 +90,13 @@
                     <span class="icon-[tabler--arrow-right] size-6 text-success"></span>
                 </div>
 
-                @if($nextQueue)
+                @if ($nextQueue)
                     <div class="card bg-gradient-to-r from-gray-400 to-gray-600 text-white mb-4 border-none">
                         <div class="card-body p-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <div class="text-2xl font-bold">{{ str_pad($nextQueue->queue_number, 3, '0', STR_PAD_LEFT) }}</div>
+                                    <div class="text-2xl font-bold">
+                                        {{ str_pad($nextQueue->queue_number, 3, '0', STR_PAD_LEFT) }}</div>
                                     <div class="text-gray-100 text-sm">Menunggu</div>
                                 </div>
                                 <span class="icon-[tabler--clock] size-8 opacity-80"></span>
@@ -165,7 +158,9 @@
                         <span class="icon-[tabler--clock] size-8"></span>
                     </div>
                     <div class="stat-title">Menunggu</div>
-                    <div class="stat-value text-warning">{{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'waiting')->count() }}</div>
+                    <div class="stat-value text-warning">
+                        {{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'waiting')->count() }}
+                    </div>
                 </div>
 
                 <div class="stat">
@@ -173,7 +168,9 @@
                         <span class="icon-[tabler--volume-2] size-8"></span>
                     </div>
                     <div class="stat-title">Dipanggil</div>
-                    <div class="stat-value text-info">{{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'called')->count() }}</div>
+                    <div class="stat-value text-info">
+                        {{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'called')->count() }}
+                    </div>
                 </div>
 
                 <div class="stat">
@@ -181,7 +178,9 @@
                         <span class="icon-[tabler--check] size-8"></span>
                     </div>
                     <div class="stat-title">Selesai</div>
-                    <div class="stat-value text-success">{{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'completed')->whereDate('created_at', today())->count() }}</div>
+                    <div class="stat-value text-success">
+                        {{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'completed')->whereDate('created_at', today())->count() }}
+                    </div>
                 </div>
 
                 <div class="stat">
@@ -189,7 +188,9 @@
                         <span class="icon-[tabler--x] size-8"></span>
                     </div>
                     <div class="stat-title">Dibatalkan</div>
-                    <div class="stat-value text-error">{{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'cancelled')->whereDate('created_at', today())->count() }}</div>
+                    <div class="stat-value text-error">
+                        {{ \App\Models\Queue::where('tenant_id', auth('tenant')->user()->tenant_id)->where('status', 'cancelled')->whereDate('created_at', today())->count() }}
+                    </div>
                 </div>
             </div>
         </div>

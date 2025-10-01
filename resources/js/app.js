@@ -61,13 +61,9 @@ document.addEventListener('livewire:navigated', () => {
 });
 
 
-window.Echo.channel('test-channel')
-    .listen('.test.event', (e) => {
-        console.log("Broadcast diterima:", e.message);
-        alert("Pesan broadcast: " + e.message);
-    });
+// window.Echo.channel('debug-channel')
+//     .listen('.debug.event', (e) => {
 
-window.Echo.channel('debug-channel')
-    .listen('.debug.event', (e) => {
-        console.log("📡 Event diterima:", e);
-    });
+//         alert("okeee")
+//         console.log("📡 Event diterima:", e);
+//     });

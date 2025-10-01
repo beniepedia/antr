@@ -5,30 +5,37 @@ namespace App\Livewire\Tenant;
 use App\Events\TenantQueueUpdated;
 use App\Models\Queue;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class QueueControl extends Component
 {
+    public $tenantId;
+
     public $currentQueue = null;
+
     public $nextQueue = null;
+
+    public $textEvent = 'state awal';
 
     public function mount()
     {
+        $this->tenantId = Auth::guard('tenant')->user()->tenant_id;
         $this->loadQueues();
+
     }
 
     public function loadQueues()
     {
-        $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         // Current called queue
-        $this->currentQueue = Queue::where('tenant_id', $tenantId)
+        $this->currentQueue = Queue::where('tenant_id', $this->tenantId)
             ->where('status', 'called')
             ->with(['customer', 'customerVehicle.vehicle'])
             ->first();
 
         // Next waiting queue
-        $this->nextQueue = Queue::where('tenant_id', $tenantId)
+        $this->nextQueue = Queue::where('tenant_id', $this->tenantId)
             ->where('status', 'waiting')
             ->with(['customer', 'customerVehicle.vehicle'])
             ->orderBy('created_at', 'asc')
@@ -44,15 +51,15 @@ class QueueControl extends Component
             // ]);
 
             // Broadcast event
-            // broadcast(new TenantQueueUpdated(
-            //     Auth::guard('tenant')->user()->tenant_id,
-            //     'called',
-            //     [
-            //         'queue_number' => $this->nextQueue->queue_number,
-            //         'status' => 'called'
-            //     ]
-            // ));
-            event(new \App\Events\TestBroadcast("Coba broadcast sukses!"));
+            broadcast(new TenantQueueUpdated(
+                $this->tenantId,
+                'called',
+                [
+                    'queue_number' => $this->nextQueue->queue_number,
+                    'status' => 'called',
+                ]
+            ));
+            // event(new \App\Events\TestBroadcast('Coba broadcast sukses!'));
 
             $this->loadQueues();
             $this->js('notyf.success("Antrian berikutnya dipanggil!")');
@@ -66,16 +73,23 @@ class QueueControl extends Component
 
             // Broadcast event
             broadcast(new TenantQueueUpdated(
-                Auth::guard('tenant')->user()->tenant_id,
+                $this->tenantId,
                 'skipped',
                 [
                     'queue_number' => $this->currentQueue->queue_number,
-                    'status' => 'waiting'
+                    'status' => 'waiting',
                 ]
             ));
 
             $this->callNext();
         }
+    }
+
+    #[On('echo:tenant.{tenantId}.queue,.queue.updated')]
+    public function handleEventUpdated()
+    {
+        $this->textEvent = 'update berhasil';
+        $this->loadQueues();
     }
 
     public function completeCurrent()
@@ -88,11 +102,11 @@ class QueueControl extends Component
 
             // Broadcast event
             broadcast(new TenantQueueUpdated(
-                Auth::guard('tenant')->user()->tenant_id,
+                $this->tenantId,
                 'completed',
                 [
                     'queue_number' => $this->currentQueue->queue_number,
-                    'status' => 'completed'
+                    'status' => 'completed',
                 ]
             ));
 
