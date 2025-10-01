@@ -1,4 +1,4 @@
-<div class="space-y-6 max-w-md">
+<div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-center items-center">
         <div>
@@ -55,20 +55,22 @@
                         </div>
                     </div>
 
-                     <div class="flex flex-col sm:flex-row gap-2">
-                         <button wire:click="recallCurrent" class="btn btn-primary btn-lg flex-1">
-                             <span class="icon-[tabler--volume-2] size-5"></span>
-                             Panggil
-                         </button>
-                         <button wire:click="completeCurrent" class="btn btn-success btn-lg flex-1">
-                             <span class="icon-[tabler--check] size-5"></span>
-                             Lanjut
-                         </button>
-                         <button wire:click="skipCurrent" class="btn btn-warning btn-lg flex-1">
-                             <span class="icon-[tabler--player-skip-forward] size-5"></span>
-                             Skip
-                         </button>
-                     </div>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        @if ($currentQueue->status === 'waiting')
+                            <button wire:click="callNext" class="btn btn-primary btn-lg flex-1">
+                                <span class="icon-[tabler--volume-2] size-5"></span>
+                                Panggil
+                            </button>
+                        @endif
+                        <button wire:click="completeCurrent" class="btn btn-success btn-lg flex-1">
+                            <span class="icon-[tabler--check] size-5"></span>
+                            Lanjut
+                        </button>
+                        <button wire:click="skipCurrent" class="btn btn-warning btn-lg flex-1">
+                            <span class="icon-[tabler--player-skip-forward] size-5"></span>
+                            Skip
+                        </button>
+                    </div>
                 @else
                     <div class="text-center py-12">
                         <div class="avatar mb-4">
@@ -96,7 +98,11 @@
                 @if ($waitingQueues->count() > 0)
                     <div class="space-y-2 mb-6">
                         @foreach ($waitingQueues as $queue)
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-base-100 rounded-lg">
+                            {{-- <ul class="divide-base-content/25 divide-y *:p-3">
+                                <li>{{ $queue->queue_number }}</li>
+                            </ul> --}}
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-base-100 rounded-lg">
                                 <div class="flex items-center space-x-3 mb-2 sm:mb-0">
                                     <div class="text-lg font-bold text-primary">
                                         {{ str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT) }}
@@ -111,10 +117,10 @@
                         @endforeach
                     </div>
 
-                    <button wire:click="callNext" class="btn btn-primary btn-lg w-full">
+                    {{-- <button wire:click="callNext" class="btn btn-primary btn-lg w-full">
                         <span class="icon-[tabler--volume-2] size-5"></span>
                         Panggil Antrian Berikutnya
-                    </button>
+                    </button> --}}
                 @else
                     <div class="text-center py-12">
                         <div class="avatar mb-4">

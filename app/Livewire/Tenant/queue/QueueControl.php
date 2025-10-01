@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Tenant;
+namespace App\Livewire\Tenant\queue;
 
 use App\Events\TenantQueueUpdated;
 use App\Models\Queue;
@@ -32,7 +32,7 @@ class QueueControl extends Component
 
         // Current called queue
         $this->currentQueue = Queue::where('tenant_id', $this->tenantId)
-            ->where('status', 'called')
+            ->whereIn('status', ['waiting','called'])
             ->with(['customer', 'customerVehicle.vehicle'])
             ->first();
 
@@ -60,14 +60,14 @@ class QueueControl extends Component
             ]);
 
             // Broadcast event
-            broadcast(new TenantQueueUpdated(
-                $this->tenantId,
-                'called',
-                [
-                    'queue_number' => $this->nextQueue->queue_number,
-                    'status' => 'called',
-                ]
-            ));
+            // broadcast(new TenantQueueUpdated(
+            //     $this->tenantId,
+            //     'called',
+            //     [
+            //         'queue_number' => $this->nextQueue->queue_number,
+            //         'status' => 'called',
+            //     ]
+            // ));
             // event(new \App\Events\TestBroadcast('Coba broadcast sukses!'));
 
             $this->loadQueues();

@@ -18,7 +18,7 @@ use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
 use App\Livewire\Tenant\queue\QueueIndex;
-use App\Livewire\Tenant\QueueControl;
+use App\Livewire\Tenant\queue\QueueControl;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
