@@ -107,17 +107,18 @@ class QueueControl extends Component
             $this->currentQueue->update([
                 'status' => 'completed',
                 'checkout_time' => now(),
+                'served_by' => Auth::guard('tenant')->user()->id,
             ]);
 
             // Broadcast event
-            broadcast(new TenantQueueUpdated(
-                $this->tenantId,
-                'completed',
-                [
-                    'queue_number' => $this->currentQueue->queue_number,
-                    'status' => 'completed',
-                ]
-            ));
+            // broadcast(new TenantQueueUpdated(
+            //     $this->tenantId,
+            //     'completed',
+            //     [
+            //         'queue_number' => $this->currentQueue->queue_number,
+            //         'status' => 'completed',
+            //     ]
+            // ));
 
             $this->loadQueues();
             $this->js('notyf.success("Antrian diselesaikan!")');

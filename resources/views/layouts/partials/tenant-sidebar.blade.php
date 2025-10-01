@@ -42,12 +42,13 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('tenant.queue.control') }}" wire:navigate class="px-4" wire:current="menu-active">
+                        <a href="{{ route('tenant.queue.control') }}" wire:navigate class="px-4"
+                            wire:current="menu-active">
                             <span class="icon-[tabler--player-play] size-5"></span>
                             <span class="grow text-[1rem]">Kontrol Antrian</span>
                         </a>
                     </li>
-
+                    <span class="px-4 text-gray-400 py-2 text-sm">MASTER DATA</span>
                     <li>
                         <a href="{{ route('tenant.karyawan') }}" wire:navigate class="px-4"
                             wire:current="menu-active">
