@@ -16,6 +16,8 @@ class QueueControl extends Component
 
     public $nextQueue = null;
 
+    public $waitingQueues = [];
+
     public $textEvent = 'state awal';
 
     public function mount()
@@ -40,15 +42,22 @@ class QueueControl extends Component
             ->with(['customer', 'customerVehicle.vehicle'])
             ->orderBy('created_at', 'asc')
             ->first();
+
+        // All waiting queues
+        $this->waitingQueues = Queue::where('tenant_id', $this->tenantId)
+            ->where('status', 'waiting')
+            ->with(['customer', 'customerVehicle.vehicle'])
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 
     public function callNext()
     {
         if ($this->nextQueue) {
-            // $this->nextQueue->update([
-            //     'status' => 'called',
-            //     'checkin_time' => now(),
-            // ]);
+            $this->nextQueue->update([
+                'status' => 'called',
+                'checkin_time' => now(),
+            ]);
 
             // Broadcast event
             broadcast(new TenantQueueUpdated(
@@ -112,6 +121,23 @@ class QueueControl extends Component
 
             $this->loadQueues();
             $this->js('notyf.success("Antrian diselesaikan!")');
+        }
+    }
+
+    public function recallCurrent()
+    {
+        if ($this->currentQueue) {
+            // Broadcast event to recall
+            broadcast(new TenantQueueUpdated(
+                $this->tenantId,
+                'called',
+                [
+                    'queue_number' => $this->currentQueue->queue_number,
+                    'status' => 'called',
+                ]
+            ));
+
+            $this->js('notyf.success("Antrian dipanggil kembali!")');
         }
     }
 

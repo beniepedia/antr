@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-6 max-w-md">
     <!-- Header -->
     <div class="flex justify-center items-center">
         <div>
@@ -7,9 +7,8 @@
         </div>
     </div>
 
-    <h1>{{ $textEvent }}</h1>
     <!-- Main Control Cards -->
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid gap-3 grid-cols-1 md:grid-cols-2">
         <!-- Current Queue Card -->
         <div class="card">
             <div class="card-body">
@@ -56,16 +55,20 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-2">
-                        <button wire:click="completeCurrent" class="btn btn-success btn-lg flex-1">
-                            <span class="icon-[tabler--check] size-5"></span>
-                            Lanjut
-                        </button>
-                        <button wire:click="skipCurrent" class="btn btn-warning btn-lg flex-1">
-                            <span class="icon-[tabler--player-skip-forward] size-5"></span>
-                            Lewati
-                        </button>
-                    </div>
+                     <div class="flex flex-col sm:flex-row gap-2">
+                         <button wire:click="recallCurrent" class="btn btn-primary btn-lg flex-1">
+                             <span class="icon-[tabler--volume-2] size-5"></span>
+                             Panggil
+                         </button>
+                         <button wire:click="completeCurrent" class="btn btn-success btn-lg flex-1">
+                             <span class="icon-[tabler--check] size-5"></span>
+                             Lanjut
+                         </button>
+                         <button wire:click="skipCurrent" class="btn btn-warning btn-lg flex-1">
+                             <span class="icon-[tabler--player-skip-forward] size-5"></span>
+                             Skip
+                         </button>
+                     </div>
                 @else
                     <div class="text-center py-12">
                         <div class="avatar mb-4">
@@ -82,50 +85,35 @@
             </div>
         </div>
 
-        <!-- Next Queue Card -->
+        <!-- Waiting Queues Card -->
         <div class="card">
             <div class="card-body">
                 <div class="flex items-center justify-between mb-4">
-                    <h5 class="card-title">Antrian Berikutnya</h5>
-                    <span class="icon-[tabler--arrow-right] size-6 text-success"></span>
+                    <h5 class="card-title">Antrian Menunggu</h5>
+                    <span class="icon-[tabler--list] size-6 text-success"></span>
                 </div>
 
-                @if ($nextQueue)
-                    <div class="card bg-gradient-to-r from-gray-400 to-gray-600 text-white mb-4 border-none">
-                        <div class="card-body p-4">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold">
-                                        {{ str_pad($nextQueue->queue_number, 3, '0', STR_PAD_LEFT) }}</div>
-                                    <div class="text-gray-100 text-sm">Menunggu</div>
+                @if ($waitingQueues->count() > 0)
+                    <div class="space-y-2 mb-6">
+                        @foreach ($waitingQueues as $queue)
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-base-100 rounded-lg">
+                                <div class="flex items-center space-x-3 mb-2 sm:mb-0">
+                                    <div class="text-lg font-bold text-primary">
+                                        {{ str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT) }}
+                                    </div>
+                                    <div class="text-sm">
+                                        <div class="font-medium">{{ $queue->customer->name ?? 'N/A' }}</div>
+                                        <div class="text-base-content/70">
+                                            {{ $queue->customerVehicle->license_plate ?? 'N/A' }}</div>
+                                    </div>
                                 </div>
-                                <span class="icon-[tabler--clock] size-8 opacity-80"></span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 mb-6">
-                        <div class="flex justify-between">
-                            <span class="text-sm font-medium">Pelanggan:</span>
-                            <span class="text-sm">{{ $nextQueue->customer->name ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm font-medium">Jenis Kendaraan:</span>
-                            <span class="text-sm">{{ $nextQueue->customerVehicle->vehicle->type ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm font-medium">Plat Nomor:</span>
-                            <span class="text-sm">{{ $nextQueue->customerVehicle->license_plate ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm font-medium">Liter Diminta:</span>
-                            <span class="text-sm">{{ $nextQueue->liters_requested }} L</span>
-                        </div>
+                        @endforeach
                     </div>
 
                     <button wire:click="callNext" class="btn btn-primary btn-lg w-full">
                         <span class="icon-[tabler--volume-2] size-5"></span>
-                        Panggil Antrian
+                        Panggil Antrian Berikutnya
                     </button>
                 @else
                     <div class="text-center py-12">
