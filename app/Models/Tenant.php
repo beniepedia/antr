@@ -13,14 +13,18 @@ class Tenant extends Model
         'code',
         'name',
         'address',
-        'contact_person',
+        'whatsapp',
         'phone',
         'status',
         'url',
         'max_queue_time',
+        'opening_time',
+        'closing_time',
     ];
 
     protected $casts = [
+        'opening_time' => 'datetime:H:i',
+        'closing_time' => 'datetime:H:i',
     ];
 
     public function users()

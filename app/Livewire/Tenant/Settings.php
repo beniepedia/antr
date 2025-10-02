@@ -9,7 +9,7 @@ class Settings extends Component
 {
     public $name;
 
-    public $contact_person;
+    public $whatsapp;
 
     public $phone;
 
@@ -17,21 +17,29 @@ class Settings extends Component
 
     public $code;
 
+    public $opening_time;
+
+    public $closing_time;
+
     protected $rules = [
         'name' => 'required|string|max:150',
-        'contact_person' => 'nullable|string|max:100',
+        'whatsapp' => 'nullable|string|max:20',
         'phone' => 'nullable|string|max:20',
         'address' => 'nullable|string',
+        'opening_time' => 'nullable|date_format:H:i',
+        'closing_time' => 'nullable|date_format:H:i|after:opening_time',
     ];
 
     public function mount()
     {
         $tenant = Auth::guard('tenant')->user()->tenant;
         $this->name = $tenant->name;
-        $this->contact_person = $tenant->contact_person;
+        $this->whatsapp = $tenant->whatsapp;
         $this->phone = $tenant->phone;
         $this->address = $tenant->address;
         $this->code = $tenant->code;
+        $this->opening_time = $tenant->opening_time ? $tenant->opening_time->format('H:i') : null;
+        $this->closing_time = $tenant->closing_time ? $tenant->closing_time->format('H:i') : null;
     }
 
     public function updateSettings()
@@ -41,9 +49,11 @@ class Settings extends Component
         $tenant = Auth::guard('tenant')->user()->tenant;
         $tenant->update([
             'name' => $this->name,
-            'contact_person' => $this->contact_person,
+            'whatsapp' => $this->whatsapp,
             'phone' => $this->phone,
             'address' => $this->address,
+            'opening_time' => $this->opening_time,
+            'closing_time' => $this->closing_time,
         ]);
         $this->dispatch('notify', type: 'success', message: 'Pengaturan berhasil disimpan');
     }
