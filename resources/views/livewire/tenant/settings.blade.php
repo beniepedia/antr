@@ -41,7 +41,7 @@
                             </tr>
                             <tr>
                                 <td class="font-semibold">URL</td>
-                                <td>{{ $url ?: '-' }}</td>
+                                <td>{{ make_url($url) }}</td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">WhatsApp</td>

@@ -17,3 +17,42 @@ if (! function_exists('remaining_credit')) {
         return round($nilaiSisa);
     }
 }
+
+
+
+if (! function_exists('make_url')) {
+    /**
+     * Buat URL dengan subdomain dinamis
+     *
+     * @param  string $subdomain
+     * @param  string|null $path
+     * @param  bool $secure
+     * @return string
+     */
+    function make_url(string $subdomain, ?string $path = null, ?bool $secure = null): string
+    {
+        $baseUrl = config('app.url'); // contoh: http://domain.test atau https://domain.com
+
+        // parse base url
+        $parsed = parse_url($baseUrl);
+
+        $scheme = $secure === null
+            ? ($parsed['scheme'] ?? 'http')
+            : ($secure ? 'https' : 'http');
+
+        $host = $parsed['host'] ?? 'localhost';
+
+        // gabungkan subdomain + domain utama
+        $fullHost = $subdomain . '.' . $host;
+
+        // kalau ada port di base url, tambahkan juga
+        if (isset($parsed['port'])) {
+            $fullHost .= ':' . $parsed['port'];
+        }
+
+        // path opsional
+        $path = $path ? '/' . ltrim($path, '/') : '';
+
+        return "{$scheme}://{$fullHost}{$path}";
+    }
+}
