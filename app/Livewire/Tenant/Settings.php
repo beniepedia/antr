@@ -21,6 +21,8 @@ class Settings extends Component
 
     public $closing_time;
 
+    public $editing = false;
+
     protected $rules = [
         'name' => 'required|string|max:150',
         'whatsapp' => 'nullable|string|max:20',
@@ -42,6 +44,11 @@ class Settings extends Component
         $this->closing_time = $tenant->closing_time ? $tenant->closing_time->format('H:i') : null;
     }
 
+    public function toggleEdit()
+    {
+        $this->editing = !$this->editing;
+    }
+
     public function updateSettings()
     {
         $this->validate();
@@ -55,6 +62,7 @@ class Settings extends Component
             'opening_time' => $this->opening_time,
             'closing_time' => $this->closing_time,
         ]);
+        $this->editing = false;
         $this->dispatch('notify', type: 'success', message: 'Pengaturan berhasil disimpan');
     }
 
