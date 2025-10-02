@@ -17,6 +17,8 @@ class Settings extends Component
 
     public $code;
 
+    public $url;
+
     public $opening_time;
 
     public $closing_time;
@@ -40,6 +42,7 @@ class Settings extends Component
         $this->phone = $tenant->phone;
         $this->address = $tenant->address;
         $this->code = $tenant->code;
+        $this->url = $tenant->url;
         $this->opening_time = $tenant->opening_time ? $tenant->opening_time->format('H:i') : null;
         $this->closing_time = $tenant->closing_time ? $tenant->closing_time->format('H:i') : null;
     }
@@ -47,6 +50,14 @@ class Settings extends Component
     public function toggleEdit()
     {
         $this->editing = !$this->editing;
+    }
+
+    public function downloadQR()
+    {
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' . urlencode(config('app.url') . '/' . $this->url);
+        return response()->streamDownload(function () use ($qrUrl) {
+            echo file_get_contents($qrUrl);
+        }, 'qrcode-' . $this->name . '.png');
     }
 
     public function updateSettings()
