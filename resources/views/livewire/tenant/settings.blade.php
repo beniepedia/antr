@@ -157,20 +157,16 @@
 
             @if ($url && !$editing)
                 <div class="col-span-2 lg:col-span-1">
-                    <div class="card bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-xl">
+                    <div class="card bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow-xl">
                         <div class="card-body">
-                            <h2 class="card-title">Kartu QR Code</h2>
+                            <h2 class="card-title text-center text-base-100">Kartu QR Code</h2>
                             <div class="flex flex-col items-center gap-4">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode(config('app.url') . '/' . $url) }}"
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data={{ urlencode(str_replace('://', '://' . $url . '.', config('app.url'))) }}"
                                     alt="QR Code" class="w-48 h-48 border rounded">
                                 <p class="text-sm">Scan untuk akses</p>
                                 <div class="text-center">
                                     <h3 class="text-lg font-bold">{{ $name }}</h3>
                                     <p class="text-xs">{{ $address ?: 'Alamat tidak tersedia' }}</p>
-                                    <p class="text-xs">WhatsApp: {{ $whatsapp ?: '-' }}</p>
-                                    <p class="text-xs">Telepon: {{ $phone ?: '-' }}</p>
-                                    <p class="text-xs">Jam: {{ $opening_time ?: '-' }} - {{ $closing_time ?: '-' }}
-                                    </p>
                                 </div>
                             </div>
                             <div class="card-actions justify-center">
