@@ -42,7 +42,7 @@ class Settings extends Component
         $this->phone = $tenant->phone;
         $this->address = $tenant->address;
         $this->code = $tenant->code;
-        $this->url = $tenant->url;
+        $this->url = make_url($tenant->url);
         $this->opening_time = $tenant->opening_time ? $tenant->opening_time->format('H:i') : null;
         $this->closing_time = $tenant->closing_time ? $tenant->closing_time->format('H:i') : null;
     }

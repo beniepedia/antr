@@ -28,39 +28,57 @@
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             @if (!$editing)
-                <div class="overflow-x-auto col-span-2">
-                    <table class="table table-zebra w-full">
+                <div class="block md:hidden space-y-4 col-span-2">
+                    @foreach ([
+        'Kode Tenant' => $code,
+        'Nama Tenant' => $name,
+        'Domain URL' => $url,
+        'WhatsApp' => $whatsapp ?: '-',
+        'Telepon' => $phone ?: '-',
+        'Jam Buka' => $opening_time ?: '-',
+        'Jam Tutup' => $closing_time ?: '-',
+        'Alamat' => $address ?: '-',
+    ] as $label => $value)
+                        <div class="bg-base-200 rounded-lg p-4">
+                            <div class="font-semibold text-sm text-base-content/70">{{ $label }}</div>
+                            <div class="text-base">{{ $value }}</div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="hidden md:block overflow-x-auto col-span-2">
+                    <table class="table table-zebra w-full text-sm md:text-base">
                         <tbody>
                             <tr>
-                                <td class="font-semibold">Kode Tenant</td>
+                                <td class="font-semibold min-w-32">Kode Tenant</td>
                                 <td>{{ $code }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">Nama Tenant</td>
+                                <td class="font-semibold min-w-32">Nama Tenant</td>
                                 <td>{{ $name }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">URL</td>
-                                <td>{{ make_url($url) }}</td>
+                                <td class="font-semibold min-w-32">Domain URL</td>
+                                <td>{{ $url }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">WhatsApp</td>
+                                <td class="font-semibold min-w-32">WhatsApp</td>
                                 <td>{{ $whatsapp ?: '-' }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">Telepon</td>
+                                <td class="font-semibold min-w-32">Telepon</td>
                                 <td>{{ $phone ?: '-' }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">Jam Buka</td>
+                                <td class="font-semibold min-w-32">Jam Buka</td>
                                 <td>{{ $opening_time ?: '-' }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">Jam Tutup</td>
+                                <td class="font-semibold min-w-32">Jam Tutup</td>
                                 <td>{{ $closing_time ?: '-' }}</td>
                             </tr>
                             <tr>
-                                <td class="font-semibold">Alamat</td>
+                                <td class="font-semibold min-w-32">Alamat</td>
                                 <td>{{ $address ?: '-' }}</td>
                             </tr>
                         </tbody>
@@ -80,6 +98,14 @@
 
                             <div class="form-control">
                                 <label class="label">
+                                    <span class="label-text">URL</span>
+                                </label>
+                                <input type="text" wire:model="url" class="input input-bordered" disabled />
+                                <div class="text-sm text-gray-500 mt-1">URL tidak dapat diubah</div>
+                            </div>
+
+                            <div class="form-control md:col-span-2">
+                                <label class="label">
                                     <span class="label-text">Nama Tenant *</span>
                                 </label>
                                 <input type="text" wire:model="name" class="input input-bordered" required />
@@ -88,13 +114,7 @@
                                 @enderror
                             </div>
 
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text">URL</span>
-                                </label>
-                                <input type="text" wire:model="url" class="input input-bordered" disabled />
-                                <div class="text-sm text-gray-500 mt-1">URL tidak dapat diubah</div>
-                            </div>
+
 
                             <div class="form-control">
                                 <label class="label">
@@ -161,7 +181,7 @@
                         <div class="card-body">
                             <h2 class="card-title text-center text-base-100">Kartu QR Code</h2>
                             <div class="flex flex-col items-center gap-4">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data={{ urlencode(str_replace('://', '://' . $url . '.', config('app.url'))) }}"
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data={{ make_url($url) }}"
                                     alt="QR Code" class="w-48 h-48 border rounded">
                                 <p class="text-sm">Scan untuk akses</p>
                                 <div class="text-center">
