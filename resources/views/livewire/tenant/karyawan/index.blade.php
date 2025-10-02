@@ -1,9 +1,9 @@
 <div class="space-y-2">
     <x-breadcumb :links="[['url' => route('tenant.dashboard'), 'label' => 'Dashboard'], ['url' => '#', 'label' => 'Karyawan']]" />
 
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-base-100 rounded-lg shadow-sm p-6">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-            <h1 class="text-xl text-base-content/80 font-bold">Manajemen Karyawan</h1>
+            <h1 class="text-xl font-bold">Manajemen Karyawan</h1>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
                 <input type="search" wire:model.live.debounce.300ms="search" placeholder="Cari karyawan..." class="input">
                 <a href="{{ route('tenant.karyawan.create') }}" class="btn btn-primary whitespace-nowrap">

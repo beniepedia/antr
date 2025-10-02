@@ -12,10 +12,12 @@ export default defineConfig({
 
     ],
     server: {
-        host: 'antrian.test',   // ganti sesuai domain Valet kamu
+        host: 'antrian.localhost',   // ganti sesuai domain Valet kamu
         port: 5173,
+        https: false,
         hmr: {
-            host: 'antrian.test',
+            host: 'antrian.localhost',
+            protocol: 'ws'
         },
     },
 });
