@@ -9,16 +9,16 @@ use App\Livewire\Customer\Profile as CustomerProfile;
 use App\Livewire\Customer\Queues\Create as CustomerQueueCreate;
 use App\Livewire\Customer\Queues\Index as CustomerQueueIndex;
 use App\Livewire\Customer\Vehicles\Create as CustomerVehiclesCreate;
-use App\Livewire\Customer\Vehicles\Index as CustomerVehiclesIndex;
 use App\Livewire\Customer\Vehicles\Edit as CustomerVehiclesEdit;
+use App\Livewire\Customer\Vehicles\Index as CustomerVehiclesIndex;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Karyawan\KaryawanCreate;
 use App\Livewire\Tenant\Karyawan\KaryawanEdit;
 use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
-use App\Livewire\Tenant\queue\QueueIndex;
 use App\Livewire\Tenant\queue\QueueControl;
+use App\Livewire\Tenant\queue\QueueIndex;
 use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
@@ -70,18 +70,18 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 
-    Route::get('/antrian', QueueIndex::class)->name('tenant.antrian');
-    Route::get('/kontrol-antrian', QueueControl::class)->name('tenant.queue.control');
+    Route::get('/queues', QueueIndex::class)->name('tenant.antrian');
+    Route::get('/queue-control', QueueControl::class)->name('tenant.queue.control');
 
-    Route::get('/karyawan', KaryawanIndex::class)->name('tenant.karyawan');
-    Route::get('/karyawan/create', KaryawanCreate::class)->name('tenant.karyawan.create');
-    Route::get('/karyawan/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
-    Route::get('/karyawan/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
+    Route::get('/employee', KaryawanIndex::class)->name('tenant.karyawan');
+    Route::get('/employee/create', KaryawanCreate::class)->name('tenant.karyawan.create');
+    Route::get('/employee/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
+    Route::get('/employee/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
 
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 
-    Route::get('/tenant/upgrade', Upgrade::class)->name('tenant.upgrade');
-    Route::get('/tenant/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
+    Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
+    Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
 
     Route::post('/logout', function () {
         Auth::guard('tenant')->logout();

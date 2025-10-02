@@ -52,6 +52,11 @@ class Queue extends Model
         return $this->belongsTo(CustomerVehicle::class);
     }
 
+    public function pump()
+    {
+        return $this->belongsTo(Pump::class);
+    }
+
     public function vehicle()
     {
         // lewat customerVehicle -> vehicles
