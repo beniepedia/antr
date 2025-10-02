@@ -56,6 +56,13 @@
                             <span class="grow text-[1rem]">Karyawan</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('tenant.pump.index') }}" wire:navigate class="px-4"
+                            wire:current="menu-active">
+                            <span class="icon-[tabler--gas-station] size-5"></span>
+                            <span class="grow text-[1rem]">Pompa</span>
+                        </a>
+                    </li>
 
                     <li>
                         <a href="{{ route('tenant.settings') }}" wire:navigate class="px-4"

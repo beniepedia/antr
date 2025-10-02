@@ -17,6 +17,7 @@ use App\Livewire\Tenant\Karyawan\KaryawanEdit;
 use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
+use App\Livewire\Tenant\Pumps;
 use App\Livewire\Tenant\queue\QueueControl;
 use App\Livewire\Tenant\queue\QueueIndex;
 use App\Livewire\Tenant\Settings as TenantSettings;
@@ -77,6 +78,8 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
     Route::get('/employee/create', KaryawanCreate::class)->name('tenant.karyawan.create');
     Route::get('/employee/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
     Route::get('/employee/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
+
+    Route::get('/pump', Pumps::class)->name('tenant.pump.index');
 
     Route::get('/settings', TenantSettings::class)->name('tenant.settings');
 
