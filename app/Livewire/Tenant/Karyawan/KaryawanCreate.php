@@ -4,8 +4,10 @@ namespace App\Livewire\Tenant\Karyawan;
 
 use App\Models\Profile;
 use App\Models\User;
+use App\Validation\KaryawanMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -16,10 +18,6 @@ class KaryawanCreate extends Component
     public $name;
 
     public $email;
-
-    public $password;
-
-    public $password_confirmation;
 
     // Profile fields
     public $employee_id;
@@ -42,32 +40,22 @@ class KaryawanCreate extends Component
 
     protected function rules()
     {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'employee_id' => 'nullable|string|unique:profiles,employee_id',
-            'position' => 'required|in:operator,supervisor,manager',
-            'hire_date' => 'nullable|date',
-            'status' => 'required|in:active,inactive',
-            'license_number' => 'nullable|string',
-            'whatsapp' => 'required|string|unique:profiles,whatsapp',
-            'address' => 'nullable|string',
-            'experience_years' => 'nullable|integer|min:0',
-            'avatar' => 'nullable|image|max:2048', // Max 2MB
-        ];
+        return KaryawanMessages::getRules();
     }
 
-    protected $messages = [
-        'email.unique' => 'Email sudah digunakan.',
-        'password.confirmed' => 'Konfirmasi password tidak cocok.',
-    ];
+    protected function messages()
+    {
+        return KaryawanMessages::getMessages();
+    }
 
     public function save()
     {
         $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         $this->validate();
+
+        // Generate random password
+        $password = Str::random(12);
 
         // Handle avatar upload
         $avatarPath = null;
@@ -79,7 +67,7 @@ class KaryawanCreate extends Component
             'tenant_id' => $tenantId,
             'name' => $this->name,
             'email' => $this->email,
-            'password' => Hash::make($this->password),
+            'password' => Hash::make($password),
             'role' => 'petugas',
         ]);
 

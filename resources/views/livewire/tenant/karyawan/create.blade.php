@@ -32,24 +32,7 @@
                 @enderror
             </div>
 
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Password</span>
-                </label>
-                <input type="password" wire:model="password" class="input input-bordered" placeholder="Password"
-                    required />
-                @error('password')
-                    <span class="text-error text-sm">{{ $message }}</span>
-                @enderror
-            </div>
 
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Konfirmasi Password</span>
-                </label>
-                <input type="password" wire:model="password_confirmation" class="input input-bordered"
-                    placeholder="Konfirmasi Password" required />
-            </div>
 
             <!-- Profile Info -->
             <div class="form-control">
