@@ -4,6 +4,7 @@ namespace App\Livewire\Tenant;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Settings extends Component
 {
@@ -25,6 +26,8 @@ class Settings extends Component
 
     public $editing = false;
 
+    public $tenant;
+
     protected $rules = [
         'name' => 'required|string|max:150',
         'whatsapp' => 'nullable|string|max:20',
@@ -36,36 +39,42 @@ class Settings extends Component
 
     public function mount()
     {
-        $tenant = Auth::guard('tenant')->user()->tenant;
-        $this->name = $tenant->name;
-        $this->whatsapp = $tenant->whatsapp;
-        $this->phone = $tenant->phone;
-        $this->address = $tenant->address;
-        $this->code = $tenant->code;
-        $this->url = make_url($tenant->url);
-        $this->opening_time = $tenant->opening_time ? $tenant->opening_time->format('H:i') : null;
-        $this->closing_time = $tenant->closing_time ? $tenant->closing_time->format('H:i') : null;
+        $this->tenant = Auth::guard('tenant')->user()->tenant;
+        $this->name = $this->tenant->name;
+        $this->whatsapp = $this->tenant->whatsapp;
+        $this->phone = $this->tenant->phone;
+        $this->address = $this->tenant->address;
+        $this->code = $this->tenant->code;
+        $this->url = make_url($this->tenant->url);
+        $this->opening_time = $this->tenant->opening_time ? $this->tenant->opening_time->format('H:i') : null;
+        $this->closing_time = $this->tenant->closing_time ? $this->tenant->closing_time->format('H:i') : null;
     }
 
     public function toggleEdit()
     {
-        $this->editing = !$this->editing;
+        $this->editing = ! $this->editing;
     }
 
     public function downloadQR()
     {
-        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=' . urlencode(config('app.url') . '/' . $this->url);
-        return response()->streamDownload(function () use ($qrUrl) {
-            echo file_get_contents($qrUrl);
-        }, 'qrcode-' . $this->name . '.png');
+        $qr = base64_encode(
+            QrCode::format('png')
+                ->size(300)
+                ->margin(2)
+                ->generate($this->url)
+        );
+
+        $this->dispatch('download-qr', [
+            'qr' => $qr,
+            'name' => "{$this->tenant->name}.png",
+        ]);
     }
 
     public function updateSettings()
     {
         $this->validate();
 
-        $tenant = Auth::guard('tenant')->user()->tenant;
-        $tenant->update([
+        $this->tenant->update([
             'name' => $this->name,
             'whatsapp' => $this->whatsapp,
             'phone' => $this->phone,

@@ -17,6 +17,7 @@ use App\Livewire\Tenant\Karyawan\KaryawanEdit;
 use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
 use App\Livewire\Tenant\Payment;
+use App\Livewire\Tenant\PrintLabel;
 use App\Livewire\Tenant\Pumps;
 use App\Livewire\Tenant\queue\QueueControl;
 use App\Livewire\Tenant\queue\QueueIndex;
@@ -85,6 +86,8 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
 
     Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
     Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
+
+    Route::get('/print', PrintLabel::class)->name('tenant.print');
 
     Route::post('/logout', function () {
         Auth::guard('tenant')->logout();
