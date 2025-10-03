@@ -1,22 +1,6 @@
 <div class="space-y-2">
     <x-breadcumb :links="[['url' => route('tenant.dashboard'), 'label' => 'Dashboard'], ['url' => '#', 'label' => 'Pengaturan']]" />
 
-    <style>
-        @media print {
-            .card {
-                break-inside: avoid;
-            }
-
-            .btn {
-                display: none;
-            }
-
-            body {
-                font-size: 14px;
-            }
-        }
-    </style>
-
     <div class="flex flex-col md:flex-row gap-6">
         <div class="bg-base-100 rounded-lg shadow-sm p-6 flex-2">
             <div class="flex-1">
@@ -196,7 +180,7 @@
                         </div>
                     </div>
                     <div class="card-actions justify-center">
-                        <button wire:click="print" class="btn">Print</button>
+                        <a href="{{ route('tenant.print'),  }}" target="_blank" class="btn">Print</a>
                         <button wire:click="downloadQR" class="btn">Download QR</button>
                     </div>
                 </div>
