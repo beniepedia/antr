@@ -61,7 +61,7 @@
                                         class="btn btn-sm btn-outline btn-primary">
                                         <span class="icon-[tabler--eye] size-4"></span>
                                     </a>
-                                    <a href="/karyawan/{{ $k->id }}/edit"
+                                    <a href="{{ route('tenant.karyawan.edit', $k->id) }}"
                                         class="btn btn-sm btn-outline btn-info">
                                         <span class="icon-[tabler--edit] size-4"></span>
                                     </a>

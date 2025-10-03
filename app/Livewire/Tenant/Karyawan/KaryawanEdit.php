@@ -4,6 +4,7 @@ namespace App\Livewire\Tenant\Karyawan;
 
 use App\Models\Profile;
 use App\Models\User;
+use App\Validation\KaryawanMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -19,10 +20,6 @@ class KaryawanEdit extends Component
     public $name;
 
     public $email;
-
-    public $password;
-
-    public $password_confirmation;
 
     // Profile fields
     public $employee_id;
@@ -45,25 +42,17 @@ class KaryawanEdit extends Component
 
     public $currentAvatar; // Current avatar path
 
-    protected $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email',
-        'password' => 'nullable|min:8|confirmed',
-        'employee_id' => 'nullable|string',
-        'position' => 'required|in:operator,supervisor,manager',
-        'hire_date' => 'nullable|date',
-        'status' => 'required|in:active,inactive',
-        'license_number' => 'nullable|string',
-        'whatsapp' => 'required|string',
-        'address' => 'nullable|string',
-        'experience_years' => 'nullable|integer|min:0',
-        'avatar' => 'nullable|image|max:2048', // Max 2MB
-    ];
+    protected $customRules = [];
 
-    protected $messages = [
-        'email.unique' => 'Email sudah digunakan.',
-        'password.confirmed' => 'Konfirmasi password tidak cocok.',
-    ];
+    protected function rules()
+    {
+        return array_merge(KaryawanMessages::getRules(), $this->customRules);
+    }
+
+    protected function messages()
+    {
+        return KaryawanMessages::getMessages();
+    }
 
     public function mount($id)
     {
@@ -88,9 +77,11 @@ class KaryawanEdit extends Component
             $this->currentAvatar = $karyawan->profile->avatar;
         }
 
-        $this->rules['email'] .= '|unique:users,email,'.$this->karyawanId;
-        $this->rules['employee_id'] .= '|unique:profiles,employee_id,'.$karyawan->profile?->id;
-        $this->rules['whatsapp'] .= '|unique:profiles,whatsapp,'.$karyawan->profile?->id.',id';
+        $this->customRules = [
+            'email' => 'required|email|unique:users,email,'.$this->karyawanId.',id',
+            'employee_id' => 'nullable|string|unique:profiles,employee_id,'.$karyawan->profile?->id.',id',
+            'whatsapp' => 'required|string|unique:profiles,whatsapp,'.$karyawan->profile?->id.',id',
+        ];
     }
 
     public function save()
@@ -114,9 +105,6 @@ class KaryawanEdit extends Component
             'name' => $this->name,
             'email' => $this->email,
         ]);
-        if ($this->password) {
-            $karyawan->update(['password' => Hash::make($this->password)]);
-        }
 
         // Update or create profile
         Profile::updateOrCreate(
@@ -137,7 +125,7 @@ class KaryawanEdit extends Component
 
         $this->js('notyf.success("Karyawan berhasil diperbarui!")');
 
-        return redirect('/karyawan');
+        return redirect()->route('tenant.karyawan');
     }
 
     public function render()

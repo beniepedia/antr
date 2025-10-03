@@ -14,14 +14,12 @@ class Profile extends Model
         'tenant_id',
         'employee_id',
         'position',
-        'shift',
         'hire_date',
         'status',
-        'station_code',
         'license_number',
-        'experience_years',
         'whatsapp',
         'avatar',
+        'address'
     ];
 
     protected $casts = [

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tenant\Karyawan;
 
+use App\Livewire\Forms\EmployeeForm;
 use App\Models\Profile;
 use App\Models\User;
 use App\Validation\KaryawanMessages;
@@ -14,81 +15,58 @@ use Livewire\WithFileUploads;
 class KaryawanCreate extends Component
 {
     use WithFileUploads;
+    
+    public EmployeeForm $form;
 
-    public $name;
+    // public $name;
 
-    public $email;
+    // public $email;
 
-    // Profile fields
-    public $employee_id;
+    // // Profile fields
+    // public $employee_id;
 
-    public $position = 'operator';
+    // public $position = 'operator';
 
-    public $hire_date;
+    // public $hire_date;
 
-    public $status = 'active';
+    // public $status = 'active';
 
-    public $license_number;
+    // public $license_number;
 
-    public $whatsapp;
+    // public $whatsapp;
 
-    public $address;
+    // public $address;
 
-    public $experience_years;
+    // public $experience_years;
 
-    public $avatar; // Temporary file upload
+    // public $avatar; // Temporary file upload
 
-    protected function rules()
-    {
-        return KaryawanMessages::getRules();
-    }
+    // protected function rules()
+    // {
+    //     return KaryawanMessages::getRules();
+    // }
 
-    protected function messages()
-    {
-        return KaryawanMessages::getMessages();
-    }
+    // protected function messages()
+    // {
+    //     return KaryawanMessages::getMessages();
+    // }
 
     public function save()
     {
-        $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         $this->validate();
+        
+        $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
-        // Generate random password
-        $password = Str::random(12);
+        $password = Str::random(6);
+        $this->form->password = $password;
+        $this->form->tenant_id = $tenantId;
 
-        // Handle avatar upload
-        $avatarPath = null;
-        if ($this->avatar) {
-            $avatarPath = $this->avatar->store('avatars', 'public');
-        }
+        $user = User::create($this->form->all());
+        $user->profile()->create($this->form->all());
 
-        $user = User::create([
-            'tenant_id' => $tenantId,
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($password),
-            'role' => 'petugas',
-        ]);
+        $this->js('notyf.success("Karyawan berhasil ditambah!")');
 
-        // Create profile
-        Profile::create([
-            'user_id' => $user->id,
-            'tenant_id' => $tenantId,
-            'employee_id' => $this->employee_id,
-            'position' => $this->position,
-            'hire_date' => $this->hire_date,
-            'status' => $this->status,
-            'license_number' => $this->license_number,
-            'experience_years' => $this->experience_years,
-            'whatsapp' => $this->whatsapp,
-            'address' => $this->address,
-            'avatar' => $avatarPath,
-        ]);
-
-        $this->dispatch('notify', type: 'success', message: 'Data karyawan berhasil ditambah');
-
-        return redirect()->route('tenant.karyawan');
     }
 
     public function render()

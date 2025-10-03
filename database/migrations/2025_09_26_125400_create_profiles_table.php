@@ -20,7 +20,6 @@ return new class extends Migration
             $table->date('hire_date')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('license_number')->nullable(); // Nomor lisensi jika diperlukan
-            $table->integer('experience_years')->nullable();
             $table->string('whatsapp')->unique();
             $table->text('address')->nullable();
             $table->string('avatar')->nullable(); // Path ke foto profil
