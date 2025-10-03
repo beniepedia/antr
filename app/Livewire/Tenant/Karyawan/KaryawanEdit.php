@@ -2,11 +2,10 @@
 
 namespace App\Livewire\Tenant\Karyawan;
 
+use App\Livewire\Forms\EmployeeForm;
 use App\Models\Profile;
 use App\Models\User;
-use App\Validation\KaryawanMessages;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,44 +14,13 @@ class KaryawanEdit extends Component
 {
     use WithFileUploads;
 
+    public EmployeeForm $form;
+
     public $karyawanId;
-
-    public $name;
-
-    public $email;
-
-    // Profile fields
-    public $employee_id;
-
-    public $position = 'operator';
-
-    public $hire_date;
-
-    public $status = 'active';
-
-    public $license_number;
-
-    public $whatsapp;
-
-    public $address;
-
-    public $experience_years;
 
     public $avatar; // Temporary file upload
 
     public $currentAvatar; // Current avatar path
-
-    protected $customRules = [];
-
-    protected function rules()
-    {
-        return array_merge(KaryawanMessages::getRules(), $this->customRules);
-    }
-
-    protected function messages()
-    {
-        return KaryawanMessages::getMessages();
-    }
 
     public function mount($id)
     {
@@ -62,33 +30,29 @@ class KaryawanEdit extends Component
         }
 
         $this->karyawanId = $karyawan->id;
-        $this->name = $karyawan->name;
-        $this->email = $karyawan->email;
+        $this->form->userId = $karyawan->id;
+        $this->form->name = $karyawan->name;
+        $this->form->email = $karyawan->email;
         // Load profile
         if ($karyawan->profile) {
-            $this->employee_id = $karyawan->profile->employee_id;
-            $this->position = $karyawan->profile->position;
-            $this->hire_date = $karyawan->profile->hire_date?->format('Y-m-d');
-            $this->status = $karyawan->profile->status;
-            $this->license_number = $karyawan->profile->license_number;
-            $this->whatsapp = $karyawan->profile->whatsapp;
-            $this->address = $karyawan->profile->address;
-            $this->experience_years = $karyawan->profile->experience_years;
+            $this->form->profileId = $karyawan->profile->id;
+            $this->form->employee_id = $karyawan->profile->employee_id;
+            $this->form->position = $karyawan->profile->position;
+            $this->form->hire_date = $karyawan->profile->hire_date?->format('Y-m-d');
+            $this->form->status = $karyawan->profile->status;
+            $this->form->license_number = $karyawan->profile->license_number;
+            $this->form->whatsapp = $karyawan->profile->whatsapp;
+            $this->form->address = $karyawan->profile->address;
             $this->currentAvatar = $karyawan->profile->avatar;
         }
-
-        $this->customRules = [
-            'email' => 'required|email|unique:users,email,'.$this->karyawanId.',id',
-            'employee_id' => 'nullable|string|unique:profiles,employee_id,'.$karyawan->profile?->id.',id',
-            'whatsapp' => 'required|string|unique:profiles,whatsapp,'.$karyawan->profile?->id.',id',
-        ];
     }
 
     public function save()
     {
-        $tenantId = Auth::guard('tenant')->user()->tenant_id;
+        dd($this->form);
+        $this->form->validate();
 
-        $this->validate();
+        $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         // Handle avatar upload
         $avatarPath = $this->currentAvatar; // Keep current if no new upload
@@ -102,8 +66,8 @@ class KaryawanEdit extends Component
 
         $karyawan = User::find($this->karyawanId);
         $karyawan->update([
-            'name' => $this->name,
-            'email' => $this->email,
+            'name' => $this->form->name,
+            'email' => $this->form->email,
         ]);
 
         // Update or create profile
@@ -111,14 +75,13 @@ class KaryawanEdit extends Component
             ['user_id' => $this->karyawanId],
             [
                 'tenant_id' => $tenantId,
-                'employee_id' => $this->employee_id,
-                'position' => $this->position,
-                'hire_date' => $this->hire_date,
-                'status' => $this->status,
-                'license_number' => $this->license_number,
-                'experience_years' => $this->experience_years,
-                'whatsapp' => $this->whatsapp,
-                'address' => $this->address,
+                'employee_id' => $this->form->employee_id,
+                'position' => $this->form->position,
+                'hire_date' => $this->form->hire_date,
+                'status' => $this->form->status,
+                'license_number' => $this->form->license_number,
+                'whatsapp' => $this->form->whatsapp,
+                'address' => $this->form->address,
                 'avatar' => $avatarPath,
             ]
         );

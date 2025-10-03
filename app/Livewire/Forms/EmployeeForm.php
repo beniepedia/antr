@@ -18,8 +18,6 @@ class EmployeeForm extends Form
     #[Validate('unique:users,email')]
     public $email;
 
-    public $employee_id = '';
-
     #[Validate('required')]
     #[Validate('in:operator,supervisor,manager')]
     public $position = 'operator';
@@ -53,13 +51,20 @@ class EmployeeForm extends Form
     public $password;
     public $tenant_id;
 
+    public $userId = null;
+    public $profileId = null;
+
+    public $employee_id = null;
+
     public function rules()
     {
         return [
+            'email' => 'required|email|unique:users,email,' . ($this->userId ?? ''),
+            'whatsapp' => 'required|string|unique:profiles,whatsapp,' . ($this->profileId ?? ''),
             'employee_id' => [
                 'nullable',
                 'string',
-                new \App\Rules\EmployeeIdRule(),
+                new \App\Rules\EmployeeIdRule($this->profileId),
             ],
         ];
     }
