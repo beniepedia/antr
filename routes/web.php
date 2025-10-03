@@ -57,6 +57,7 @@ Route::domain('{subdomain:url}.'.config('app.url'))
         });
     });
 
+
 // guest for tenant users
 Route::middleware('guest:tenant')->group(function () {
     Route::get('/login', UserLogin::class)->name('login');
@@ -69,25 +70,30 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 });
 
 // For dashboard routes, bungkus with middleware auth:
-Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
+Route::middleware('auth:tenant')->group(function () {
+   
+    Route::middleware('tenant.active')->group(function(){
+        Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 
-    Route::get('/queues', QueueIndex::class)->name('tenant.antrian');
-    Route::get('/queue-control', QueueControl::class)->name('tenant.queue.control');
+        Route::get('/queues', QueueIndex::class)->name('tenant.antrian');
+        Route::get('/queue-control', QueueControl::class)->name('tenant.queue.control');
 
-    Route::get('/employee', KaryawanIndex::class)->name('tenant.karyawan');
-    Route::get('/employee/create', KaryawanCreate::class)->name('tenant.karyawan.create');
-    Route::get('/employee/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
-    Route::get('/employee/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
+        Route::get('/employee', KaryawanIndex::class)->name('tenant.karyawan');
+        Route::get('/employee/create', KaryawanCreate::class)->name('tenant.karyawan.create');
+        Route::get('/employee/{id}/show', KaryawanShow::class)->name('tenant.karyawan.show');
+        Route::get('/employee/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
 
-    Route::get('/pump', Pumps::class)->name('tenant.pump.index');
+        Route::get('/pump', Pumps::class)->name('tenant.pump.index');
 
-    Route::get('/settings', TenantSettings::class)->name('tenant.settings');
+        Route::get('/settings', TenantSettings::class)->name('tenant.settings');
+        Route::get('/print', PrintLabel::class)->name('tenant.print');
+    });
 
     Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
     Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
 
-    Route::get('/print', PrintLabel::class)->name('tenant.print');
+    Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
+    Route::get('/subscription', Subscription::class)->name('tenant.subscription');
 
     Route::post('/logout', function () {
         Auth::guard('tenant')->logout();
@@ -99,10 +105,6 @@ Route::middleware(['auth:tenant', 'tenant.active'])->group(function () {
 
 });
 
-Route::middleware(['auth:tenant'])->group(function () {
-    Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
-    Route::get('/subscription', Subscription::class)->name('tenant.subscription');
-});
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
 //     Route::get('/dashboard', function () {
