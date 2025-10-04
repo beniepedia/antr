@@ -5,18 +5,17 @@ namespace App\Livewire\Forms;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class EmployeeForm extends Form
 {
+    public ?object $model = null;
+
+
     #[Validate('required')]
     #[Validate('string')]
     #[Validate('max:255')]
     public $name;
-
-    #[Validate('required')]
-    #[Validate('email')]
-    #[Validate('unique:users,email')]
-    public $email;
 
     #[Validate('required')]
     #[Validate('in:operator,supervisor,manager')]
@@ -34,11 +33,6 @@ class EmployeeForm extends Form
     #[Validate('string')]
     public $license_number;
 
-    #[Validate('required')]
-    #[Validate('string')]
-    #[Validate('unique:profiles,whatsapp')]
-    public $whatsapp;
-
     #[Validate('nullable')]
     #[Validate('string')]
     public $address;
@@ -48,6 +42,9 @@ class EmployeeForm extends Form
     #[Validate('max:2048')]
     public $avatar;
 
+
+    public $email;
+    public $whatsapp;
     public $password;
     public $tenant_id;
 
@@ -56,11 +53,21 @@ class EmployeeForm extends Form
 
     public $employee_id = null;
 
+    public $role = null;
+
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:users,email,' . ($this->userId ?? ''),
-            'whatsapp' => 'required|string|unique:profiles,whatsapp,' . ($this->profileId ?? ''),
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->model?->id)
+            ],
+            'whatsapp' => [
+                'required',
+                'string',
+                Rule::unique('profiles', 'whatsapp')->ignore($this->profileId)
+            ],
             'employee_id' => [
                 'nullable',
                 'string',

@@ -7,16 +7,16 @@
         </a>
     </div>
 
-    <form wire:submit.prevent="save" class="space-y-6">
+    <form wire:submit.prevent="save" class="space-y-6" novalidate>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- User Info -->
             <div class="form-control">
                 <label class="label">
                     <span class="label-text">Nama</span>
                 </label>
-                <input type="text" wire:model="name" class="input input-bordered" placeholder="Nama lengkap"
+                <input type="text" wire:model="form.name" class="input input-bordered" placeholder="Nama lengkap"
                     required />
-                @error('name')
+                @error('form.name')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -25,9 +25,9 @@
                 <label class="label">
                     <span class="label-text">Email</span>
                 </label>
-                <input type="email" wire:model="email" class="input input-bordered" placeholder="email@example.com"
-                    required />
-                @error('email')
+                <input type="email" wire:model="form.email" class="input input-bordered"
+                    placeholder="email@example.com" required />
+                @error('form.email')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -39,8 +39,9 @@
                 <label class="label">
                     <span class="label-text">ID Karyawan</span>
                 </label>
-                <input type="text" wire:model="employee_id" class="input input-bordered" placeholder="ID Karyawan" />
-                @error('employee_id')
+                <input type="text" wire:model="form.employee_id" class="input input-bordered"
+                    placeholder="ID Karyawan" />
+                @error('form.employee_id')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -49,13 +50,13 @@
                 <label class="label">
                     <span class="label-text">Jabatan</span>
                 </label>
-                <select wire:model="position" class="select select-bordered" required>
+                <select wire:model="form.position" class="select select-bordered" required>
                     @foreach (\App\Enums\PositionEnum::options() as $value => $label)
-                        <option value="{{ $value }}" {{ $position == $value ? 'selected' : '' }}>
+                        <option value="{{ $value }}" {{ $form->position == $value ? 'selected' : '' }}>
                             {{ $label }}</option>
                     @endforeach
                 </select>
-                @error('position')
+                @error('form.position')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -64,8 +65,8 @@
                 <label class="label">
                     <span class="label-text">Tanggal Mulai Kerja</span>
                 </label>
-                <input type="date" wire:model="hire_date" class="input input-bordered" />
-                @error('hire_date')
+                <input type="date" wire:model="form.hire_date" class="input input-bordered" />
+                @error('form.hire_date')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -74,11 +75,11 @@
                 <label class="label">
                     <span class="label-text">Status</span>
                 </label>
-                <select wire:model="status" class="select select-bordered" required>
+                <select wire:model="form.status" class="select select-bordered" required>
                     <option value="active">Aktif</option>
                     <option value="inactive">Tidak Aktif</option>
                 </select>
-                @error('status')
+                @error('form.status')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -87,20 +88,9 @@
                 <label class="label">
                     <span class="label-text">Nomor Lisensi</span>
                 </label>
-                <input type="text" wire:model="license_number" class="input input-bordered"
+                <input type="text" wire:model="form.license_number" class="input input-bordered"
                     placeholder="Nomor Lisensi" />
-                @error('license_number')
-                    <span class="text-error text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Tahun Pengalaman</span>
-                </label>
-                <input type="number" wire:model="experience_years" class="input input-bordered" placeholder="0"
-                    min="0" />
-                @error('experience_years')
+                @error('form.license_number')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -109,9 +99,9 @@
                 <label class="label">
                     <span class="label-text">Nomor WhatsApp</span>
                 </label>
-                <input type="text" wire:model="whatsapp" class="input input-bordered" placeholder="628xxxxxxxxx"
+                <input type="text" wire:model="form.whatsapp" class="input input-bordered" placeholder="628xxxxxxxxx"
                     required />
-                @error('whatsapp')
+                @error('form.whatsapp')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -120,8 +110,8 @@
                 <label class="label">
                     <span class="label-text">Alamat</span>
                 </label>
-                <textarea wire:model="address" class="textarea textarea-bordered" rows="3" placeholder="Alamat lengkap"></textarea>
-                @error('address')
+                <textarea wire:model="form.address" class="textarea textarea-bordered" rows="3" placeholder="Alamat lengkap"></textarea>
+                @error('form.address')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -130,8 +120,9 @@
                 <label class="label">
                     <span class="label-text">Foto Profil</span>
                 </label>
-                <input type="file" wire:model="avatar" class="file-input file-input-bordered" accept="image/*" />
-                @error('avatar')
+                <input type="file" wire:model="form.avatar" class="file-input file-input-bordered"
+                    accept="image/*" />
+                @error('form.avatar')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
                 @if ($currentAvatar)
@@ -144,8 +135,7 @@
                 @if ($avatar)
                     <div class="mt-2">
                         <p class="text-sm text-gray-600">Pratinjau:</p>
-                        <img src="{{ $avatar->temporaryUrl() }}" alt="Preview"
-                            class="w-20 h-20 object-cover rounded">
+                        <img src="{{ $avatar->temporaryUrl() }}" alt="Preview" class="w-20 h-20 object-cover rounded">
                     </div>
                 @endif
             </div>

@@ -18,39 +18,6 @@ class KaryawanCreate extends Component
     
     public EmployeeForm $form;
 
-    // public $name;
-
-    // public $email;
-
-    // // Profile fields
-    // public $employee_id;
-
-    // public $position = 'operator';
-
-    // public $hire_date;
-
-    // public $status = 'active';
-
-    // public $license_number;
-
-    // public $whatsapp;
-
-    // public $address;
-
-    // public $experience_years;
-
-    // public $avatar; // Temporary file upload
-
-    // protected function rules()
-    // {
-    //     return KaryawanMessages::getRules();
-    // }
-
-    // protected function messages()
-    // {
-    //     return KaryawanMessages::getMessages();
-    // }
-
     public function save()
     {
 
@@ -61,6 +28,7 @@ class KaryawanCreate extends Component
         $password = Str::random(6);
         $this->form->password = $password;
         $this->form->tenant_id = $tenantId;
+        $this->form->role = 'petugas';
 
         $user = User::create($this->form->all());
         $user->profile()->create($this->form->all());
