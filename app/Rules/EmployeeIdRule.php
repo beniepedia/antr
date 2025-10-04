@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
+use App\Models\Profile;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Profile;
 
 class EmployeeIdRule implements ValidationRule
 {
@@ -24,7 +24,7 @@ class EmployeeIdRule implements ValidationRule
         $tenantId = Auth::user('tenant')->tenant_id ?? null;
 
         $query = Profile::where('employee_id', $value)
-            ->whereHas('user', fn($q) => $q->where('tenant_id', $tenantId));
+            ->whereHas('user', fn ($q) => $q->where('tenant_id', $tenantId));
 
         // kalau update, exclude profile dirinya sendiri
         if ($this->ignoreProfileId) {

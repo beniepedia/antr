@@ -1,21 +1,27 @@
 <div class="bg-white rounded-lg shadow-sm p-6">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Edit Karyawan</h1>
-        <a href="{{ route('tenant.karyawan') }}" class="btn btn-outline">
-            <span class="icon-[tabler--arrow-left] size-4 mr-2"></span>
-            Kembali
-        </a>
     </div>
 
     <form wire:submit.prevent="save" class="space-y-6" novalidate>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <!-- Profile Info -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">ID Karyawan</span>
+                </label>
+                <input type="text" wire:model="form.employee_id" class="input" placeholder="ID Karyawan" />
+                @error('form.employee_id')
+                    <span class="text-error text-sm">{{ $message }}</span>
+                @enderror
+            </div>
             <!-- User Info -->
             <div class="form-control">
                 <label class="label">
                     <span class="label-text">Nama</span>
                 </label>
-                <input type="text" wire:model="form.name" class="input input-bordered" placeholder="Nama lengkap"
-                    required />
+                <input type="text" wire:model="form.name" class="input" placeholder="Nama lengkap" required />
                 @error('form.name')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
@@ -25,26 +31,38 @@
                 <label class="label">
                     <span class="label-text">Email</span>
                 </label>
-                <input type="email" wire:model="form.email" class="input input-bordered"
-                    placeholder="email@example.com" required />
+                <input type="email" wire:model="form.email" class="input" placeholder="email@example.com" required />
                 @error('form.email')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-
-            <!-- Profile Info -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">ID Karyawan</span>
+                    <span class="label-text">Password Baru (Opsional)</span>
                 </label>
-                <input type="text" wire:model="form.employee_id" class="input input-bordered"
-                    placeholder="ID Karyawan" />
-                @error('form.employee_id')
+                <input type="password" wire:model="form.password" class="input"
+                    placeholder="Kosongkan jika tidak ingin mengubah" />
+                @error('form.password')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
             </div>
+
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Konfirmasi Password</span>
+                </label>
+                <input type="password" wire:model="form.password_confirmation" class="input"
+                    placeholder="Konfirmasi password baru" />
+                @error('form.password_confirmation')
+                    <span class="text-error text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
 
             <div class="form-control">
                 <label class="label">
@@ -63,9 +81,27 @@
 
             <div class="form-control">
                 <label class="label">
+                    <span class="label-text">Hak Akses</span>
+                </label>
+                <select wire:model="form.role" class="select select-bordered" required>
+                    @foreach (\App\Enums\TenantRole::cases() as $role)
+                        <option value="{{ $role->value }}" {{ $form->role == $role->value ? 'selected' : '' }}
+                            class="text-capitalize">
+                            {{ ucfirst($role->value) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('form.role')
+                    <span class="text-error text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+
+            <div class="form-control">
+                <label class="label">
                     <span class="label-text">Tanggal Mulai Kerja</span>
                 </label>
-                <input type="date" wire:model="form.hire_date" class="input input-bordered" />
+                <input type="date" wire:model="form.hire_date" class="input" />
                 @error('form.hire_date')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
@@ -86,10 +122,9 @@
 
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Nomor Lisensi</span>
+                    <span class="label-text">NIK</span>
                 </label>
-                <input type="text" wire:model="form.license_number" class="input input-bordered"
-                    placeholder="Nomor Lisensi" />
+                <input type="text" wire:model="form.license_number" class="input" placeholder="Masukkan NIK" />
                 @error('form.license_number')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
@@ -99,8 +134,7 @@
                 <label class="label">
                     <span class="label-text">Nomor WhatsApp</span>
                 </label>
-                <input type="text" wire:model="form.whatsapp" class="input input-bordered" placeholder="628xxxxxxxxx"
-                    required />
+                <input type="text" wire:model="form.whatsapp" class="input" placeholder="628xxxxxxxxx" required />
                 @error('form.whatsapp')
                     <span class="text-error text-sm">{{ $message }}</span>
                 @enderror
@@ -117,10 +151,8 @@
             </div>
 
             <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Foto Profil</span>
-                </label>
-                <input type="file" wire:model="form.avatar" class="file-input file-input-bordered"
+                <label class="label-text" for="inpuFileTypeDefault">Upload Gambar</label>
+                <input type="file" wire:model="form.avatar" class="input w-full" id="inpuFileTypeDefault"
                     accept="image/*" />
                 @error('form.avatar')
                     <span class="text-error text-sm">{{ $message }}</span>
@@ -135,14 +167,16 @@
                 @if ($avatar)
                     <div class="mt-2">
                         <p class="text-sm text-gray-600">Pratinjau:</p>
-                        <img src="{{ $avatar->temporaryUrl() }}" alt="Preview" class="w-20 h-20 object-cover rounded">
+                        <img src="{{ $avatar->temporaryUrl() }}" alt="Preview"
+                            class="w-20 h-20 object-cover rounded">
                     </div>
                 @endif
             </div>
         </div>
 
+
         <div class="flex justify-end space-x-4">
-            <a href="{{ route('tenant.karyawan') }}" class="btn btn-outline">Batal</a>
+            <a href="{{ route('tenant.karyawan') }}" class="btn btn-outline" wire:navigate>Batal</a>
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </form>

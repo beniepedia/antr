@@ -58,8 +58,9 @@ class Create extends Component
 
         $customerVehicle = CustomerVehicle::find($this->selected_customer_vehicle_id);
 
-        if (!$customerVehicle || !$customerVehicle->vehicle) {
+        if (! $customerVehicle || ! $customerVehicle->vehicle) {
             $this->addError('selected_customer_vehicle_id', 'Invalid vehicle selected.');
+
             return;
         }
 

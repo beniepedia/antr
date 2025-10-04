@@ -8,6 +8,7 @@ use Livewire\Component;
 class Create extends Component
 {
     public $license_plate = '';
+
     public $vehicle_id = '';
 
     public function rules()

@@ -7,14 +7,13 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-
     public function checkIn()
     {
         $activeQueue = Queue::where('customer_id', auth('customer')->id())
             ->whereIn('status', ['waiting', 'called'])
             ->first();
 
-        if ($activeQueue && !$activeQueue->checkin_time) {
+        if ($activeQueue && ! $activeQueue->checkin_time) {
             $activeQueue->update(['checkin_time' => now()]);
             $this->dispatch('notify', type: 'success', message: 'Check-in berhasil!');
         } else {
@@ -37,9 +36,10 @@ class Dashboard extends Component
             $this->dispatch('notify', type: 'error', message: 'Tidak ada antrian aktif untuk dibatalkan.');
         }
     }
+
     public function render()
     {
-       
+
         $customer = auth('customer')->user();
         $customerId = $customer->id;
         $tenantId = $customer->tenant_id;

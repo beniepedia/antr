@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->string('employee_id')->nullable()->unique();
             $table->enum('position', ['operator', 'supervisor', 'manager'])->default('operator');
             $table->date('hire_date')->nullable();

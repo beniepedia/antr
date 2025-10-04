@@ -32,7 +32,7 @@ class QueueControl extends Component
 
         // Current called queue
         $this->currentQueue = Queue::where('tenant_id', $this->tenantId)
-            ->whereIn('status', ['waiting','called'])
+            ->whereIn('status', ['waiting', 'called'])
             ->with(['customer', 'customerVehicle.vehicle'])
             ->first();
 

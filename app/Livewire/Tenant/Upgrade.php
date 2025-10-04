@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Tenant;
 
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Upgrade extends Component
@@ -17,6 +16,7 @@ class Upgrade extends Component
     public function render()
     {
         $plans = \App\Models\Plan::all();
+
         return view('livewire.tenant.upgrade', compact('plans'))->layout('layouts.tenant');
     }
 }

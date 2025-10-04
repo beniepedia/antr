@@ -5,10 +5,8 @@ namespace App\Livewire\Tenant\Karyawan;
 use App\Enums\TenantRole;
 use App\Livewire\Forms\EmployeeForm;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -45,11 +43,12 @@ class KaryawanEdit extends Component
         $this->form->userId = $this->karyawan->id;
         $this->form->name = $this->karyawan->name;
         $this->form->email = $this->karyawan->email;
+        $this->form->role = $this->karyawan->role;
 
         $profile = $this->karyawan->profile;
 
         $this->form->model = $this->karyawan;
-        
+
         if ($profile) {
             $this->form->profileId = $profile->id;
             $this->form->employee_id = $profile->employee_id;
@@ -66,7 +65,7 @@ class KaryawanEdit extends Component
     public function save()
     {
         $this->validate();
-        
+
         $this->form->avatar = $this->avatar;
         $avatarPath = $this->currentAvatar;
         if ($this->form->avatar) {
@@ -74,7 +73,13 @@ class KaryawanEdit extends Component
             $avatarPath = $this->form->avatar->store('avatars', 'public');
         }
 
-        $this->form->role = TenantRole::PETUGAS->value;
+        $this->form->tenant_id = $this->tenant->id;
+
+        if ($this->form->password) {
+            $this->form->password = bcrypt($this->form->password);
+        } else {
+            $this->form->password =$this->karyawan->password;
+        }
 
         $this->karyawan->update($this->form->all());
 

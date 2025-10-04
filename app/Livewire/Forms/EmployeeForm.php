@@ -2,15 +2,13 @@
 
 namespace App\Livewire\Forms;
 
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class EmployeeForm extends Form
 {
     public ?object $model = null;
-
 
     #[Validate('required')]
     #[Validate('string')]
@@ -42,13 +40,18 @@ class EmployeeForm extends Form
     #[Validate('max:2048')]
     public $avatar;
 
-
     public $email;
+
     public $whatsapp;
+
     public $password;
+
+    public $password_confirmation;
+
     public $tenant_id;
 
     public $userId = null;
+
     public $profileId = null;
 
     public $employee_id = null;
@@ -61,19 +64,24 @@ class EmployeeForm extends Form
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($this->model?->id)
+                Rule::unique('users', 'email')->ignore($this->model?->id),
             ],
             'whatsapp' => [
                 'required',
                 'string',
-                Rule::unique('profiles', 'whatsapp')->ignore($this->profileId)
+                Rule::unique('profiles', 'whatsapp')->ignore($this->profileId),
             ],
             'employee_id' => [
                 'nullable',
                 'string',
                 new \App\Rules\EmployeeIdRule($this->profileId),
             ],
+            'password' => [
+                'nullable',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
         ];
     }
-
 }

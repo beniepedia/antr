@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum TenantRole: string
 {
-     case ADMIN = 'admin';
-     case PETUGAS = 'petugas';
+    case ADMIN = 'admin';
+    case PETUGAS = 'petugas';
 }

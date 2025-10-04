@@ -13,26 +13,24 @@ class PrintLabel extends Component
     {
         $tenant = Auth::guard('tenant')->user()->tenant;
 
-        $fpdf = new Fpdf();
-        $fpdf->SetMargins(10,20);
+        $fpdf = new Fpdf;
+        $fpdf->SetMargins(10, 20);
         $fpdf->AddPage();
 
         $fpdf->SetFont('Arial', 'B', 20);
         $fpdf->Cell(0, 10, 'ANTRIAN ONLINE', 0, 1, 'C');
         $fpdf->Ln(10);
 
-
         // Sub Judul
         $fpdf->SetFont('Arial', '', 16);
-        $fpdf->MultiCell(0, 7, "SILAHKAN SCAN QR CODE DIBAWHAH INI UNTUK MENGAMBIL ANTRIAN ONLINE.", 0, 'C');
+        $fpdf->MultiCell(0, 7, 'SILAHKAN SCAN QR CODE DIBAWHAH INI UNTUK MENGAMBIL ANTRIAN ONLINE.', 0, 'C');
         // $fpdf->Ln(10);
-
 
         // Generate QR Code langsung sebagai string biner PNG
         $qrcodeData = QrCode::format('png')->size(500)->margin(2)->generate(make_url($tenant->url));
 
         // Simpan ke memori sementara pakai data URI
-        $tempImage = 'data://text/plain;base64,' . base64_encode($qrcodeData);
+        $tempImage = 'data://text/plain;base64,'.base64_encode($qrcodeData);
         $pageWidth = $fpdf->GetPageWidth();
         $imageWidth = 100; // lebar QR yang kamu set
         $x = ($pageWidth - $imageWidth) / 2; // posisi X biar center

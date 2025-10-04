@@ -57,7 +57,6 @@ Route::domain('{subdomain:url}.'.config('app.url'))
         });
     });
 
-
 // guest for tenant users
 Route::middleware('guest:tenant')->group(function () {
     Route::get('/login', UserLogin::class)->name('login');
@@ -71,8 +70,8 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 
 // For dashboard routes, bungkus with middleware auth:
 Route::middleware('auth:tenant')->group(function () {
-   
-    Route::middleware('tenant.active')->group(function(){
+
+    Route::middleware('tenant.active')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 
         Route::get('/queues', QueueIndex::class)->name('tenant.antrian');
@@ -104,7 +103,6 @@ Route::middleware('auth:tenant')->group(function () {
     })->name('tenant.logout');
 
 });
-
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
 //     Route::get('/dashboard', function () {

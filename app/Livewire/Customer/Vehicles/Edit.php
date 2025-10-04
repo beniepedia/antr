@@ -6,19 +6,19 @@ use App\Models\Vehicle;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-use function PHPSTORM_META\type;
-
 class Edit extends Component
 {
     public $vehicleId;
+
     public $license_plate = '';
+
     public $vehicle_id = '';
 
     public function mount($id)
     {
         $customerVehicle = auth('customer')->user()->vehicles()->wherePivot('id', $id)->first();
 
-        if (!$customerVehicle) {
+        if (! $customerVehicle) {
             abort(404);
         }
 
@@ -30,7 +30,7 @@ class Edit extends Component
     public function rules()
     {
         return [
-            'license_plate' => 'required|string|max:20|unique:customer_vehicles,license_plate,' . $this->vehicleId . ',id',
+            'license_plate' => 'required|string|max:20|unique:customer_vehicles,license_plate,'.$this->vehicleId.',id',
             'vehicle_id' => 'required|exists:vehicles,id',
         ];
     }
@@ -40,13 +40,13 @@ class Edit extends Component
         $this->validate();
 
         DB::table('customer_vehicles')
-            ->where('id',  $this->vehicleId) // id dari pivot (customer_vehicles)
+            ->where('id', $this->vehicleId) // id dari pivot (customer_vehicles)
             ->update([
                 'vehicle_id' => $this->vehicle_id,
                 'license_plate' => $this->license_plate,
             ]);
 
-        $this->dispatch('notify', type:'success', message: 'tess');
+        $this->dispatch('notify', type: 'success', message: 'tess');
         $this->redirect(route('customer.vehicles.index'), true);
     }
 

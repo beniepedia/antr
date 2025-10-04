@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('served_by')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('liters_requested')->nullable()->default(0);
             $table->date('queue_date');
-            $table->enum('status', ['reserved','waiting', 'called', 'completed', 'cancelled', 'expired'])->default('waiting');
+            $table->enum('status', ['reserved', 'waiting', 'called', 'completed', 'cancelled', 'expired'])->default('waiting');
             $table->timestamp('checkin_time')->nullable();
             $table->timestamp('checkout_time')->nullable();
             $table->timestamps();

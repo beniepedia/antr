@@ -9,10 +9,15 @@ use Livewire\Component;
 class Pumps extends Component
 {
     public $pumps;
+
     public $showForm = false;
+
     public $name;
+
     public $tenant;
+
     public $editing = false;
+
     public $editingId;
 
     public function mount()
@@ -53,7 +58,7 @@ class Pumps extends Component
             'name' => 'required|string|max:255|min:3',
         ], [
             'name.required' => 'Nama pompa tidak boleh kosong',
-            'name.min' => 'Nama pompa minimal :min karakter'
+            'name.min' => 'Nama pompa minimal :min karakter',
         ]);
 
         if ($this->editing) {
@@ -79,7 +84,7 @@ class Pumps extends Component
     {
         $pump = Pump::find($pumpId);
         if ($pump) {
-            $pump->is_active = !$pump->is_active;
+            $pump->is_active = ! $pump->is_active;
             $pump->save();
             $this->mount(); // Refresh data
         }

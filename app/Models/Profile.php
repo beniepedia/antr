@@ -11,7 +11,6 @@ class Profile extends Model
 
     protected $fillable = [
         'user_id',
-        'tenant_id',
         'employee_id',
         'position',
         'hire_date',
@@ -19,7 +18,7 @@ class Profile extends Model
         'license_number',
         'whatsapp',
         'avatar',
-        'address'
+        'address',
     ];
 
     protected $casts = [
@@ -31,8 +30,4 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
 }

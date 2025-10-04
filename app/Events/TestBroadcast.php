@@ -9,7 +9,7 @@ class TestBroadcast implements ShouldBroadcast
 {
     public $message;
 
-    public function __construct($message = "Hello from broadcast!")
+    public function __construct($message = 'Hello from broadcast!')
     {
         $this->message = $message;
     }

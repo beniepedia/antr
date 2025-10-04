@@ -3,11 +3,8 @@
 namespace App\Livewire\Tenant\Karyawan;
 
 use App\Livewire\Forms\EmployeeForm;
-use App\Models\Profile;
 use App\Models\User;
-use App\Validation\KaryawanMessages;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,14 +12,14 @@ use Livewire\WithFileUploads;
 class KaryawanCreate extends Component
 {
     use WithFileUploads;
-    
+
     public EmployeeForm $form;
 
     public function save()
     {
 
         $this->validate();
-        
+
         $tenantId = Auth::guard('tenant')->user()->tenant_id;
 
         $password = Str::random(6);

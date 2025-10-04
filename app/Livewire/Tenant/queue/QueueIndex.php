@@ -33,8 +33,6 @@ class QueueIndex extends Component
             ->paginate(10);
     }
 
-
-
     public function callQueue($queueId)
     {
         $queue = QueueModel::find($queueId);
@@ -70,8 +68,6 @@ class QueueIndex extends Component
             $this->js('notyf.success("Antrian berhasil dibatalkan!")');
         }
     }
-
-
 
     public function updatedFilterStatus()
     {

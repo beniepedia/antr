@@ -6,7 +6,7 @@ use App\Models\Queue;
 
 trait WithQueueNumber
 {
-    public static function generate(int $digit=4):string
+    public static function generate(int $digit = 4): string
     {
         $today = now()->toDateString();
         $tenant = app('tenant');

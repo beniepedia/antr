@@ -10,7 +10,9 @@ class Profile extends Component
     use WithNotyf;
 
     public $name = '';
+
     public $whatsapp = '';
+
     public $editing = false;
 
     public function mount()
@@ -22,14 +24,14 @@ class Profile extends Component
 
     public function toggleEdit()
     {
-        $this->editing = !$this->editing;
+        $this->editing = ! $this->editing;
     }
 
     public function rules()
     {
         return [
             'name' => 'required|string|max:255',
-            'whatsapp' => 'required|string|max:20|unique:customers,whatsapp,' . auth('customer')->id(),
+            'whatsapp' => 'required|string|max:20|unique:customers,whatsapp,'.auth('customer')->id(),
         ];
     }
 
@@ -42,8 +44,8 @@ class Profile extends Component
             'whatsapp' => $this->whatsapp,
         ]);
 
-       $this->notyf("Profil berhasil diperbarui");
-       $this->toggleEdit();
+        $this->notyf('Profil berhasil diperbarui');
+        $this->toggleEdit();
     }
 
     public function render()

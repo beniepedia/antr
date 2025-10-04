@@ -3,15 +3,17 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class TenantQueueUpdated implements ShouldBroadcast
 {
     use InteractsWithSockets;
 
     public $tenantId;
+
     public $action;
+
     public $queueData;
 
     public function __construct($tenantId, $action, $queueData = null)
@@ -24,7 +26,7 @@ class TenantQueueUpdated implements ShouldBroadcast
     public function broadcastOn()
     {
         // public channel untuk tenant tertentu
-        return new Channel('tenant.' . $this->tenantId . '.queue');
+        return new Channel('tenant.'.$this->tenantId.'.queue');
     }
 
     public function broadcastAs()
