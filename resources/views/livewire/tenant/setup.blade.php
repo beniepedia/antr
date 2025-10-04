@@ -1,11 +1,11 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
     <div class="w-full max-w-4xl">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-base-100 border-2 border-gray-300 rounded-2xl shadow-xl overflow-hidden">
             <div class="p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Setup Akun Tenant</h2>
-                <p class="text-gray-600 text-center mb-6">Lengkapi informasi SPBU Anda untuk memulai.</p>
-                 <form class="mt-6 space-y-4" novalidate wire:submit.prevent="save">
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <h2 class="text-2xl font-bold text-gray-800 text-center mb-2">{{ __('tenant_setup.header') }}</h2>
+                <p class="text-gray-600 text-center mb-10">{{ __('tenant_setup.subinfo') }} </p>
+                <form class="mt-6 space-y-4" novalidate wire:submit.prevent="save">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label for="code" class="label">
                                 <span class="label-text">Kode SPBU</span>
@@ -46,48 +46,51 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                     </div>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                         <div>
-                             <label for="max_queue_time" class="label">
-                                 <span class="label-text">Batas Waktu Ambil Antrian</span>
-                             </label>
-                             <input id="max_queue_time" wire:model="max_queue_time" type="time"
-                                 class="input input-bordered md:input-lg" placeholder="Contoh: 14:00">
-                             <p class="text-gray-500 text-sm mt-1">Batas waktu maksimal untuk mengambil antrian (opsional).</p>
-                             @error('max_queue_time')
-                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                             @enderror
-                         </div>
-                         <div>
-                             <label for="url" class="label">
-                                 <span class="label-text">URL Subdomain</span>
-                             </label>
-                             <div class="join w-full">
-                                 <input id="url" wire:model="url" type="text" required
-                                     class="input input-bordered join-item md:input-lg flex-1" placeholder="tes">
-                                 <span
-                                     class="join-item bg-base-200 px-3 flex items-center">.{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
-                             </div>
-                             <p class="text-gray-500 text-sm mt-1">URL subdomain digunakan untuk pelanggan mengambil nomor
-                                 antrian dan tidak dapat diubah setelah tenant dibuat.</p>
-                             @error('url')
-                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                             @enderror
-                         </div>
-                     </div>
-                     <div class="mt-2">
-                         <label for="address" class="label">
-                             <span class="label-text">Alamat</span>
-                         </label>
-                         <textarea id="address" wire:model="address" rows="3" required
-                             class="textarea textarea-bordered w-full md:textarea-lg" placeholder="Alamat SPBU"></textarea>
-                         @error('address')
-                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                         @enderror
-                     </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                        <div>
+                            <label for="max_queue_time" class="label">
+                                <span class="label-text">Batas Waktu Ambil Antrian</span>
+                            </label>
+                            <input id="max_queue_time" wire:model="max_queue_time" type="text"
+                                class="input input-bordered md:input-lg flatpickr" placeholder="Contoh: 14:00"
+                                data-time-only="true">
+                            <p class="text-gray-500 text-sm mt-1">Batas waktu maksimal untuk mengambil antrian
+                                (opsional).</p>
+                            @error('max_queue_time')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="url" class="label">
+                                <span class="label-text">URL Subdomain</span>
+                            </label>
+                            <div class="join w-full">
+                                <input id="url" wire:model="url" type="text" required
+                                    class="input input-bordered join-item md:input-lg flex-1" placeholder="tes">
+                                <span
+                                    class="join-item bg-primary px-3 font-bold text-base-100 flex items-center">.{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-1">URL subdomain digunakan untuk pelanggan mengambil
+                                nomor
+                                antrian dan tidak dapat diubah setelah tenant dibuat.</p>
+                            @error('url')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label for="address" class="label">
+                            <span class="label-text">Alamat</span>
+                        </label>
+                        <textarea id="address" wire:model="address" rows="3" required
+                            class="textarea textarea-bordered w-full md:textarea-lg" placeholder="Alamat SPBU"></textarea>
+                        @error('address')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                     <div class="flex flex-col gap-3 mt-6 sm:flex-row sm:justify-between">
+                    <div class="flex flex-col gap-3 mt-6 sm:flex-row sm:justify-between">
                         <button wire:click="logout" class="btn btn-outline">
                             Kembali
                         </button>
@@ -108,3 +111,17 @@
 
     </div>
 </div>
+
+
+@push('scripts')
+    <script>
+        document.addEventListener("livewire:init", () => {
+            window.flatpickr(".flatpickr", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+            });
+        });
+    </script>
+@endpush

@@ -2,8 +2,8 @@
 @import "./../../node_modules/flyonui/variants.css";
 @import "./main.css";
 
-
 @plugin "@iconify/tailwind4";
+
 @source "./../../node_modules/flyonui/dist/index.js";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -14,7 +14,3 @@
     themes: all;
     /* include: badge, dropdown, modal, button; */
 }
-
-
-
-

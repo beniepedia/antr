@@ -6,18 +6,24 @@ use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\TenantSubscription;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Setup extends Component
 {
+    #[Validate('required|string|max:50|unique:tenants,code', as:'kode')]
     public $code;
 
+    #[Validate('required|string|max:150', as: 'nama')]
     public $name;
 
+    #[Validate('required', as: 'alamat')]
     public $address;
 
+    #[Validate('required|string|max:20')]
     public $whatsapp;
 
+    #[Validate('required|string|max:20')]
     public $phone;
 
     public $url;

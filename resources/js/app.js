@@ -4,16 +4,17 @@ import './main.js';
 import './echo';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
+import './flatpickr.js';
 
 
-// bikin fungsi init ulang
 function initNotyf() {
-    // document.querySelectorAll(".notyf").forEach(el => el.remove());
     window.notyf = new Notyf({
         duration: 2500,
         position: { x: "right", y: "top" },
         dismissible: true,
     });
+
+    window.flatpickr = flatpickr
 }
 
 // inisialisasi awal
