@@ -41,8 +41,8 @@
                         <label for="name" class="sr-only">Nama Lengkap</label>
                         <div class="input">
                             <span class="icon-[tabler--user] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="name" type="text" id="name" class="grow"
-                                placeholder="Nama Lengkap" />
+                            <input wire:model.defer="name" type="text" id="name"
+                                class="grow @error('name') is-invalid @enderror" placeholder="Nama Lengkap" />
                         </div>
                         @error('name')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -53,8 +53,8 @@
                         <label for="email" class="sr-only">Email</label>
                         <div class="input">
                             <span class="icon-[tabler--mail] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="email" type="email" id="email" class="grow"
-                                placeholder="email@contoh.com" />
+                            <input wire:model.defer="email" type="email" id="email"
+                                class="grow @error('email') is-invalid @enderror" placeholder="email@contoh.com" />
                         </div>
                         @error('email')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -65,8 +65,8 @@
                         <label for="password" class="sr-only">Password</label>
                         <div class="input">
                             <span class="icon-[tabler--key] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
-                            <input wire:model.defer="password" type="password" id="password" class="grow"
-                                placeholder="••••••••" />
+                            <input wire:model.defer="password" type="password" id="password"
+                                class="grow @error('password') is-invalid @enderror" placeholder="••••••••" />
                         </div>
                         @error('password')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -78,7 +78,8 @@
                         <div class="input">
                             <span class="icon-[tabler--key] text-base-content/80 my-auto me-3 size-5 shrink-0"></span>
                             <input wire:model.defer="password_confirmation" type="password" id="password_confirmation"
-                                class="grow" placeholder="••••••••" />
+                                class="grow @error('password_confirmation') is-invalid @enderror"
+                                placeholder="••••••••" />
                         </div>
                         @error('password_confirmation')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -87,7 +88,8 @@
 
                     <div class="mb-6">
                         <div class="flex items-center">
-                            <input wire:model="terms" type="checkbox" class="checkbox checkbox-primary" id="terms"
+                            <input wire:model="terms" type="checkbox"
+                                class="checkbox checkbox-primary @error('terms') is-invalid @enderror" id="terms"
                                 required />
                             <label for="terms" class="ml-2 block text-sm text-gray-700">
                                 Saya setuju dengan <a href="#" class="text-blue-600 hover:text-blue-500">syarat
