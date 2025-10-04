@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Tenant\Karyawan;
 
-use App\Enums\TenantRole;
 use App\Livewire\Forms\EmployeeForm;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +77,7 @@ class KaryawanEdit extends Component
         if ($this->form->password) {
             $this->form->password = bcrypt($this->form->password);
         } else {
-            $this->form->password =$this->karyawan->password;
+            $this->form->password = $this->karyawan->password;
         }
 
         $this->karyawan->update($this->form->all());

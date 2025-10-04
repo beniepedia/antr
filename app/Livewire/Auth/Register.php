@@ -46,6 +46,8 @@ class Register extends Component
             'password' => Hash::make($this->password),
         ]);
 
+        $user->sendEmailVerificationNotification();
+
         Auth::guard('tenant')->login($user);
 
         session()->regenerate();

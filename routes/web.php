@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailVerificationController;
 use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
@@ -27,6 +28,16 @@ use App\Livewire\Tenant\Subscription;
 use App\Livewire\Tenant\Upgrade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/email', function(){
+$user = \App\Models\User::find(3);
+
+    $notification = new \App\Notifications\VerifyEmail;
+
+    // tapi toMail butuh notifiable dan signed url; jadi cara ini agak repot
+    $mailMessage = $notification->toMail($user);
+    return $mailMessage->render();
+});
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -71,7 +82,19 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 // For dashboard routes, bungkus with middleware auth:
 Route::middleware('auth:tenant')->group(function () {
 
-    Route::middleware('tenant.active')->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user('tenant')->sendEmailVerificationNotification();
+
+        return back()->with('resent', true);
+    })->middleware('throttle:6,1')->name('verification.send');
+
+    Route::get('/email/verify/{id}/{hash}', EmailVerificationController::class)->name('verification.verify');
+
+    Route::middleware(['tenant.active', 'verified'])->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('tenant.dashboard');
 
         Route::get('/queues', QueueIndex::class)->name('tenant.antrian');
