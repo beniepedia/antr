@@ -15,6 +15,7 @@ class PlansSeeder extends Seeder
         $plans = [
             [
                 'name' => 'Free Trial',
+                'slug' => 'free',
                 'price' => 0.00,
                 'description' => 'Trial gratis selama 10 hari untuk mencoba fitur dasar.',
                 'billing_cycle' => 'trial',
@@ -29,6 +30,7 @@ class PlansSeeder extends Seeder
             ],
             [
                 'name' => 'Bulanan',
+                'slug' => 'bulanan',
                 'price' => 50000.00,
                 'description' => 'Langganan bulanan dengan akses penuh fitur.',
                 'billing_cycle' => 'monthly',
@@ -43,6 +45,7 @@ class PlansSeeder extends Seeder
             ],
             [
                 'name' => 'Tahunan',
+                'slug' => 'tahunan',
                 'price' => 500000.00,
                 'description' => 'Langganan tahunan dengan diskon dan prioritas support.',
                 'billing_cycle' => 'yearly',

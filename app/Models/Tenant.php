@@ -52,6 +52,14 @@ class Tenant extends Model
             ->first();
     }
 
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscriptions()
+            ->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->exists();
+    }
+
     public function customers()
     {
         return $this->hasMany(Customer::class);

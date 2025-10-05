@@ -122,7 +122,7 @@ Route::middleware('auth:tenant')->group(function () {
 
     Route::middleware('verified')->group(function(){
         Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
-        Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
+        Route::get('/payment/{plan:slug}', Payment::class)->name('tenant.subscription.payment');
 
         Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
         Route::get('/subscription', Subscription::class)->name('tenant.subscription');

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureTenantIsActive
@@ -17,16 +18,22 @@ class EnsureTenantIsActive
     {
         $user = auth('tenant')->user();
 
-        // belum isi tenant
+        // Belum punya tenant → redirect onboarding
         if (is_null($user->tenant_id)) {
             return redirect()->route('tenant.onboarding');
         }
 
-        // cek langganan aktif
-        $subscription = $user->tenant->subscriptions();
+        $tenant = $user->tenant;
+        $cacheKey = "tenant:{$tenant->id}:active";
 
-        if ($subscription->get()->isEmpty()) {
-            return redirect()->route('tenant.subscription');
+        // Cache status aktif selama 1 jam (3600 detik)
+        $isActive = Cache::remember($cacheKey, 3600, function () use ($tenant) {
+            return $tenant->hasActiveSubscription();
+        });
+
+        // Jika tidak aktif, arahkan ke halaman upgrade
+        if (!$isActive) {
+            return redirect()->route('tenant.upgrade');
         }
 
         return $next($request);

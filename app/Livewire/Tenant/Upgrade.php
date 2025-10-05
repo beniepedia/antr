@@ -10,7 +10,7 @@ class Upgrade extends Component
 
     public function selectPlan($planId)
     {
-        return redirect()->route('tenant.subscription.payment', ['plan' => $planId]);
+        return redirect()->route('tenant.subscription.payment', ['slug' => $planId]);
     }
 
     public function render()

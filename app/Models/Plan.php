@@ -23,4 +23,9 @@ class Plan extends Model
         'price' => 'decimal:2',
         'features' => 'array',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

@@ -36,20 +36,23 @@
                 <!-- Discount Section -->
                 <div class="mb-4">
                     <label class="label">
-                        <span class="label-text font-medium">Kode Diskon (Opsional)</span>
+                        <span class="label-text font-medium">Kode Promo (Opsional)</span>
                     </label>
                     <div class="flex gap-2">
                         <input type="text" class="input input-bordered flex-1" wire:model="discountCode"
-                            placeholder="Masukkan kode diskon">
+                            placeholder="Masukkan kode promo">
                         <button type="button" class="btn btn-outline btn-primary" wire:click="applyDiscount">
                             <span class="icon-[tabler--tag] size-4"></span>
                             Terapkan
                         </button>
                     </div>
+                    @error('coupon')
+                        <h6 class="text-helper text-red-600 mt-2 ml-2">{{ $message }}</h6>
+                    @enderror
                     @if ($discountAmount > 0)
                         <div class="text-green-600 text-sm mt-2 flex items-center gap-1">
                             <span class="icon-[tabler--circle-check] size-4"></span>
-                            Diskon diterapkan: Rp {{ number_format($discountAmount) }}
+                            Kode promo berhasil diterapkan: Rp {{ number_format($discountAmount) }}
                         </div>
                     @endif
                 </div>
@@ -124,7 +127,7 @@
                             <span class="icon-[tabler--credit-card] size-5"></span>
                             Bayar Sekarang
                         </button>
-                        <a href="{{ route('tenant.upgrade') }}"
+                        <a href="{{ route('tenant.upgrade') }}" wire:navigate
                             class="btn btn-outline btn-secondary w-full md:flex-1 btn-lg order-2 md:order-1">
                             <span class="icon-[tabler--arrow-left] size-5"></span>
                             Kembali
@@ -135,34 +138,32 @@
         </div>
     </div>
 
-    <!-- Duitku POP Script -->
-    @push('scripts')
-        <script src="{{ config('duitku.url') }}"></script>
-        <script>
-            document.addEventListener('livewire:init', () => {
-                console.log("Livewire Loaded");
 
-                Livewire.on('open-payment-popup', (event) => {
-                    console.log("Event diterima:", event);
+</div>
 
-                    checkout.process(event.reference, {
-                        defaultLanguage: "id",
-                        successEvent: function(result) {
-                            console.log('Payment Success:', result);
-                            window.location.href = '{{ route('tenant.dashboard') }}';
-                        },
-                        pendingEvent: function(result) {
-                            console.log('Payment Pending:', result);
-                        },
-                        errorEvent: function(result) {
-                            console.log('Payment Error:', result);
-                        },
-                        closeEvent: function(result) {
-                            console.log('Popup closed:', result);
-                        }
-                    });
+<!-- Duitku POP Script -->
+@push('scripts')
+    <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('open-payment-popup', (event) => {
+
+                checkout.process(event.reference, {
+                    defaultLanguage: "id",
+                    successEvent: function(result) {
+                        window.location.href = '{{ route('tenant.dashboard') }}';
+                    },
+                    pendingEvent: function(result) {
+                        console.log('Payment Pending:', result);
+                    },
+                    errorEvent: function(result) {
+                        console.log('Payment Error:', result);
+                    },
+                    closeEvent: function(result) {
+                        console.log('Popup closed:', result);
+                    }
                 });
             });
-        </script>
-    @endpush
-</div>
+        });
+    </script>
+@endpush

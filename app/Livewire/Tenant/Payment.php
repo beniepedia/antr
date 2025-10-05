@@ -2,110 +2,79 @@
 
 namespace App\Livewire\Tenant;
 
-use AdityaDarma\LaravelDuitku\Facades\DuitkuPOP;
+use App\Models\Coupon;
 use App\Models\Plan;
+use App\Services\PaymentService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Payment extends Component
 {
-    public $planId;
-
-    public $plan;
-
+    public $plan, $planId;
+    public $fullName, $email;
     public $paymentMethod = 'VC';
-
-    public $paymentMethods = [];
-
+    public $discountCode = '', $discountAmount = 0, $coupon = null;
     public $reference;
 
-    public $fullName;
-
-    public $email;
-
-    public $discountCode = '';
-
-    public $discountAmount = 0;
-
-    public function mount($plan)
+    public function mount(Plan $plan)
     {
-        $this->planId = $plan;
-        $this->plan = Plan::find($plan);
-        if (! $this->plan) {
-            abort(404, 'Plan not found');
-        }
-        $this->fullName = Auth::guard('tenant')->user()->name ?? '';
-        $this->email = Auth::guard('tenant')->user()->email ?? '';
-
+        $this->plan = $plan;
+        $this->planId = $plan->id;
+        $user = Auth::guard('tenant')->user();
+        $this->fullName = $user->name;
+        $this->email = $user->email;
     }
 
     public function applyDiscount()
     {
-        // Simple discount logic - in real app, check against database
-        if (strtoupper($this->discountCode) === 'DISKON20') {
-            $this->discountAmount = $this->plan->price * 0.2; // 20% discount
-            session()->flash('success', 'Kode diskon berhasil diterapkan!');
-        } elseif (strtoupper($this->discountCode) === 'WELCOME10') {
-            $this->discountAmount = $this->plan->price * 0.1; // 10% discount
-            session()->flash('success', 'Kode diskon berhasil diterapkan!');
-        } else {
-            $this->discountAmount = 0;
-            session()->flash('error', 'Kode diskon tidak valid.');
-        }
+        $code = strtoupper(trim($this->discountCode));
+        if (!$code) return $this->addError('coupon', 'Masukkan kode promo.');
+
+        $coupon = Coupon::active()->where('code', $code)->first();
+        if (!$coupon) return $this->addError('coupon', 'Kode kupon tidak valid atau sudah kedaluwarsa.');
+
+        if (!$coupon->isValidFor($this->plan))
+            return $this->addError('coupon', 'Kupon tidak berlaku untuk plan ini.');
+
+        $this->discountAmount = $coupon->calculateDiscount($this->plan);
+        $coupon->markUsed();
+        $this->coupon = $coupon;
+
+        $this->resetErrorBag('coupon');
+        $this->js("notyf.success('Kupon berhasil diterapkan.')");
+        
     }
 
-    public function processPayment()
+    public function processPayment(PaymentService $paymentService)
     {
-        // Validate
         $this->validate([
             'paymentMethod' => 'required',
-            'fullName' => 'required|string|max:255',
-            'email' => 'required|email',
+            'fullName'      => 'required|string|max:255',
+            'email'         => 'required|email',
         ]);
 
-        // Calculate final amount
-        $finalAmount = $this->plan->price - $this->discountAmount;
+        $tenant = Auth::guard('tenant')->user();
+        $amount = max(0, $this->plan->price - $this->discountAmount);
 
-        if ($finalAmount <= 0) {
-            session()->flash('error', 'Total pembayaran tidak valid.');
+        if ($amount <= 0) return $this->js("notyf.error('Total pembayaran tidak valid.')");
 
+        $trx = $paymentService->createPayment(
+            $tenant,
+            $this->plan,
+            $amount,
+            $this->fullName,
+            $this->email,
+            $this->paymentMethod,
+            $this->coupon
+        );
+
+        if (!$trx) {
+            $this->js("notyf.error('Gagal membuat transaksi.')");
             return;
         }
 
-        try {
-            $transaction = DuitkuPOP::createTransaction([
-                'merchantOrderId' => 'PAY-'.$this->planId.'-'.time(),
-                'customerVaName' => $this->fullName,
-                'email' => $this->email,
-                'paymentAmount' => $finalAmount,
-                'paymentMethod' => $this->paymentMethod,
-                'productDetails' => 'Upgrade Paket: '.$this->plan->name,
-                'itemDetails' => [
-                    [
-                        'name' => $this->plan->name,
-                        'price' => $finalAmount,
-                        'quantity' => 1,
-                    ],
-                ],
-                'customerDetail' => [
-                    'firstName' => $this->fullName,
-                    'lastName' => '',
-                    'email' => $this->email,
-                ],
-                'returnUrl' => route('tenant.dashboard'),
-                // 'callbackUrl' => route('tenant.payment.callback'), // Uncomment if route exists
-            ]);
-
-            if (isset($transaction->reference)) {
-                $this->reference = $transaction->reference;
-                // Emit event to trigger popup
-                $this->dispatch('open-payment-popup', reference: $this->reference);
-            } else {
-                $this->dispatch('notify', type: 'error', message: 'Gagal membuat transaksi pembayaran.');
-            }
-        } catch (\Exception $e) {
-            $this->dispatch('notify', type: 'error', message: 'Terjadi kesalahan, silahkan coba beberapa saat lagi.');
-        }
+        $this->reference = $trx->payment_ref;
+        $this->dispatch('open-payment-popup', reference: $trx->payment_ref, paymentUrl: $trx->meta['payment_url'] ?? null);
     }
 
     public function render()
