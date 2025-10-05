@@ -25,6 +25,7 @@ class Tenant extends Model
     protected $casts = [
         'opening_time' => 'datetime:H:i',
         'closing_time' => 'datetime:H:i',
+        'max_queue_time' => 'datetime:H:i',
     ];
 
     public function users()

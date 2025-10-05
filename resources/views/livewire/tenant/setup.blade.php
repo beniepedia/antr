@@ -49,35 +49,46 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
                         <div>
-                            <label for="max_queue_time" class="label">
-                                <span class="label-text">Batas Waktu Ambil Antrian</span>
+                            <label for="opening_time" class="label">
+                                <span class="label-text">Jam Buka SPBU</span>
                             </label>
-                            <input id="max_queue_time" wire:model="max_queue_time" type="text"
-                                class="input input-bordered md:input-lg flatpickr" placeholder="Contoh: 14:00"
-                                data-time-only="true">
-                            <p class="text-gray-500 text-sm mt-1">Batas waktu maksimal untuk mengambil antrian
-                                (opsional).</p>
-                            @error('max_queue_time')
+                            <input id="opening_time" wire:model="opening_time" type="text"
+                                class="input input-bordered md:input-lg flatpickr" placeholder="" data-time-only="true">
+                            @error('opening_time')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label for="url" class="label">
-                                <span class="label-text">URL Subdomain</span>
+                            <label for="closing_time" class="label">
+                                <span class="label-text">Jam Tutup SPBU</span>
                             </label>
-                            <div class="join w-full">
-                                <input id="url" wire:model="url" type="text" required
-                                    class="input input-bordered join-item md:input-lg flex-1" placeholder="tes">
-                                <span
-                                    class="join-item bg-primary px-3 font-bold text-base-100 flex items-center">.{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
-                            </div>
-                            <p class="text-gray-500 text-sm mt-1">URL subdomain digunakan untuk pelanggan mengambil
-                                nomor
-                                antrian dan tidak dapat diubah setelah tenant dibuat.</p>
-                            @error('url')
+                            <input id="closing_time" wire:model="closing_time" type="text"
+                                class="input input-bordered md:input-lg flatpickr" placeholder="Contoh: 14:00"
+                                data-time-only="true">
+
+                            @error('closing_time')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+
+                    </div>
+
+                    <div>
+                        <label for="url" class="label">
+                            <span class="label-text">URL Subdomain</span>
+                        </label>
+                        <div class="join w-full">
+                            <input id="url" wire:model="url" type="text" required
+                                class="input input-bordered join-item md:input-lg w-full" placeholder="example">
+                            <span
+                                class="join-item bg-primary px-3 font-bold text-base-100 flex items-center">.{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-1">URL subdomain digunakan untuk pelanggan mengambil
+                            nomor
+                            antrian dan tidak dapat diubah setelah tenant dibuat.</p>
+                        @error('url')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mt-2">
                         <label for="address" class="label">
@@ -115,13 +126,21 @@
 
 @push('scripts')
     <script>
-        document.addEventListener("livewire:init", () => {
+        function initFlatpicker() {
             window.flatpickr(".flatpickr", {
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "H:i",
                 time_24hr: true,
             });
+        }
+
+        document.addEventListener("livewire:init", () => {
+            initFlatpicker()
+        });
+
+        document.addEventListener("livewire:navigated", () => {
+            initFlatpicker()
         });
     </script>
 @endpush

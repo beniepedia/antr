@@ -26,19 +26,14 @@ class Setup extends Component
     #[Validate('required|string|max:20')]
     public $phone;
 
+    #[Validate('required|string|regex:/^[a-zA-Z0-9\-]+$/|max:50|unique:tenants,url')]
     public $url;
 
-    public $max_queue_time;
+    #[Validate('required')]
+    public $opening_time;
 
-    protected $rules = [
-        'code' => 'required|string|max:50|unique:tenants,code',
-        'name' => 'required|string|max:150',
-        'address' => 'required|string',
-        'whatsapp' => 'required|string|max:20',
-        'phone' => 'nullable|string|max:20',
-        'url' => 'required|string|regex:/^[a-zA-Z0-9\-]+$/|max:50|unique:tenants,url',
-        'max_queue_time' => 'nullable|date_format:H:i',
-    ];
+    #[Validate('required')]
+    public $closing_time;
 
     public function mount()
     {
@@ -51,20 +46,12 @@ class Setup extends Component
 
     public function save()
     {
-        $this->validate();
+        $validated =$this->validate();
 
         $user = Auth::guard('tenant')->user();
 
         // Buat tenant baru
-        $tenant = Tenant::create([
-            'code' => $this->code,
-            'name' => $this->name,
-            'address' => $this->address,
-            'whatsapp' => $this->whatsapp,
-            'phone' => $this->phone,
-            'url' => $this->url,
-            'max_queue_time' => $this->max_queue_time,
-        ]);
+        $tenant = Tenant::create($validated);
 
         // Update user dengan tenant_id
         $user->update(['tenant_id' => $tenant->id]);
@@ -82,7 +69,7 @@ class Setup extends Component
             ]);
         }
 
-        return redirect()->route('tenant.dashboard')->with('success', 'Setup berhasil! Paket trial telah diaktifkan. Selamat datang di dashboard');
+        return $this->redirectIntended(route('tenant.dashboard'), navigate:true);
     }
 
     public function logout()

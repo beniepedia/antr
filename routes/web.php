@@ -110,21 +110,23 @@ Route::middleware('auth:tenant')->group(function () {
 
         Route::get('/settings', TenantSettings::class)->name('tenant.settings');
         Route::get('/print', PrintLabel::class)->name('tenant.print');
+
+        Route::post('/logout', function () {
+            Auth::guard('tenant')->logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            return redirect()->route('login')->header('X-Livewire-Navigate', 'true');
+        })->name('tenant.logout');
     });
 
-    Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
-    Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
+    Route::middleware('verified')->group(function(){
+        Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
+        Route::get('/payment/{plan}', Payment::class)->name('tenant.subscription.payment');
 
-    Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
-    Route::get('/subscription', Subscription::class)->name('tenant.subscription');
-
-    Route::post('/logout', function () {
-        Auth::guard('tenant')->logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
-        return redirect()->route('login')->header('X-Livewire-Navigate', 'true');
-    })->name('tenant.logout');
+        Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
+        Route::get('/subscription', Subscription::class)->name('tenant.subscription');
+    });
 
 });
 
