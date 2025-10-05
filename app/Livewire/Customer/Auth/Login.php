@@ -3,6 +3,7 @@
 namespace App\Livewire\Customer\Auth;
 
 use App\Models\Customer;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -74,6 +75,13 @@ class Login extends Component
         $customer->is_active = true; // default aktif
         $customer->save();
 
+        // Send OTP via WhatsApp
+        $message = "Kode OTP anda adalah {$customer->otp_code}. Untuk alasan keamanan, jangan bagikan kode ini kepada siapa pun.";
+        if (!WhatsAppService::sendMessage($this->phone, $message)) {
+            $this->dispatch('notify', type: 'error', message: 'Gagal mengirim OTP via WhatsApp. coba beberapa saat lagi.');
+            return;
+        }
+
         // Set timer resend
         $this->resendExpiresAt = time() + self::RESEND_TIMER_DURATION;
         session([
@@ -84,7 +92,7 @@ class Login extends Component
 
         $this->otpSent = true;
 
-        $this->dispatch('notify', type: 'success', message: "Kode OTP dikirim (code: {$customer->otp_code})");
+        $this->dispatch('notify', type: 'success', message: 'Kode OTP telah dikirim via WhatsApp.');
     }
 
     // ===========================
