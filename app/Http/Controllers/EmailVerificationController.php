@@ -19,7 +19,6 @@ class EmailVerificationController extends Controller implements HasMiddleware
 
     public function __invoke(Request $request)
     {
-        // dd($request);
         if ($request->user('tenant')->hasVerifiedEmail()) {
             return redirect()->intended(route('tenant.dashboard'));
         }
