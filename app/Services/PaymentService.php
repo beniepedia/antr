@@ -80,7 +80,7 @@ class PaymentService
                     'phoneNumber' => $phone,
                 ],
                 'returnUrl'   => route('tenant.dashboard'),
-                // 'callbackUrl' => route('tenant.payment.callback'),
+                'callbackUrl' => route('tenant.payment.callback'),
             ]);
 
             if (empty($res->reference)) {

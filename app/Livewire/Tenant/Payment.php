@@ -6,13 +6,14 @@ use App\Models\Coupon;
 use App\Models\Plan;
 use App\Services\PaymentService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class Payment extends Component
 {
     public $plan, $planId;
     public $fullName, $email, $phone;
-    public $paymentMethod = 'VC';
+    public $paymentMethod = '';
     public $discountCode = '', $discountAmount = 0, $coupon = null;
     public $reference;
 
@@ -49,12 +50,11 @@ class Payment extends Component
     public function processPayment(PaymentService $paymentService)
     {
         $this->validate([
-            'paymentMethod' => 'required',
             'fullName'      => 'required|string|max:255',
             'email'         => 'required|email',
             'phone'         => 'required|min:10|max:15',
         ]);
-
+   
         $tenant = Auth::guard('tenant')->user();
         $amount = max(0, $this->plan->price - $this->discountAmount);
 

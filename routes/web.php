@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\PaymentController;
 use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
@@ -26,6 +27,7 @@ use App\Livewire\Tenant\Settings as TenantSettings;
 use App\Livewire\Tenant\Setup;
 use App\Livewire\Tenant\Subscription;
 use App\Livewire\Tenant\Upgrade;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -129,6 +131,12 @@ Route::middleware('auth:tenant')->group(function () {
     });
 
 });
+
+
+// Payment Callback
+Route::post('/payment/callback', [PaymentController::class, 'callback'])
+->withoutMiddleware([VerifyCsrfToken::class])
+->name('tenant.payment.callback');
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
 //     Route::get('/dashboard', function () {
