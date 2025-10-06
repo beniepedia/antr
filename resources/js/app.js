@@ -4,7 +4,9 @@ import './main.js';
 import './echo';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import './flatpickr.js';
+
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 
 
 function initNotyf() {
@@ -14,7 +16,13 @@ function initNotyf() {
         dismissible: true,
     });
 
-    window.flatpickr = flatpickr
+    flatpickr(".flatpickr", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+            });
+    
 }
 
 // inisialisasi awal

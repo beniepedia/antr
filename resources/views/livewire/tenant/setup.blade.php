@@ -2,13 +2,13 @@
     <div class="w-full max-w-4xl">
         <div class="bg-base-100 border-2 border-gray-300 rounded-2xl shadow-xl overflow-hidden">
             <div class="p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-800 text-center mb-2">{{ __('tenant_setup.header') }}</h2>
-                <p class="text-gray-600 text-center mb-10">{{ __('tenant_setup.subinfo') }} </p>
+                <h2 class="text-2xl font-bold text-gray-800 text-center mb-2">{{ __('setup tenant') }}</h2>
+                <p class="text-gray-600 text-center mb-10">{{ __('please fill before continue') }} </p>
                 <form class="mt-6 space-y-4" novalidate wire:submit.prevent="save">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label for="code" class="label">
-                                <span class="label-text">Kode SPBU</span>
+                                <span class="label-text">{{ __('tenant code') }}</span>
                             </label>
                             <input id="code" wire:model="code" type="text" required
                                 class="input input-bordered md:input-lg" placeholder="Kode SPBU">
@@ -53,7 +53,8 @@
                                 <span class="label-text">Jam Buka SPBU</span>
                             </label>
                             <input id="opening_time" wire:model="opening_time" type="text"
-                                class="input input-bordered md:input-lg flatpickr" placeholder="" data-time-only="true">
+                                class="input input-bordered md:input-lg flatpickr" placeholder="Cth: 07:00"
+                                data-time-only="true">
                             @error('opening_time')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -63,7 +64,7 @@
                                 <span class="label-text">Jam Tutup SPBU</span>
                             </label>
                             <input id="closing_time" wire:model="closing_time" type="text"
-                                class="input input-bordered md:input-lg flatpickr" placeholder="Contoh: 14:00"
+                                class="input input-bordered md:input-lg flatpickr" placeholder="Cth: 14:00"
                                 data-time-only="true">
 
                             @error('closing_time')
@@ -124,7 +125,7 @@
 </div>
 
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         function initFlatpicker() {
             window.flatpickr(".flatpickr", {
@@ -143,4 +144,4 @@
             initFlatpicker()
         });
     </script>
-@endpush
+@endpush --}}
