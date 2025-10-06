@@ -156,7 +156,7 @@
 </div>
 
 <!-- Duitku POP Script -->
-@push('scripts')
+{{-- @push('scripts')
     <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
     <script>
         document.addEventListener('livewire:init', () => {
@@ -180,4 +180,4 @@
             });
         });
     </script>
-@endpush
+@endpush --}}

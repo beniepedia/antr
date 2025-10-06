@@ -76,8 +76,15 @@ class Payment extends Component
             return;
         }
 
-        $this->reference = $trx->payment_ref;
-        $this->dispatch('open-payment-popup', reference: $trx->payment_ref, paymentUrl: $trx->meta['payment_url'] ?? null);
+        $redirectUrl = $trx->payment_url ?? $trx->meta['payment_url'];
+
+        if(!$redirectUrl){
+            $this->js('notyf.error("Gagal memproses pembayaran. Silahkan coba beberapa saat lagi.")');
+            return;
+        }
+        return $this->redirectIntended($trx->payment_url ?? $trx->meta['payment_url']);
+        // $this->reference = $trx->payment_ref;
+        // $this->dispatch('open-payment-popup', reference: $trx->payment_ref, paymentUrl: $trx->meta['payment_url'] ?? null);
     }
 
     public function render()

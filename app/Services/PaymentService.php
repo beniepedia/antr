@@ -97,6 +97,7 @@ class PaymentService
                 'payment_url' => $res->paymentUrl ?? null,
                 'meta'        => [
                     'response'    => $res,
+                    'payment_url' => $res->paymentUrl ?? null,
                 ],
             ]);
             DB::commit();
