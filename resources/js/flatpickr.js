@@ -12,31 +12,31 @@ export function InitFlatFickr() {
         const isDateTime = el.dataset.datetime === "true";
 
         let options = {
-            noCalendar: true,
-            dateFormat: "Y-m-d",
-            enableTime: isTimeOnly || false,
+            noCalendar: false,
+            dateFormat: "d/m/Y H:i",
+            enableTime: true,
             time_24hr: true,
         };
 
-        // if (isTimeOnly) {
-        //     options = {
-        //         noCalendar: true,
-        //         enableTime: true,
-        //         dateFormat: "H:i",
-        //         time_24hr: true,
-        //     };
-        // } else if (isDateOnly) {
-        //     options = {
-        //         enableTime: false,
-        //         dateFormat: "Y-m-d",
-        //     };
-        // } else if (isDateTime) {
-        //     options = {
-        //         enableTime: true,
-        //         dateFormat: "Y-m-d H:i",
-        //         time_24hr: true,
-        //     };
-        // }
+        if (isTimeOnly) {
+            options = {
+                noCalendar: true,
+                enableTime: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+            };
+        } else if (isDateOnly) {
+            options = {
+                enableTime: false,
+                dateFormat: "d/m/Y",
+            };
+        } else if (isDateTime) {
+            options = {
+                enableTime: true,
+                dateFormat: "d/m/Y H:i",
+                time_24hr: true,
+            };
+        }
 
         flatpickr(el, options);
     });
