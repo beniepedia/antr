@@ -11,7 +11,7 @@ use Livewire\Component;
 class Payment extends Component
 {
     public $plan, $planId;
-    public $fullName, $email;
+    public $fullName, $email, $phone;
     public $paymentMethod = 'VC';
     public $discountCode = '', $discountAmount = 0, $coupon = null;
     public $reference;
@@ -23,6 +23,7 @@ class Payment extends Component
         $user = Auth::guard('tenant')->user();
         $this->fullName = $user->name;
         $this->email = $user->email;
+        $this->phone = $user->tenant->phone;
     }
 
     public function applyDiscount()
@@ -51,6 +52,7 @@ class Payment extends Component
             'paymentMethod' => 'required',
             'fullName'      => 'required|string|max:255',
             'email'         => 'required|email',
+            'phone'         => 'required|min:10|max:15',
         ]);
 
         $tenant = Auth::guard('tenant')->user();
@@ -64,6 +66,7 @@ class Payment extends Component
             $amount,
             $this->fullName,
             $this->email,
+            $this->phone,
             $this->paymentMethod,
             $this->coupon
         );

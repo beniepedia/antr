@@ -14,20 +14,21 @@
 
         <!-- Plan Summary -->
         <div class="card mb-8 rounded-2xl shadow-lg">
-            <div class="card-body p-6">
+            <div class="card-body ">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="card-title text-lg">Ringkasan Paket</h2>
+                    <h2 class="card-title text-xl">Ringkasan Paket</h2>
                     <span class="icon-[tabler--package] size-6 text-primary"></span>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div>
+                <div class="md:bg-gray-100 md:p-6 rounded-lg mb-4">
+                    <div class="flex flex-col gap-x-6 md:flex-row justify-between items-center mb-2">
+                        <div class="mb-8 md:mb-0">
                             <h3 class="text-xl font-bold text-gray-900">{{ $plan->name }}</h3>
-                            <p class="text-gray-600 text-sm">
-                                {{ $plan->description ?? 'Deskripsi paket tidak tersedia' }}</p>
+                            <p class="text-gray-600 ">
+                                {{ $plan->description ?? '' }}</p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-2xl md:text-3xl font-bold text-primary">Rp
+                        <div
+                            class="text-center py-3 bg-gray-100 md:bg-gray-100 border-b-3 border-indigo-400 md:border-none w-full md:w-auto">
+                            <p class="text-3xl font-bold text-primary text-nowrap">Rp
                                 {{ number_format($plan->price ?? 0) }}</p>
                         </div>
                     </div>
@@ -38,26 +39,30 @@
                     <label class="label">
                         <span class="label-text font-medium">Kode Promo (Opsional)</span>
                     </label>
-                    <div class="flex gap-2">
-                        <input type="text" class="input input-bordered flex-1" wire:model="discountCode"
-                            placeholder="Masukkan kode promo">
-                        <button type="button" class="btn btn-outline btn-primary" wire:click="applyDiscount">
+                    <div class="flex flex-col md:flex-row gap-2">
+                        <div class="w-full">
+                            <input type="text" class="input " wire:model="discountCode"
+                                placeholder="Masukkan kode promo">
+                            @error('coupon')
+                                <h6 class="text-red-600 mt-2 ml-2 text-sm ">{{ $message }}</h6>
+                            @enderror
+                            @if ($discountAmount > 0)
+                                <div class="text-green-600 text-sm mt-2 flex items-center gap-1">
+                                    <span class="icon-[tabler--circle-check] size-4"></span>
+                                    Kode promo berhasil diterapkan: Rp {{ number_format($discountAmount) }}
+                                </div>
+                            @endif
+                        </div>
+
+                        <button type="button" class="btn btn-primary" wire:click="applyDiscount">
                             <span class="icon-[tabler--tag] size-4"></span>
                             Terapkan
                         </button>
                     </div>
-                    @error('coupon')
-                        <h6 class="text-helper text-red-600 mt-2 ml-2">{{ $message }}</h6>
-                    @enderror
-                    @if ($discountAmount > 0)
-                        <div class="text-green-600 text-sm mt-2 flex items-center gap-1">
-                            <span class="icon-[tabler--circle-check] size-4"></span>
-                            Kode promo berhasil diterapkan: Rp {{ number_format($discountAmount) }}
-                        </div>
-                    @endif
+
                 </div>
 
-                <hr class="my-4">
+                <hr class="mt-5">
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="font-semibold text-gray-700">Subtotal</span>
@@ -83,19 +88,29 @@
         <div class="card rounded-2xl shadow-lg">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="card-title text-lg">Informasi Pembayaran</h2>
+                    <h2 class="card-title text-xl">Informasi Pembayaran</h2>
                     <span class="icon-[tabler--shield-check] size-6 text-green-500"></span>
                 </div>
                 <form wire:submit.prevent="processPayment" class="space-y-6">
                     <div class="grid gap-6 md:grid-cols-2">
-
                         <div>
                             <label class="label">
                                 <span class="label-text font-medium">Nama Lengkap</span>
                             </label>
-                            <input type="text" class="input input-bordered w-full focus:ring-2 focus:ring-primary"
-                                wire:model="fullName" placeholder="Masukkan nama lengkap">
+                            <input type="text" class="input  w-full " wire:model="fullName"
+                                placeholder="Masukkan nama lengkap anda">
                             @error('fullName')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-medium">No. Handphone</span>
+                            </label>
+                            <input type="text" class="input  w-full " wire:model="phone"
+                                placeholder="Masukkan nomor handphone">
+                            @error('phone')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
@@ -105,8 +120,7 @@
                         <label class="label">
                             <span class="label-text font-medium">Email</span>
                         </label>
-                        <input type="email" class="input input-bordered w-full focus:ring-2 focus:ring-primary"
-                            wire:model="email" placeholder="Masukkan email">
+                        <input type="email" class="input  w-full " wire:model="email" placeholder="Masukkan email">
                         @error('email')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -125,7 +139,7 @@
                         <button type="submit"
                             class="btn btn-primary w-full md:flex-1 btn-lg shadow-lg order-1 md:order-2">
                             <span class="icon-[tabler--credit-card] size-5"></span>
-                            Bayar Sekarang
+                            Proses Pembayaran
                         </button>
                         <a href="{{ route('tenant.upgrade') }}" wire:navigate
                             class="btn btn-outline btn-secondary w-full md:flex-1 btn-lg order-2 md:order-1">

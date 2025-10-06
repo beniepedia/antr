@@ -31,7 +31,6 @@
                             <div class="mt-4">
                                 <span class="text-4xl font-bold text-primary">Rp
                                     {{ number_format($plan->price ?? 0) }}</span>
-                                <span class="text-gray-500">/bulan</span>
                             </div>
                         </div>
 
