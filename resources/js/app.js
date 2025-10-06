@@ -1,13 +1,10 @@
-import './bootstrap';
-import "flyonui/flyonui"
-import './main.js';
-import './echo';
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
-
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
-
+import "./bootstrap";
+import "flyonui/flyonui";
+import "./main.js";
+import "./echo";
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+import { InitFlatFickr } from "./flatpickr.js";
 
 function initNotyf() {
     window.notyf = new Notyf({
@@ -15,18 +12,12 @@ function initNotyf() {
         position: { x: "right", y: "top" },
         dismissible: true,
     });
-
-    flatpickr(".flatpickr", {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true,
-            });
-    
 }
 
 // inisialisasi awal
 initNotyf();
+
+InitFlatFickr();
 
 document.addEventListener("livewire:init", () => {
     Livewire.on("notify", ({ type, message }) => {
@@ -39,36 +30,41 @@ document.addEventListener("livewire:init", () => {
     });
 });
 
-const reinitFlyonUI = () => {
+const reinitUI = () => {
     try {
-        if (window.HSStaticMethods && typeof window.HSStaticMethods.autoInit === 'function') {
-            window.HSStaticMethods.autoInit('all');
+        if (
+            window.HSStaticMethods &&
+            typeof window.HSStaticMethods.autoInit === "function"
+        ) {
+            window.HSStaticMethods.autoInit("all");
             if (window.HSSelect) {
-                window.HSSelect.getInstance('#select');
+                window.HSSelect.getInstance("#select");
             }
         }
     } catch (e) {
         console.warn("FlyonUI reinit gagal:", e);
     }
+
+    // Reinitialize flatpickr after DOM updates
 };
 
+// --- hook untuk UI setelah navigasi/DOM update ---
+document.addEventListener("livewire:load", () => {
+    reinitUI();
+    InitFlatFickr();
 
-// --- hook untuk FlyonUI setelah navigasi/DOM update ---
-document.addEventListener('livewire:load', () => {
-    reinitFlyonUI();
-
-    if (window.Livewire && typeof window.Livewire.hook === 'function') {
-        window.Livewire.hook('message.processed', () => {
-            reinitFlyonUI();
+    if (window.Livewire && typeof window.Livewire.hook === "function") {
+        window.Livewire.hook("message.processed", () => {
+            reinitUI();
         });
     }
 });
 
-document.addEventListener('livewire:navigated', () => {
-    reinitFlyonUI();
+document.addEventListener("livewire:navigated", () => {
+    reinitUI();
     initNotyf();
+    InitFlatFickr();
 });
-
 
 // window.Echo.channel('debug-channel')
 //     .listen('.debug.event', (e) => {

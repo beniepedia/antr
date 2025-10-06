@@ -1,18 +1,17 @@
-import Echo from 'laravel-echo';
+import Echo from "laravel-echo";
 
-import Pusher from 'pusher-js';
+import Pusher from "pusher-js";
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: "pusher",
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     wsHost: import.meta.env.VITE_PUSHER_HOST,
     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
-    encrypted: false,        // 🚫 pastikan gak enkripsi
+    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? "https") === "https",
+    encrypted: false, // 🚫 pastikan gak enkripsi
     disableStats: true,
-    enabledTransports: ['ws'], // cukup ws (tanpa wss)
-    cluster: '',
+    enabledTransports: ["ws"], // cukup ws (tanpa wss)
+    cluster: "",
 });
-

@@ -123,12 +123,12 @@
 
     </div>
 </div>
+{{-- 
 
-
-{{-- @push('scripts')
+@push('scripts')
     <script>
         function initFlatpicker() {
-            window.flatpickr(".flatpickr", {
+            flatpickr(".flatpickr", {
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "H:i",
