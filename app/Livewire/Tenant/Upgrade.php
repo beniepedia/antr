@@ -17,6 +17,6 @@ class Upgrade extends Component
     {
         $plans = \App\Models\Plan::all();
 
-        return view('livewire.tenant.upgrade', compact('plans'))->layout('layouts.tenant');
+        return view('livewire.tenant.upgrade', compact('plans'))->layout('layouts.payment');
     }
 }

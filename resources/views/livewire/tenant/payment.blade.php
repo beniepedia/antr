@@ -1,6 +1,6 @@
-<div>
+<div class="px-4">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-12 mb-8 rounded-2xl">
+    <div class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-12 mb-8 rounded-2xl shadow-lg">
         <div class="max-w-2xl mx-auto text-center px-4">
             <div class="mb-4">
                 <span class="icon-[tabler--credit-card] size-12 mx-auto block"></span>
@@ -10,10 +10,9 @@
         </div>
     </div>
 
-    <div class="max-w-2xl mx-auto">
-
+    <div class="max-w-6xl mx-auto">
         <!-- Plan Summary -->
-        <div class="card mb-8 rounded-2xl shadow-lg">
+        <div class="card mb-8 rounded-2xl shadow-lg border">
             <div class="card-body ">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="card-title text-xl">Ringkasan Paket</h2>
@@ -85,7 +84,7 @@
         </div>
 
         <!-- Customer Information Form -->
-        <div class="card rounded-2xl shadow-lg">
+        <div class="card rounded-2xl shadow-lg border">
             <div class="card-body p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="card-title text-xl">Informasi Pembayaran</h2>

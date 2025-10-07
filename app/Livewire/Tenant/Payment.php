@@ -89,6 +89,6 @@ class Payment extends Component
 
     public function render()
     {
-        return view('livewire.tenant.payment')->layout('layouts.tenant');
+        return view('livewire.tenant.payment')->layout('layouts.payment');
     }
 }

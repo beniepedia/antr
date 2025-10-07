@@ -1,6 +1,6 @@
 <div>
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-600 text-white py-8 mb-6 rounded-2xl">
+    <div class="bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-600 text-white py-8 mb-8 rounded-2xl">
         <div class="max-w-4xl mx-auto text-center px-4">
             <div class="mb-6">
                 <span class="icon-[tabler--crown] size-16 mx-auto block mb-4 opacity-90"></span>
@@ -17,11 +17,11 @@
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
             @foreach ($plans as $index => $plan)
                 <div
-                    class="card rounded-2xl {{ $selectedPlan == $plan->id ? 'border-primary ring-2 ring-primary ring-opacity-50 shadow-2xl scale-105' : 'border-gray-200 hover:shadow-xl hover:scale-102' }} transition-all duration-300 bg-white">
+                    class="card rounded-2xl border-primary ring-1 ring-primary ring-opacity-50 transition-all duration-300 border-gray-200 hover:shadow-xl hover:scale-102">
                     <div class="card-body p-6">
-                        @if ($index == 1)
+                        {{-- @if ($index == 1)
                             <div class="badge badge-primary mb-4">Paling Populer</div>
-                        @endif
+                        @endif --}}
                         <div class="text-center mb-6">
                             <div
                                 class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -34,7 +34,16 @@
                             </div>
                         </div>
 
-                        <div class="space-y-3 mb-8">
+                        <div class="text-center  mb-4">
+                            <a href="{{ route('tenant.subscription.payment', $plan->slug) }}"
+                                class="btn {{ $index == 1 ? 'btn-primary' : 'btn-outline btn-primary' }} w-full btn-lg gap-2"
+                                wire:navigate>
+                                <span class="icon-[tabler--credit-card] size-5"></span>
+                                Pilih Paket Ini
+                            </a>
+                        </div>
+
+                        <div class="space-y-3">
                             <div class="flex items-center gap-3">
                                 <span class="icon-[tabler--users] size-5 text-green-500"></span>
                                 <span class="text-sm">Maksimal {{ $plan->max_users ?? 100 }} pengguna</span>
@@ -53,14 +62,7 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-                            <a href="{{ route('tenant.subscription.payment', $plan->slug) }}"
-                                class="btn {{ $index == 1 ? 'btn-primary' : 'btn-outline btn-primary' }} w-full btn-lg gap-2"
-                                wire:navigate>
-                                <span class="icon-[tabler--credit-card] size-5"></span>
-                                Upgrade Paket
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             @endforeach
