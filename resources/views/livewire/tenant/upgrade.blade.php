@@ -1,4 +1,4 @@
-<div>
+<div class="">
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-600 text-white py-8 mb-8 rounded-2xl">
         <div class="max-w-4xl mx-auto text-center px-4">

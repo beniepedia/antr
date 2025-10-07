@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use AdityaDarma\LaravelDuitku\Facades\DuitkuPOP;
+use App\Models\Plan;
+use App\Models\TenantSubscription;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +18,8 @@ class PaymentController extends Controller
             $notification = DuitkuPOP::getNotificationTransaction();
 
             // 🔹 Cari transaksi berdasarkan merchantOrderId (transaction_code)
-            $trx = Transaction::where('transaction_code', $notification->merchantOrderId)->first();
+            $trx = Transaction::with('plan')->where('transaction_code', $notification->merchantOrderId)->first();
+
 
             if (!$trx) {
                 Log::warning('Callback received for unknown transaction', [
@@ -37,7 +40,22 @@ class PaymentController extends Controller
                     ]),
                 ]);
 
-                
+                $subscription = TenantSubscription::where('tenant_id', $trx->tenant_id)
+                    ->where('status', 'active')
+                    ->first();
+
+                if ($subscription) {
+                    $subscription->update(['status' => 'expired']);
+                    $subscription->create([
+                        'tenant_id' => $trx->tenant_id,
+                        'plan_id' => $trx->plan_id,
+                        'start_date' => now(),
+                        'end_date' => now()->addDays($trx->plan->duration_days),
+                        'status' => 'active',
+                        'price_subscription' => $trx->total
+                    ]);
+                }
+
 
                 Log::info('Payment successful via callback', [
                     'transaction_id' => $trx->id,
@@ -59,7 +77,6 @@ class PaymentController extends Controller
 
             // 🔹 Return response ke Duitku (penting untuk callback)
             return response('OK', 200);
-
         } catch (\Throwable $e) {
             Log::error('Error processing payment callback', [
                 'error' => $e->getMessage(),

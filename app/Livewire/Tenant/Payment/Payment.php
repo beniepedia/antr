@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Tenant;
+namespace App\Livewire\Tenant\payment;
 
 use App\Models\Coupon;
 use App\Models\Plan;
@@ -44,7 +44,6 @@ class Payment extends Component
 
         $this->resetErrorBag('coupon');
         $this->js("notyf.success('Kupon berhasil diterapkan.')");
-        
     }
 
     public function processPayment(PaymentService $paymentService)
@@ -54,8 +53,8 @@ class Payment extends Component
             'email'         => 'required|email',
             'phone'         => 'required|min:10|max:15',
         ]);
-   
-        $tenant = Auth::guard('tenant')->user();
+
+        $tenant = Auth::guard('tenant')->user()->tenant;
         $amount = max(0, $this->plan->price - $this->discountAmount);
 
         if ($amount <= 0) return $this->js("notyf.error('Total pembayaran tidak valid.')");
@@ -78,7 +77,7 @@ class Payment extends Component
 
         $redirectUrl = $trx->payment_url ?? $trx->meta['payment_url'];
 
-        if(!$redirectUrl){
+        if (!$redirectUrl) {
             $this->js('notyf.error("Gagal memproses pembayaran. Silahkan coba beberapa saat lagi.")');
             return;
         }
@@ -89,6 +88,6 @@ class Payment extends Component
 
     public function render()
     {
-        return view('livewire.tenant.payment')->layout('layouts.payment');
+        return view('livewire.tenant.payment')->layout('layouts.guest');
     }
 }

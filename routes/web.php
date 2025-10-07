@@ -18,7 +18,8 @@ use App\Livewire\Tenant\Karyawan\KaryawanCreate;
 use App\Livewire\Tenant\Karyawan\KaryawanEdit;
 use App\Livewire\Tenant\Karyawan\KaryawanIndex;
 use App\Livewire\Tenant\Karyawan\KaryawanShow;
-use App\Livewire\Tenant\Payment;
+use App\Livewire\Tenant\Payment\Payment;
+use App\Livewire\Tenant\Payment\PaymentVerify;
 use App\Livewire\Tenant\PrintLabel;
 use App\Livewire\Tenant\Pumps;
 use App\Livewire\Tenant\queue\QueueControl;
@@ -32,8 +33,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/email', function(){
-$user = \App\Models\User::find(3);
+Route::get('/email', function () {
+    $user = \App\Models\User::find(3);
 
     $notification = new \App\Notifications\VerifyEmail;
 
@@ -46,7 +47,7 @@ $user = \App\Models\User::find(3);
 //     return view('welcome');
 // })->name('home');
 
-Route::domain('{subdomain:url}.'.config('app.url'))
+Route::domain('{subdomain:url}.' . config('app.url'))
     ->middleware('tenant.domain')
     ->group(function () {
         // Customer Portal (public and authenticated)
@@ -111,7 +112,7 @@ Route::middleware('auth:tenant')->group(function () {
         Route::get('/pump', Pumps::class)->name('tenant.pump.index');
 
         Route::get('/settings', TenantSettings::class)->name('tenant.settings');
-        Route::get('/print', PrintLabel::class)->name('tenant.print');
+        Route::get('/print', PrintLabel::class)->name('tenant.prisnt');
 
         Route::post('/logout', function () {
             Auth::guard('tenant')->logout();
@@ -122,21 +123,26 @@ Route::middleware('auth:tenant')->group(function () {
         })->name('tenant.logout');
     });
 
-    Route::middleware('verified')->group(function(){
+    Route::middleware('verified')->group(function () {
         Route::get('/upgrade', Upgrade::class)->name('tenant.upgrade');
+        Route::get('/payment/verify', PaymentVerify::class)->name('tenant.payment.verify');
         Route::get('/payment/{plan:slug}', Payment::class)->name('tenant.subscription.payment');
+
+
 
         Route::get('/onboarding', Setup::class)->name('tenant.onboarding');
         Route::get('/subscription', Subscription::class)->name('tenant.subscription');
     });
-
 });
 
 
 // Payment Callback
 Route::post('/payment/callback', [PaymentController::class, 'callback'])
-->withoutMiddleware([VerifyCsrfToken::class])
-->name('tenant.payment.callback');
+    ->withoutMiddleware([VerifyCsrfToken::class])
+    ->name('tenant.payment.callback');
+
+// Payment Success Page
+
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
 //     Route::get('/dashboard', function () {

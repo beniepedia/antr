@@ -1,4 +1,4 @@
-<div class="px-4">
+<div class="">
     <!-- Header -->
     <div class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-12 mb-8 rounded-2xl shadow-lg">
         <div class="max-w-2xl mx-auto text-center px-4">
