@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\WebpushSubscribe;
 use App\Livewire\Admin\Login as AdminLogin;
 use App\Livewire\Auth\Login as UserLogin;
 use App\Livewire\Auth\Register as UserRegister;
@@ -44,10 +45,6 @@ Route::get('/email', function () {
     return $mailMessage->render();
 });
 
-// Route::get('/', function () {
-//     return view('welcome');
-// })->name('home');
-
 Route::domain('{subdomain:url}.' . config('app.url'))
     ->middleware('tenant.domain')
     ->group(function () {
@@ -72,6 +69,8 @@ Route::domain('{subdomain:url}.' . config('app.url'))
             })->name('customer.logout');
         });
     });
+
+
 
 // guest for tenant users
 Route::middleware('guest:tenant')->group(function () {
@@ -143,7 +142,16 @@ Route::post('/payment/callback', [PaymentController::class, 'callback'])
     ->withoutMiddleware([VerifyCsrfToken::class])
     ->name('tenant.payment.callback');
 
-// Payment Success Page
+// WebPush routes
+Route::middleware('auth:tenant,customer')->group(function () {
+    Route::get('/webpush/vapid-public-key', function () {
+        return response()->json([
+            'publicKey' => config('webpush.vapid.public_key')
+        ]);
+    });
+
+    Route::post('/webpush/subscribe', [WebpushSubscribe::class, 'subscribe']);
+});
 
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {

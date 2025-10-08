@@ -40,4 +40,5 @@ return [
         'url' => env('WHATSAPP_API_URL'),
     ],
 
+
 ];
