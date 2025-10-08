@@ -31,11 +31,10 @@ class KaryawanCreate extends Component
         $user->profile()->create($this->form->all());
 
         $this->js('notyf.success("Karyawan berhasil ditambah!")');
-
     }
 
     public function render()
     {
-        return view('livewire.tenant.karyawan.create')->layout('layouts.tenant');
+        return view('livewire.tenant.karyawan.create');
     }
 }

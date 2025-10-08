@@ -6,7 +6,7 @@
             <h1 class="text-xl font-bold">Manajemen Karyawan</h1>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
                 <input type="search" wire:model.live.debounce.300ms="search" placeholder="Cari karyawan..." class="input">
-                <a href="{{ route('tenant.karyawan.create') }}" class="btn btn-primary whitespace-nowrap">
+                <a href="{{ route('tenant.karyawan.create') }}" wire:navigate class="btn btn-primary whitespace-nowrap">
                     <span class="icon-[tabler--plus] size-4 mr-2"></span>
                     Tambah Karyawan
                 </a>
@@ -35,9 +35,7 @@
                                     <img src="{{ asset('storage/' . $k->profile->avatar) }}" alt="Avatar"
                                         class="w-10 h-10 object-cover rounded-full">
                                 @else
-                                    <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                        <span class="text-gray-600 text-sm">{{ substr($k->name, 0, 1) }}</span>
-                                    </div>
+                                    <x-avatar name="{{ substr($k->name, 0, 1) }}" size="10" />
                                 @endif
                             </td>
                             <td>{{ $k->name }}</td>
@@ -58,11 +56,11 @@
                             <td>
                                 <div class="flex gap-2">
                                     <a href="{{ route('tenant.karyawan.show', $k->id) }}"
-                                        class="btn btn-sm btn-outline btn-primary">
+                                        class="btn btn-sm btn-outline btn-primary" wire:navigate>
                                         <span class="icon-[tabler--eye] size-4"></span>
                                     </a>
                                     <a href="{{ route('tenant.karyawan.edit', $k->id) }}"
-                                        class="btn btn-sm btn-outline btn-info">
+                                        class="btn btn-sm btn-outline btn-info" wire:navigate>
                                         <span class="icon-[tabler--edit] size-4"></span>
                                     </a>
                                     <button @click="$dispatch('open-confirmation', { id: {{ $k->id }} })"

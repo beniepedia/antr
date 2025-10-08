@@ -112,7 +112,7 @@ Route::middleware('auth:tenant')->group(function () {
         Route::get('/pump', Pumps::class)->name('tenant.pump.index');
 
         Route::get('/settings', TenantSettings::class)->name('tenant.settings');
-        Route::get('/print', PrintLabel::class)->name('tenant.prisnt');
+        Route::get('/print', PrintLabel::class)->name('tenant.print');
 
         Route::post('/logout', function () {
             Auth::guard('tenant')->logout();

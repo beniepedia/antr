@@ -13,11 +13,11 @@
          <div class="flex gap-3 flex-col lg:flex-row w-full  justify-end">
 
              <a href="{{ route('tenant.karyawan') }}" class="btn btn-text">
-                 <span class="icon-[tabler--arrow-left] size-4 mr-2"></span>
+                 <span class="icon-[tabler--arrow-left] size-4 mr-2" wire:navigate></span>
                  Kembali
              </a>
 
-             <a href="/karyawan/{{ $karyawan->id }}/edit" class="btn btn-warning">
+             <a href="{{ route('tenant.karyawan.edit', $karyawan->id) }}" wire:navigate class="btn btn-warning">
                  <span class="icon-[tabler--edit] size-4 mr-2"></span>
                  Edit
              </a>

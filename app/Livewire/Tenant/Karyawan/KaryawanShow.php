@@ -26,6 +26,6 @@ class KaryawanShow extends Component
 
     public function render()
     {
-        return view('livewire.tenant.karyawan.show')->layout('layouts.tenant');
+        return view('livewire.tenant.karyawan.show');
     }
 }

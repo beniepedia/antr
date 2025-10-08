@@ -23,10 +23,10 @@ class KaryawanIndex extends Component
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('name', 'like', '%'.$this->search.'%')
-                    ->orWhere('email', 'like', '%'.$this->search.'%')
+                $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
                     ->orWhereHas('profile', function ($profileQuery) {
-                        $profileQuery->where('employee_id', 'like', '%'.$this->search.'%');
+                        $profileQuery->where('employee_id', 'like', '%' . $this->search . '%');
                     });
             });
         }
@@ -53,6 +53,6 @@ class KaryawanIndex extends Component
     {
         return view('livewire.tenant.karyawan.index', [
             'karyawan' => $this->karyawan,
-        ])->layout('layouts.tenant');
+        ]);
     }
 }

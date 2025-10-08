@@ -29,7 +29,7 @@ class Dashboard extends Component
             ->get()
             ->map(function ($queue) {
                 return [
-                    'id' => 'ANTRIAN'.str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT),
+                    'id' => 'ANTRIAN' . str_pad($queue->queue_number, 3, '0', STR_PAD_LEFT),
                     'service' => $queue->vehicle->type ?? 'Unknown',
                     'date' => $queue->queue_date->format('d M Y'),
                     'status' => match ($queue->status) {
@@ -71,8 +71,8 @@ class Dashboard extends Component
             $subscriptionData = [
                 'plan_name' => $subscription->plan->name ?? 'Unknown',
                 'status' => $subscription->status,
-                'start_date' => $subscription->start_date->format('d M Y'),
-                'end_date' => $subscription->end_date->format('d M Y'),
+                'start_date' => indo_date($subscription->start_date, "DD MMM Y"),
+                'end_date' => indo_date($subscription->end_date, "DD MMM Y"),
                 'days_remaining' => $daysRemaining,
                 'total_days' => $totalDays,
             ];

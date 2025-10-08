@@ -110,6 +110,6 @@ class KaryawanEdit extends Component
 
     public function render(): View
     {
-        return view('livewire.tenant.karyawan.edit')->layout('layouts.tenant');
+        return view('livewire.tenant.karyawan.edit');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if (! function_exists('remaining_credit')) {
     function remaining_credit($hargaPaket, $totalHari, $tanggalMulai, $tanggalAkhir)
     {
@@ -36,16 +38,23 @@ if (! function_exists('make_url')) {
         $host = $parsed['host'] ?? 'localhost';
 
         // gabungkan subdomain + domain utama
-        $fullHost = $subdomain.'.'.$host;
+        $fullHost = $subdomain . '.' . $host;
 
         // kalau ada port di base url, tambahkan juga
         if (isset($parsed['port'])) {
-            $fullHost .= ':'.$parsed['port'];
+            $fullHost .= ':' . $parsed['port'];
         }
 
         // path opsional
-        $path = $path ? '/'.ltrim($path, '/') : '';
+        $path = $path ? '/' . ltrim($path, '/') : '';
 
         return "{$scheme}://{$fullHost}{$path}";
+    }
+}
+
+if (!function_exists('indo_date')) {
+    function indo_date($date, $format = 'D MMMM Y'): string
+    {
+        return Carbon::parse($date)->isoFormat($format);
     }
 }
