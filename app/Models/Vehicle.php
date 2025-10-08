@@ -15,6 +15,8 @@ class Vehicle extends Model
         static::addGlobalScope('tenant', function (Builder $builder) {
             if (auth('customer')->check()) {
                 $builder->where('tenant_id', auth('customer')->user()->tenant_id);
+            } elseif (auth('tenant')->check()) {
+                $builder->where('tenant_id', auth('tenant')->user()->tenant_id);
             }
         });
     }

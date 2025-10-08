@@ -67,7 +67,7 @@ class Tenant extends Model
 
     public function vehicles()
     {
-        return $this->hasMany(CustomerVehicle::class);
+        return $this->hasMany(Vehicle::class);
     }
 
     public function pumps()

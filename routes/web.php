@@ -22,6 +22,7 @@ use App\Livewire\Tenant\Payment\Payment;
 use App\Livewire\Tenant\Payment\PaymentVerify;
 use App\Livewire\Tenant\PrintLabel;
 use App\Livewire\Tenant\Pumps;
+use App\Livewire\Tenant\Vehicles;
 use App\Livewire\Tenant\queue\QueueControl;
 use App\Livewire\Tenant\queue\QueueIndex;
 use App\Livewire\Tenant\Settings as TenantSettings;
@@ -110,6 +111,7 @@ Route::middleware('auth:tenant')->group(function () {
         Route::get('/employee/{id}/edit', KaryawanEdit::class)->name('tenant.karyawan.edit');
 
         Route::get('/pump', Pumps::class)->name('tenant.pump.index');
+        Route::get('/vehicles', Vehicles::class)->name('tenant.vehicles.index');
 
         Route::get('/settings', TenantSettings::class)->name('tenant.settings');
         Route::get('/print', PrintLabel::class)->name('tenant.print');

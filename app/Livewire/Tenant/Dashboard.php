@@ -91,6 +91,6 @@ class Dashboard extends Component
             'plans' => $plans,
         ];
 
-        return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'))->layout('layouts.tenant');
+        return view('livewire.tenant.dashboard.index', compact('user', 'dashboardData'));
     }
 }
