@@ -97,7 +97,7 @@
 
         <!-- Back Button -->
         <div class="text-center">
-            <a href="{{ route('tenant.dashboard') }}" class="btn btn-soft btn-secondary btn-lg gap-2">
+            <a href="{{ route('tenant.dashboard') }}" wire:navigate class="btn btn-soft btn-secondary btn-lg gap-2">
                 <span class="icon-[tabler--arrow-left] size-5"></span>
                 Kembali ke Dashboard
             </a>
